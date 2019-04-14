@@ -1,8 +1,10 @@
-package com.example.biennale_go;
+package bienale_go;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.biennale_go.R;
 
 public class MainActivity extends AppCompatActivity {
 
