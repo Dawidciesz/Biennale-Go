@@ -26,7 +26,7 @@ import static com.example.biennale_go.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_
 import static com.example.biennale_go.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 
 public class MainActivity extends AppCompatActivity {
-    private Button button;
+    private Button button, quizButton;
     private boolean mLocationPermissionGranted = false;
     private static final String TAG = "MainActivity";
 
@@ -42,10 +42,22 @@ public class MainActivity extends AppCompatActivity {
                 openMapActivity();
             }
         });
+        quizButton = (Button) findViewById(R.id.quizButton);
+        quizButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openQuizListActivity();
+            }
+        });
     }
 
     public void openMapActivity(){
         Intent intent = new Intent(this, MapsActivity.class);
+        startActivity(intent);
+    }
+
+    public void openQuizListActivity(){
+        Intent intent = new Intent(this, QuizListActivity.class);
         startActivity(intent);
     }
 
