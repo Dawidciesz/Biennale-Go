@@ -1,4 +1,4 @@
-package bienale_go;
+package com.example.biennale_go;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
