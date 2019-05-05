@@ -1,4 +1,4 @@
-package com.example.biennale_go;
+package bienale_go;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +24,8 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import static com.example.biennale_go.Constants.ERROR_DIALOG_REQUEST;
 import static com.example.biennale_go.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.example.biennale_go.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
+
+import com.example.biennale_go.R;
 
 public class MainActivity extends AppCompatActivity {
     private Button button;
