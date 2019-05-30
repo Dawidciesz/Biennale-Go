@@ -6,12 +6,16 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.biennale_go.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,10 +26,11 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
     private EditText email;
     private EditText password;
     private TextView successInfo;
-//
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(getApplicationContext());
         setContentView(R.layout.activity_email_password);
         email = findViewById(R.id.fieldEmail);
         password = findViewById(R.id.fieldPassword);
@@ -33,6 +38,23 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
         findViewById(R.id.emailCreateAccountButton).setOnClickListener(this);
         findViewById(R.id.emailSignInButton).setOnClickListener(this);
         mAuth = FirebaseAuth.getInstance();
+
+        // TEST FIRESTORM TODO
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("login", "roki130");
+        docData.put("password", "test123");
+        docData.put("email", "dawidcieszewski@gmail.com");
+        docData.put("name", "Dawid");
+        docData.put("surname", "Cieszewski");
+        docData.put("age", "23");
+        docData.put("gender", "AttackHelicopter");
+        docData.put("is_admin", true);
+        docData.put("avatar", "jakisURL");
+        docData.put("description", "XD");
+
+        db.collection("users").document("user_0").set(docData);
+
     }
 
     @Override
