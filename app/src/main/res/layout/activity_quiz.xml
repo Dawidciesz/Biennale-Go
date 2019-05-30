@@ -7,7 +7,7 @@
     tools:context=".QuizActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/questionNumberTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -15,13 +15,13 @@
         android:layout_marginTop="24dp"
         android:layout_marginBottom="9dp"
         android:text="Pytane nr 1"
-        app:layout_constraintBottom_toTopOf="@+id/textView3"
+        app:layout_constraintBottom_toTopOf="@+id/questionDescriptionTextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/questionDescriptionTextView"
         android:layout_width="326dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -35,7 +35,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/summaryButton"
+        android:id="@+id/answerA"
         android:layout_width="324dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="248dp"
@@ -45,27 +45,27 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/answerB"
         android:layout_width="324dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="Button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/summaryButton" />
+        app:layout_constraintTop_toBottomOf="@+id/answerA" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/answerC"
         android:layout_width="324dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:text="Button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button4" />
+        app:layout_constraintTop_toBottomOf="@+id/answerB" />
 
     <Button
-        android:id="@+id/button6"
+        android:id="@+id/answerD"
         android:layout_width="324dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="21dp"
@@ -73,5 +73,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button5" />
+        app:layout_constraintTop_toBottomOf="@+id/answerC" />
 </androidx.constraintlayout.widget.ConstraintLayout>
