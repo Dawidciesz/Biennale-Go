@@ -2,4 +2,6 @@
     <string name="app_name">Biennale-Go</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_quiz_list">quizListActivity</string>
+    <string name="lista_quizow">Lista quizow:</string>
+    <string name="test_1">Test 1</string>
 </resources>
