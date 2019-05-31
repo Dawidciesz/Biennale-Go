@@ -1,16 +1,20 @@
 package com.example.biennale_go;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,12 +26,24 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
     private GoogleMap mMap;
     private TextView testText;
-    private Button testButton;
+    private Button testButton, poiButton;
     LocationManager locationManager;
+    private static final String TAG = "QuizMapActicity";
+    private ArrayList<String> poiNames;
+    private ArrayList<Double> poiLatitude;
+    private ArrayList<Double> poiLongitude;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,9 +52,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
+        poiNames = new ArrayList<String>();
+        poiLatitude = new ArrayList<Double>();
+        poiLongitude = new ArrayList<Double>();
         testText = (TextView) findViewById(R.id.textView2);
-
         testButton = (Button) findViewById(R.id.button2);
         testButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +63,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 getLocation();
             }
         });
+        poiButton = (Button) findViewById(R.id.poiButton);
+        poiButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openPoiActivity();
+            }
+        });
+    }
+
+    public void openPoiActivity(){
+        Intent intent = new Intent(this, PoiActivity.class);
+        Bundle b = new Bundle();
+        b.putSerializable("names", poiNames);
+        intent.putExtras(b);
+        startActivity(intent);
     }
 
     void getLocation() {
@@ -69,11 +101,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-//        LatLng galleryElLoc = new LatLng(54.160509, 19.393717);
-//        mMap.addMarker(new MarkerOptions().position(galleryElLoc).title("Galeria El"));
-//        float zoomLevel = 17.0f;
-//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(galleryElLoc, zoomLevel));
+        fetchPOI();
     }
 
     @Override
@@ -95,5 +123,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onProviderDisabled(String provider) {
 
+    }
+
+    private void fetchPOI() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference docRef = db.collection("POI");
+        docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (final QueryDocumentSnapshot document : task.getResult()) {
+                        String name = document.getData().get("name").toString();
+                        Double latitude = (Double) document.getData().get("latitude");
+                        Double longitude = (Double) document.getData().get("longitude");
+                        LatLng POI = new LatLng(latitude, longitude);
+                        mMap.addMarker(new MarkerOptions().position(POI).title(name));
+                        poiNames.add(name);
+                        poiLatitude.add(latitude);
+                        poiLongitude.add(longitude);
+//                        float zoomLevel = 17.0f;
+//                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(POI, zoomLevel));
+                    }
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
     }
 }
