@@ -23,7 +23,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".QuizSummaryActivity"></activity>
+        <activity android:name=".PoiActivity"></activity>
+        <activity android:name=".QuizSummaryActivity" />
         <activity android:name=".QuizActivity" />
         <activity android:name=".QuizListActivity" />
         <!--
@@ -54,16 +55,13 @@
         <!-- android:name="android.support.PARENT_ACTIVITY" -->
         <!-- android:value=".MainActivity" /> -->
         <!-- </activity> -->
-
-        <activity android:name=".EmailPasswordActivity">
+        <activity android:name=".EmailPasswordActivity"></activity>
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".MainActivity">
-
         </activity>
     </application>
 

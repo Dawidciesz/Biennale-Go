@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,13 +38,14 @@ import java.util.ArrayList;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
     private GoogleMap mMap;
-    private TextView testText;
-    private Button testButton, poiButton;
+    private Button  poiButton;
     LocationManager locationManager;
     private static final String TAG = "QuizMapActicity";
     private ArrayList<String> poiNames;
     private ArrayList<Double> poiLatitude;
     private ArrayList<Double> poiLongitude;
+    private RelativeLayout loadingPanel, mapPanel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,17 +54,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        loadingPanel = (RelativeLayout) findViewById(R.id.loadingPanel);
+        mapPanel = (RelativeLayout) findViewById(R.id.mapPanel);
+
         poiNames = new ArrayList<String>();
         poiLatitude = new ArrayList<Double>();
         poiLongitude = new ArrayList<Double>();
-        testText = (TextView) findViewById(R.id.textView2);
-        testButton = (Button) findViewById(R.id.button2);
-        testButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getLocation();
-            }
-        });
         poiButton = (Button) findViewById(R.id.poiButton);
         poiButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,6 +68,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 openPoiActivity();
             }
         });
+
+        getLocation();
     }
 
     public void openPoiActivity(){
@@ -96,6 +96,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         float zoomLevel = 17.0f;
         mMap.addMarker(new MarkerOptions().position(userCurrentLocation));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userCurrentLocation, zoomLevel));
+
+        if(loadingPanel.getVisibility() != View.GONE) {
+            loadingPanel.setVisibility(View.GONE);
+            mapPanel.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -106,7 +111,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onLocationChanged(Location location) {
-        testText.setText("Current Location: " + location.getLatitude() + ", " + location.getLongitude());
         setMapLocation(location.getLatitude(), location.getLongitude());
     }
 
