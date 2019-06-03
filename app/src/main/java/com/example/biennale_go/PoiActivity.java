@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class PoiActivity extends AppCompatActivity {
     private Bundle b;
     private LinearLayout poiPanel;
-    private ArrayList<String> names;
+    private ArrayList<String> names, addresses, descriptions;
     private Button newButton;
 
     @Override
@@ -29,29 +29,35 @@ public class PoiActivity extends AppCompatActivity {
 
         if (b != null) {
             names = new ArrayList((ArrayList) b.getSerializable("names"));
+            addresses = new ArrayList((ArrayList) b.getSerializable("addresses"));
+            descriptions = new ArrayList((ArrayList) b.getSerializable("descriptions"));
             generatePoiButtons();
         }
     }
 
     private void generatePoiButtons() {
         for (Integer i = 0; i<names.size(); i++) {
+            final String name = names.get(i);
+            final String address = addresses.get(i);
+            final String description = descriptions.get(i);
+
             newButton = new Button(PoiActivity.this);
-            newButton.setText(names.get(i));
+            newButton.setText(name);
             newButton.setClickable(true);
             newButton.setGravity(Gravity.CENTER);
-//            newButton.setOnClickListener(new View.OnClickListener()
-//            {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent intent = new Intent(QuizListActivity.this, QuizActivity.class);
-//                    Bundle b = new Bundle();
-//                    ArrayList questions = (ArrayList) document.getData().get("questions");
-//                    b.putString("name", document.getData().get("name").toString());
-//                    b.putSerializable("questions", questions);
-//                    intent.putExtras(b);
-//                    startActivity(intent);
-//                }
-//            });
+            newButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(PoiActivity.this, PoiDetailsActivity.class);
+                    Bundle b = new Bundle();
+                    b.putString("name", name);
+                    b.putString("address", address);
+                    b.putString("description", description);
+                    intent.putExtras(b);
+                    startActivity(intent);
+                }
+            });
             poiPanel.addView(newButton);
             // TODO FIX MARGINS
             newButton = new Button(PoiActivity.this);

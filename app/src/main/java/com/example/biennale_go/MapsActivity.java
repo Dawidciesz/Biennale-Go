@@ -41,9 +41,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Button  poiButton;
     LocationManager locationManager;
     private static final String TAG = "QuizMapActicity";
-    private ArrayList<String> poiNames;
-    private ArrayList<Double> poiLatitude;
-    private ArrayList<Double> poiLongitude;
+    private ArrayList<String> poiNames, poiAddresses, poiDescriptions;
+    private ArrayList<Double> poiLatitude, poiLongitude;
     private RelativeLayout loadingPanel, mapPanel;
 
     @Override
@@ -59,6 +58,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapPanel = (RelativeLayout) findViewById(R.id.mapPanel);
 
         poiNames = new ArrayList<String>();
+        poiAddresses = new ArrayList<String>();
+        poiDescriptions = new ArrayList<String>();
         poiLatitude = new ArrayList<Double>();
         poiLongitude = new ArrayList<Double>();
         poiButton = (Button) findViewById(R.id.poiButton);
@@ -76,6 +77,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Intent intent = new Intent(this, PoiActivity.class);
         Bundle b = new Bundle();
         b.putSerializable("names", poiNames);
+        b.putSerializable("addresses", poiAddresses);
+        b.putSerializable("descriptions", poiDescriptions);
         intent.putExtras(b);
         startActivity(intent);
     }
@@ -138,11 +141,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if (task.isSuccessful()) {
                     for (final QueryDocumentSnapshot document : task.getResult()) {
                         String name = document.getData().get("name").toString();
+                        String address = document.getData().get("address").toString();
+                        String description = document.getData().get("description").toString();
                         Double latitude = (Double) document.getData().get("latitude");
                         Double longitude = (Double) document.getData().get("longitude");
                         LatLng POI = new LatLng(latitude, longitude);
                         mMap.addMarker(new MarkerOptions().position(POI).title(name));
                         poiNames.add(name);
+                        poiAddresses.add(address);
+                        poiDescriptions.add(description);
                         poiLatitude.add(latitude);
                         poiLongitude.add(longitude);
 //                        float zoomLevel = 17.0f;
