@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/quizItem"
+        android:layout_width="128dp"
+        android:layout_height="48dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="36dp"
+        android:textSize="20sp"
+        android:gravity="center_horizontal"/>
+
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="64dp"
+        android:layout_height="48dp"
+        android:layout_weight="1"
+        android:text="usuń"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="36dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#FFFFFF"/>
+</RelativeLayout>
