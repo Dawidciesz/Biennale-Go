@@ -58,6 +58,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<String> poiNames, poiAddresses, poiDescriptions, poiImages;
     private ArrayList<Double> poiLatitude, poiLongitude;
     private RelativeLayout loadingPanel, mapPanel;
+    private Double POICollisionRange = (360.0 * 100.0) / 40075000.0; // 100 meters
     private ArrayList markerPoints = new ArrayList();
 
     @Override
@@ -116,10 +117,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         float zoomLevel = 17.0f;
         mMap.addMarker(new MarkerOptions().position(userCurrentLocation));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userCurrentLocation, zoomLevel));
-
+        checkIfPoi(latitude, longtitude);
         if(loadingPanel.getVisibility() != View.GONE) {
             loadingPanel.setVisibility(View.GONE);
             mapPanel.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void checkIfPoi(double player_latitude, double player_longtitude){
+        for (Integer i = 0; i<poiNames.size(); i++) {
+            final Double POI_latitude = poiLatitude.get(i);
+            final Double POI_longtitude = poiLongitude.get(i);
+
+            if (player_latitude < POI_latitude + POICollisionRange &&
+                    player_latitude + POICollisionRange > POI_latitude &&
+                    player_longtitude < POI_longtitude + POICollisionRange &&
+                    player_longtitude + POICollisionRange > POI_longtitude) {
+                Log.d("Ricardo!", "Yeah Boy! " + poiNames.get(i));
+            }
+            else {
+                Log.d("Ricardo!", " NANANANANA");
+            }
         }
     }
 
