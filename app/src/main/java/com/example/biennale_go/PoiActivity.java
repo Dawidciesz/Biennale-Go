@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class PoiActivity extends AppCompatActivity {
     private Bundle b;
     private LinearLayout poiPanel;
-    private ArrayList<String> names, addresses, descriptions;
+    private ArrayList<String> names, addresses, descriptions, images;
     private Button newButton;
 
     @Override
@@ -29,6 +29,7 @@ public class PoiActivity extends AppCompatActivity {
 
         if (b != null) {
             names = new ArrayList((ArrayList) b.getSerializable("names"));
+            images = new ArrayList((ArrayList) b.getSerializable("images"));
             addresses = new ArrayList((ArrayList) b.getSerializable("addresses"));
             descriptions = new ArrayList((ArrayList) b.getSerializable("descriptions"));
             generatePoiButtons();
@@ -38,6 +39,7 @@ public class PoiActivity extends AppCompatActivity {
     private void generatePoiButtons() {
         for (Integer i = 0; i<names.size(); i++) {
             final String name = names.get(i);
+            final String image = images.get(i);
             final String address = addresses.get(i);
             final String description = descriptions.get(i);
 
@@ -52,6 +54,7 @@ public class PoiActivity extends AppCompatActivity {
                     Intent intent = new Intent(PoiActivity.this, PoiDetailsActivity.class);
                     Bundle b = new Bundle();
                     b.putString("name", name);
+                    b.putString("image", image);
                     b.putString("address", address);
                     b.putString("description", description);
                     intent.putExtras(b);
