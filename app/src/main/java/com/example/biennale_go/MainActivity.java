@@ -19,6 +19,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.util.Log;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.biennale_go.Fragments.AdminPanelFragment;
@@ -28,9 +29,10 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import static com.example.biennale_go.Constants.ERROR_DIALOG_REQUEST;
 import static com.example.biennale_go.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.example.biennale_go.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
-
+import com.example.biennale_go.R;
 public class MainActivity extends FragmentActivity {
     private Button button, quizButton, adminPanelButton;
+    private LinearLayout mapCard, quizCard;
     private boolean mLocationPermissionGranted = false;
     private static final String TAG = "MainActivity";
 
@@ -39,29 +41,45 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        button = (Button) findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
+
+        mapCard = (LinearLayout) findViewById(R.id.mapCard);
+        mapCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openMapActivity();
             }
         });
-        quizButton = (Button) findViewById(R.id.quizButton);
-        quizButton.setOnClickListener(new View.OnClickListener() {
+        quizCard = (LinearLayout) findViewById(R.id.quizCard);
+        quizCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openQuizListActivity();
             }
         });
-
-        adminPanelButton = (Button) findViewById(R.id.adminPanelButton);
-        adminPanelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openAdminPanelFragment();
-            }
-        });
     }
+//        button = (Button) findViewById(R.id.button);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                openMapActivity();
+//            }
+//        });
+//        quizButton = (Button) findViewById(R.id.quizButton);
+//        quizButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                openQuizListActivity();
+//            }
+//        });
+
+//        adminPanelButton = (Button) findViewById(R.id.adminPanelButton);
+//        adminPanelButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                openAdminPanelFragment();
+//            }
+//        });
+//    }
 
     public void openMapActivity(){
         Intent intent = new Intent(this, MapsActivity.class);
@@ -73,12 +91,12 @@ public class MainActivity extends FragmentActivity {
         startActivity(intent);
     }
 
-    public void openAdminPanelFragment() {
-        Fragment adminPanelFragment = new AdminPanelFragment();
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, adminPanelFragment);
-        fragmentTransaction.commit();
-    }
+//    public void openAdminPanelFragment() {
+//        Fragment adminPanelFragment = new AdminPanelFragment();
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.fragment_container, adminPanelFragment);
+//        fragmentTransaction.commit();
+//    }
 
     private boolean checkMapServices(){
         if(isServicesOK()){
