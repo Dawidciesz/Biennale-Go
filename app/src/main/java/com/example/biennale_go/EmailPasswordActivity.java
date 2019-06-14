@@ -38,23 +38,6 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
         findViewById(R.id.emailCreateAccountButton).setOnClickListener(this);
         findViewById(R.id.emailSignInButton).setOnClickListener(this);
         mAuth = FirebaseAuth.getInstance();
-
-        // TEST FIRESTORM TODO
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Map<String, Object> docData = new HashMap<>();
-        docData.put("login", "roki130");
-        docData.put("password", "test123");
-        docData.put("email", "dawidcieszewski@gmail.com");
-        docData.put("name", "Dawid");
-        docData.put("surname", "Cieszewski");
-        docData.put("age", "23");
-        docData.put("gender", "AttackHelicopter");
-        docData.put("is_admin", true);
-        docData.put("avatar", "jakisURL");
-        docData.put("description", "XD");
-
-        db.collection("users").document("user_0").set(docData);
-
     }
 
     @Override
