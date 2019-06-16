@@ -5,11 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".QuizListActivity">
+
     <RelativeLayout
         android:id="@+id/loadingPanel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center" >
+        android:background="@color/colorPrimaryDark"
+        android:gravity="center">
 
         <ProgressBar
             android:layout_width="158dp"
@@ -24,6 +26,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:background="@color/colorPrimaryDark"
         android:orientation="vertical"
         android:visibility="invisible">
 
