@@ -4,74 +4,89 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".QuizActivity">
+    android:background="@color/colorPrimaryDark"
+    android:padding="20dp"
+    tools:context=".QuizActivity"
+    tools:layout_editor_absoluteY="81dp">
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/answerD"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:background="@android:color/holo_blue_bright"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="20dp" />
+
+    <Button
+        android:id="@+id/answerC"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="@android:color/holo_red_dark"
+        android:text="Button"
+        app:layout_constraintBottom_toTopOf="@+id/answerD"
+        tools:layout_editor_absoluteX="24dp" />
+
+    <Button
+        android:id="@+id/answerB"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="@android:color/holo_orange_light"
+        android:text="Button"
+        app:layout_constraintBottom_toTopOf="@+id/answerC"
+        tools:layout_editor_absoluteX="20dp" />
+
+    <Button
+        android:id="@+id/answerA"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="@android:color/holo_green_light"
+        android:text="Odpowiedz 1"
+        app:layout_constraintBottom_toTopOf="@+id/answerB"
+        tools:layout_editor_absoluteX="20dp" />
+
+    <TextView
+        android:id="@+id/questionDescriptionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="24dp"
+        android:text="Donec non sollicitudin metus. Donec rutrum, nunc ut blandit pulvinar, dolor mi efficitur turpis, ac tristique magna erat vulputate nulla. Maecenas cursus, tellus non mattis vestibulum, nisi sem lacinia nisl, ac pharetra est magna eget enim. Phasellus congue hendrerit nisi, vitae iaculis neque sollicitudin vel. Proin nec maximus metus. Morbi bibendum eget ligula vitae ultrices. Donec non turpis velit. Integer at ante sapien."
+        android:textColor="@android:color/white"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/questionNumberTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="9dp"
         android:text="Pytane nr 1"
+        android:textColor="@color/design_default_color_surface"
+        android:textSize="18dp"
         app:layout_constraintBottom_toTopOf="@+id/questionDescriptionTextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.571" />
 
-    <TextView
-        android:id="@+id/questionDescriptionTextView"
-        android:layout_width="326dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="52dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:text="Donec non sollicitudin metus. Donec rutrum, nunc ut blandit pulvinar, dolor mi efficitur turpis, ac tristique magna erat vulputate nulla. Maecenas cursus, tellus non mattis vestibulum, nisi sem lacinia nisl, ac pharetra est magna eget enim. Phasellus congue hendrerit nisi, vitae iaculis neque sollicitudin vel. Proin nec maximus metus. Morbi bibendum eget ligula vitae ultrices. Donec non turpis velit. Integer at ante sapien."
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/answerA"
-        android:layout_width="324dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="248dp"
-        android:text="Odpowiedz 1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/answerB"
-        android:layout_width="324dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/answerA" />
-
-    <Button
-        android:id="@+id/answerC"
-        android:layout_width="324dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/answerB" />
-
-    <Button
-        android:id="@+id/answerD"
-        android:layout_width="324dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="21dp"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/answerC" />
 </androidx.constraintlayout.widget.ConstraintLayout>
