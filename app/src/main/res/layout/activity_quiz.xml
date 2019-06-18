@@ -28,7 +28,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:background="@android:color/holo_blue_bright"
         android:text="Button"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="20dp" />
@@ -38,7 +37,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:background="@android:color/holo_red_dark"
         android:text="Button"
         app:layout_constraintBottom_toTopOf="@+id/answerD"
         tools:layout_editor_absoluteX="24dp" />
@@ -48,7 +46,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:background="@android:color/holo_orange_light"
         android:text="Button"
         app:layout_constraintBottom_toTopOf="@+id/answerC"
         tools:layout_editor_absoluteX="20dp" />
@@ -58,7 +55,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:background="@android:color/holo_green_light"
         android:text="Odpowiedz 1"
         app:layout_constraintBottom_toTopOf="@+id/answerB"
         tools:layout_editor_absoluteX="20dp" />

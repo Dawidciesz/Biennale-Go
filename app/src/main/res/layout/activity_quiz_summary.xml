@@ -13,15 +13,16 @@
         android:layout_height="200dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="140dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:adjustViewBounds="false"
         android:cropToPadding="false"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:srcCompat="@drawable/goldcircle" />
+        app:srcCompat="@drawable/award" />
 
     <TextView
         android:id="@+id/textView4"
@@ -61,13 +62,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="105dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="3 / 10"
         android:textColor="@android:color/holo_orange_light"
         android:textSize="64dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 

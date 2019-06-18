@@ -1,9 +1,12 @@
 package com.example.biennale_go;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -36,6 +39,7 @@ public class QuizListActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference docRef = db.collection("quizzes");
         docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 findViewById(R.id.loadingPanel).setVisibility(View.GONE);
@@ -58,8 +62,10 @@ public class QuizListActivity extends AppCompatActivity {
                                 startActivity(intent);
                             }
                         });
+                        Drawable img =  getDrawable( R.drawable.award );
+                        img.setBounds( 0, 0, 60, 60 );
+                        newButton.setCompoundDrawables( img, null, img, null );
                         quizListPanel.addView(newButton);
-                        // TODO FIX MARGINS
                         newButton = new Button(QuizListActivity.this);
                         newButton.setVisibility(View.INVISIBLE);
                         quizListPanel.addView(newButton);
