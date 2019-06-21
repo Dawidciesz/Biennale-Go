@@ -29,7 +29,7 @@ import static com.example.biennale_go.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 import com.example.biennale_go.R;
 
 public class MainActivity extends AppCompatActivity {
-    private LinearLayout mapCard, quizCard;
+    private LinearLayout mapCard, quizCard, poiCard;
     private boolean mLocationPermissionGranted = false;
     private static final String TAG = "MainActivity";
 
@@ -52,6 +52,13 @@ public class MainActivity extends AppCompatActivity {
                 openQuizListActivity();
             }
         });
+        poiCard = (LinearLayout) findViewById(R.id.poiCard);
+        poiCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openPoiActivity();
+            }
+        });
     }
 
     public void openMapActivity(){
@@ -61,6 +68,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void openQuizListActivity(){
         Intent intent = new Intent(this, QuizListActivity.class);
+        startActivity(intent);
+    }
+
+    public void openPoiActivity(){
+        Intent intent = new Intent(this, PoiActivity.class);
         startActivity(intent);
     }
 
