@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".PoiActivity">
 
+    <RelativeLayout
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="visible">
+
+        <ProgressBar
+            android:layout_width="158dp"
+            android:layout_height="136dp"
+            android:indeterminate="true" />
+    </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/poiPanel"
         android:layout_width="match_parent"
@@ -14,7 +27,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
