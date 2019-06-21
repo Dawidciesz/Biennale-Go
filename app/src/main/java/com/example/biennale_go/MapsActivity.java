@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,7 +53,7 @@ import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
     private GoogleMap mMap;
-    private Button  poiButton;
+    private ImageView poiButton;
     LocationManager locationManager;
     private static final String TAG = "QuizMapActicity";
     private ArrayList<String> poiNames, poiAddresses, poiDescriptions, poiImages;
@@ -79,7 +80,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         poiDescriptions = new ArrayList<String>();
         poiLatitude = new ArrayList<Double>();
         poiLongitude = new ArrayList<Double>();
-        poiButton = (Button) findViewById(R.id.poiButton);
+        poiButton = (ImageView) findViewById(R.id.poiButton);
         poiButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
