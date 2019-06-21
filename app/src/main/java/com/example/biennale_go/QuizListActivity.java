@@ -30,6 +30,7 @@ import java.util.Map;
 public class QuizListActivity extends AppCompatActivity {
     private LinearLayout quizListPanel;
     private Button newButton;
+    private ArrayList scoresList;
     private static final String TAG = "QuizListActicity";
 //    TODO GLOBAL ID
     private Integer id = 1;
@@ -38,6 +39,7 @@ public class QuizListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_list);
         quizListPanel = (LinearLayout) findViewById(R.id.quizListPanel);
+        scoresList = new ArrayList();
         fetchScores();
     }
 
@@ -52,7 +54,7 @@ public class QuizListActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        ArrayList scoresList = new ArrayList((ArrayList) document.getData().get("scores"));
+                        scoresList = new ArrayList((ArrayList) document.getData().get("scores"));
                         for(int i=0; i<scoresList.size(); i++) {
                             Map<String, String> temp = new HashMap<String, String>();
                             temp.putAll((HashMap<String,String>)scoresList.get(i));
@@ -96,6 +98,14 @@ public class QuizListActivity extends AppCompatActivity {
                                 Bundle b = new Bundle();
                                 b.putString("name", document.getData().get("name").toString());
                                 b.putSerializable("questions", questions);
+                                Integer key = 0;
+                                for(Integer i = scores.size(); i>=0; i--) {
+                                    if(scores.get(document.getData().get("name").toString()) != null) break;
+                                    key++;
+                                }
+                                b.putInt("key", key);
+                                b.putSerializable("scoresList", scoresList);
+
                                 intent.putExtras(b);
                                 startActivity(intent);
                             }

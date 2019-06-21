@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,9 +18,10 @@ public class QuizActivity extends AppCompatActivity {
     private Button questionAnswerB;
     private Button questionAnswerC;
     private Button questionAnswerD;
+    private ArrayList scoresList = new ArrayList();
 
     private Integer questionNumber = 0;
-    private Integer maxQuestionNumber;
+    private Integer maxQuestionNumber, key;
     private ArrayList questions;
     private Bundle b;
     private Integer points = 0;
@@ -42,6 +42,8 @@ public class QuizActivity extends AppCompatActivity {
 
         if (b != null) {
             questions = new ArrayList((ArrayList) b.getSerializable("questions"));
+            scoresList = new ArrayList((ArrayList) b.getSerializable("scoresList"));
+            key = b.getInt("key");
             maxQuestionNumber = questions.size()-1;
             fillQuestion();
         }
@@ -96,6 +98,8 @@ public class QuizActivity extends AppCompatActivity {
             Bundle b2 = new Bundle();
             b2.putInt("points", points);
             b2.putInt("maxPoints", maxQuestionNumber+1);
+            b2.putInt("key", key);
+            b2.putSerializable("scoresList", scoresList);
             intent.putExtras(b2);
             startActivity(intent);
         }
