@@ -35,6 +35,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -56,11 +58,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ImageView poiButton;
     LocationManager locationManager;
     private static final String TAG = "QuizMapActicity";
-    private ArrayList<String> poiNames, poiAddresses, poiDescriptions, poiImages;
+    private ArrayList<String> poiNames, poiAddresses, poiDescriptions, poiImages, poiScores;
     private ArrayList<Double> poiLatitude, poiLongitude;
     private RelativeLayout loadingPanel, mapPanel;
     private Double POICollisionRange = (360.0 * 100.0) / 40075000.0; // 100 meters
     private ArrayList markerPoints = new ArrayList();
+
+    //    TODO GLOBAL ID
+    private Integer id = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +80,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapPanel = (RelativeLayout) findViewById(R.id.mapPanel);
 
         poiNames = new ArrayList<String>();
+        poiScores = new ArrayList<String>();
         poiImages = new ArrayList<String>();
         poiAddresses = new ArrayList<String>();
         poiDescriptions = new ArrayList<String>();
@@ -95,6 +101,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Intent intent = new Intent(this, PoiActivity.class);
         Bundle b = new Bundle();
         b.putSerializable("names", poiNames);
+        b.putSerializable("scores", poiScores);
         b.putSerializable("images", poiImages);
         b.putSerializable("addresses", poiAddresses);
         b.putSerializable("descriptions", poiDescriptions);
@@ -134,10 +141,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     player_latitude + POICollisionRange > POI_latitude &&
                     player_longtitude < POI_longtitude + POICollisionRange &&
                     player_longtitude + POICollisionRange > POI_longtitude) {
-                Log.d("Ricardo!", "Yeah Boy! " + poiNames.get(i));
-            }
-            else {
-                Log.d("Ricardo!", " NANANANANA");
+                updatePoiScores(poiNames.get(i));
             }
         }
     }
@@ -145,7 +149,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        fetchPOI();
+        fetchPOIScores();
 
 //        //TODO ROUTES CODE - TEST
 //        LatLng sydney = new LatLng(-34, 151);
@@ -378,7 +382,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         Double latitude = (Double) document.getData().get("latitude");
                         Double longitude = (Double) document.getData().get("longitude");
                         LatLng POI = new LatLng(latitude, longitude);
-                        mMap.addMarker(new MarkerOptions().position(POI).title(name));
+                        if(poiScores.contains(name)) {
+                            mMap.addMarker(new MarkerOptions().position(POI).title(name).icon(BitmapDescriptorFactory
+                                    .defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                        } else {
+                            mMap.addMarker(new MarkerOptions().position(POI).title(name).icon(BitmapDescriptorFactory
+                                    .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                        }
+
                         poiNames.add(name);
                         poiImages.add(image);
                         poiAddresses.add(address);
@@ -393,5 +404,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         });
+    }
+
+    private void fetchPOIScores() {
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("POI_scores").document(id.toString());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        poiScores = (ArrayList<String>) document.getData().get("scores");
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+                fetchPOI();
+            }
+        });
+    }
+
+    private void updatePoiScores(String name) {
+        if(!poiScores.contains(name)) {
+            Log.d("It works!", "element is here!");
+            poiScores.add(name);
+            final FirebaseFirestore db = FirebaseFirestore.getInstance();
+            DocumentReference docRef = db.collection("POI_scores").document(id.toString());
+            docRef.update("scores", poiScores);
+        }
     }
 }
