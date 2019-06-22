@@ -49,7 +49,7 @@ public class QuizQuestionListFragment extends Fragment implements QuizQuestionLi
                 Fragment testFragment = new AddQuestionFragment();
                 testFragment.setArguments(bundle);
                 FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, testFragment);
+//                fragmentTransaction.replace(R.id.fragment_container, testFragment);
                 fragmentTransaction.commit();
             }
         });
@@ -90,7 +90,7 @@ public class QuizQuestionListFragment extends Fragment implements QuizQuestionLi
         Fragment testFragment = new AddQuestionFragment();
         testFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, testFragment);
+//        fragmentTransaction.replace(R.id.fragment_container, testFragment);
         fragmentTransaction.commit();
     }
 }

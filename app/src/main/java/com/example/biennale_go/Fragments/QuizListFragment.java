@@ -63,7 +63,7 @@ public class QuizListFragment extends Fragment implements QuizListAdapter.OnItem
                     Fragment testFragment = new AddQuestionFragment();
                     testFragment.setArguments(bundle);
                     FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment_container, testFragment);
+//                    fragmentTransaction.replace(R.id.fragment_container, testFragment);
                     fragmentTransaction.commit();
                     newQuizName.setVisibility(View.GONE);
                     addQuiz.setText("Dodaj nowy quiz");
@@ -103,7 +103,7 @@ public class QuizListFragment extends Fragment implements QuizListAdapter.OnItem
         Fragment testFragment = new QuizQuestionListFragment();
         testFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, testFragment);
+//        fragmentTransaction.replace(R.id.fragment_container, testFragment);
         fragmentTransaction.commit();
     }
 
