@@ -53,7 +53,7 @@ import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
     private GoogleMap mMap;
-    private ImageView poiButton;
+    private ImageView poiButton, routesButton;
     LocationManager locationManager;
     private static final String TAG = "QuizMapActicity";
     private ArrayList<String> poiNames, poiAddresses, poiDescriptions, poiImages;
@@ -87,7 +87,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 openPoiActivity();
             }
         });
-
+        routesButton = (ImageView) findViewById(R.id.routesButton);
+        routesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openRoutesListActivity();
+            }
+        });
         getLocation();
     }
 
@@ -99,6 +105,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         b.putSerializable("addresses", poiAddresses);
         b.putSerializable("descriptions", poiDescriptions);
         intent.putExtras(b);
+        startActivity(intent);
+    }
+
+    public void openRoutesListActivity(){
+        Intent intent = new Intent(this, RoutesListActivity.class);
         startActivity(intent);
     }
 

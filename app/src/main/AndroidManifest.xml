@@ -23,7 +23,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".PoiDetailsActivity"></activity>
+        <activity android:name=".RoutesDetailsActivity"></activity>
+        <activity android:name=".RoutesListActivity" />
+        <activity android:name=".PoiDetailsActivity" />
         <activity android:name=".PoiActivity" />
         <activity android:name=".QuizSummaryActivity" />
         <activity android:name=".QuizActivity" />

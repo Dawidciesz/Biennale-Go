@@ -35,7 +35,7 @@ import com.example.biennale_go.R;
 //public class MainActivity extends FragmentActivity {
 public class MainActivity extends AppCompatActivity {
     private Button button, quizButton, adminPanelButton;
-    private LinearLayout mapCard, quizCard, poiCard;
+    private LinearLayout mapCard, quizCard, poiCard, routesCard;
     private boolean mLocationPermissionGranted = false;
     private static final String TAG = "MainActivity";
 
@@ -66,6 +66,13 @@ public class MainActivity extends AppCompatActivity {
                 openPoiActivity();
             }
         });
+        routesCard = (LinearLayout) findViewById(R.id.routesCard);
+        routesCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openRoutesListActivity();
+            }
+        });
     }
 //        button = (Button) findViewById(R.id.button);
 //        button.setOnClickListener(new View.OnClickListener() {
@@ -93,6 +100,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void openMapActivity(){
         Intent intent = new Intent(this, MapsActivity.class);
+        startActivity(intent);
+    }
+
+    public void openRoutesListActivity(){
+        Intent intent = new Intent(this, RoutesListActivity.class);
         startActivity(intent);
     }
 

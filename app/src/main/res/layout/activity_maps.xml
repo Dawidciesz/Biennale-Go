@@ -57,7 +57,7 @@
             app:civ_circle_background_color="@android:color/white" />
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/routeButton"
+            android:id="@+id/routesButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_below="@+id/poiButton"
