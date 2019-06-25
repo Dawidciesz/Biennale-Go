@@ -82,4 +82,15 @@
                 tools:layout_editor_absoluteY="278dp" />
         </LinearLayout>
     </ScrollView>
+
+    <Button
+        android:id="@+id/showOnMapButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Pokaz na mapie"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

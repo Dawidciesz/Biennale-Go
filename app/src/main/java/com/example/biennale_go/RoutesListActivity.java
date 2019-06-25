@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -36,6 +37,18 @@ public class RoutesListActivity extends AppCompatActivity {
         fetchRoutes();
     }
 
+    public ArrayList polylineSerialize(ArrayList polyline) {
+        ArrayList newPolyline = new ArrayList();
+        for(Integer i = 0; i<polyline.size(); i++) {
+            GeoPoint geoPoint = (GeoPoint) polyline.get(i);
+            ArrayList latLong = new ArrayList();
+            latLong.add(geoPoint.getLatitude());
+            latLong.add(geoPoint.getLongitude());
+            newPolyline.add(latLong);
+        }
+        return newPolyline;
+    }
+
     public void fetchRoutes() {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference docRef = db.collection("routes");
@@ -49,8 +62,9 @@ public class RoutesListActivity extends AppCompatActivity {
                         final ArrayList streets = (ArrayList) document.getData().get("streets");
                         final String name = (String) document.getData().get("name");
                         final String description = (String) document.getData().get("description");
-                        final String polyline = (String) document.getData().get("polyline");
+                        final ArrayList polyline = polylineSerialize((ArrayList) document.getData().get("polyline"));
                         final String color = (String) document.getData().get("color");
+                        final String image = (String) document.getData().get("image");
 
                         newButton = new Button(RoutesListActivity.this);
                         newButton.setText(name);
@@ -64,7 +78,8 @@ public class RoutesListActivity extends AppCompatActivity {
                                 Bundle b = new Bundle();
                                 b.putString("name", name);
                                 b.putString("description", description);
-                                b.putString("polyline", polyline);
+                                b.putSerializable("polyline", polyline);
+                                b.putString("image", image);
                                 b.putString("color", color);
                                 b.putSerializable("streets", streets);
 

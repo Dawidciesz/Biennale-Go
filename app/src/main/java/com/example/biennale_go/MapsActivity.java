@@ -31,6 +31,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -61,6 +62,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private RelativeLayout loadingPanel, mapPanel;
     private Double POICollisionRange = (360.0 * 100.0) / 40075000.0; // 100 meters
     private ArrayList markerPoints = new ArrayList();
+    private ArrayList polyline;
+    private Bundle b;
+    private String polylineColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +77,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         loadingPanel = (RelativeLayout) findViewById(R.id.loadingPanel);
         mapPanel = (RelativeLayout) findViewById(R.id.mapPanel);
+
+        b = getIntent().getExtras();
+        if (b != null) {
+            polyline = (ArrayList) b.getSerializable("polyline");
+            polylineColor = (String) b.getString("polylineColor");
+        }
 
         poiNames = new ArrayList<String>();
         poiImages = new ArrayList<String>();
@@ -128,7 +138,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng userCurrentLocation = new LatLng(latitude, longtitude);
         float zoomLevel = 17.0f;
         mMap.addMarker(new MarkerOptions().position(userCurrentLocation));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userCurrentLocation, zoomLevel));
+        if(polyline == null) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userCurrentLocation, zoomLevel));
+        }
         checkIfPoi(latitude, longtitude);
         if(loadingPanel.getVisibility() != View.GONE) {
             loadingPanel.setVisibility(View.GONE);
@@ -153,10 +165,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    public void drawRoutes() {
+        for(Integer i = 1; i<polyline.size();i++) {
+            ArrayList firstEl = (ArrayList) polyline.get(i-1);
+            ArrayList secondEl = (ArrayList) polyline.get(i);
+            Polyline polyline1 = mMap.addPolyline(new PolylineOptions()
+                    .clickable(true)
+                    .add(new LatLng((Double) firstEl.get(0), (Double) firstEl.get(1)),
+                           new  LatLng((Double) secondEl.get(0), (Double) secondEl.get(1))));
+            polyline1.setColor(Color.parseColor(polylineColor));
+        }
+        ArrayList firstEl = (ArrayList) polyline.get(0);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng((Double) firstEl.get(0), (Double) firstEl.get(1)), 16));
+        // Set listeners for click events.
+//        mMap.setOnPolylineClickListener(this);
+//        mMap.setOnPolygonClickListener(this);
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         fetchPOI();
+        if(polyline != null) drawRoutes();
+
 
 //        //TODO ROUTES CODE - TEST
 //        LatLng sydney = new LatLng(-34, 151);
