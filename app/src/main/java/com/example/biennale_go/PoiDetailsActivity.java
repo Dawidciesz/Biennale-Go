@@ -8,6 +8,7 @@ import android.media.Image;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,9 +20,10 @@ import java.util.ArrayList;
 
 public class PoiDetailsActivity extends AppCompatActivity {
     private String name, image, address, description;
+    private Boolean checked;
     private TextView nameTextView, addressTextView, descriptionTextView;
     private Bundle b;
-    private ImageView PoiImageView;
+    private ImageView PoiImageView, checkedImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +35,15 @@ public class PoiDetailsActivity extends AppCompatActivity {
             image = (String) b.getString("image");
             address = (String) b.getString("address");
             description = (String) b.getString("description");
+            checked = (Boolean) b.getBoolean("checked");
             nameTextView = (TextView) findViewById(R.id.nameTextView);
             nameTextView.setText(name);
             addressTextView = (TextView) findViewById(R.id.addressTextView);
             addressTextView.setText(address);
             descriptionTextView = (TextView) findViewById(R.id.descriptionTextView);
             descriptionTextView.setText(description);
-
+            checkedImageView = (ImageView) findViewById(R.id.checkedImageView);
+            if(checked) checkedImageView.setVisibility(View.VISIBLE);
             StrictMode.ThreadPolicy policy = new
             StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
