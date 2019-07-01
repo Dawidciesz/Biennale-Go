@@ -30,7 +30,7 @@ import static com.example.biennale_go.Utility.Constants.PERMISSIONS_REQUEST_ACCE
 import static com.example.biennale_go.Utility.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 
 //public class MainActivity extends FragmentActivity {
-public class MainActivity extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity {
     private Button button, quizButton, adminPanelButton;
     private LinearLayout mapCard, quizCard, poiCard, routesCard;
     private boolean mLocationPermissionGranted = false;
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean isServicesOK(){
         Log.d(TAG, "isServicesOK: checking google services version");
 
-        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MainActivity.this);
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MenuActivity.this);
 
         if(available == ConnectionResult.SUCCESS){
             //everything is fine and the user can make map requests
@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
         else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
             //an error occured but we can resolve it
             Log.d(TAG, "isServicesOK: an error occured but we can fix it");
-            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MainActivity.this, available, ERROR_DIALOG_REQUEST);
+            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MenuActivity.this, available, ERROR_DIALOG_REQUEST);
             dialog.show();
         }else{
             Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show();

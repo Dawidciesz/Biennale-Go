@@ -1,4 +1,4 @@
-package com.example.biennale_go;
+package com.example.biennale_go.Utility;
 
 public class Constants {
     public static final int ERROR_DIALOG_REQUEST = 9001;

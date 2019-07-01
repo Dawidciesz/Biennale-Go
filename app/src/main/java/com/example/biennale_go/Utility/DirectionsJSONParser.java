@@ -1,4 +1,4 @@
-package com.example.biennale_go;
+package com.example.biennale_go.Utility;
 
 import android.util.Log;
 
