@@ -96,14 +96,12 @@ public class QuizListFragment extends Fragment implements QuizListAdapter.OnItem
 
     @Override
     public void onItemClick(int posision) {
-        Log.d(TAG, "onItemClick: xdxdxd    " + posision);
         Bundle bundle = new Bundle();
         bundle.putString("quizName", items.get(posision));
-        //set Fragmentclass Arguments
         Fragment testFragment = new QuizQuestionListFragment();
         testFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.fragment_container, testFragment);
+        fragmentTransaction.replace(R.id.fragment_container, testFragment);
         fragmentTransaction.commit();
     }
 

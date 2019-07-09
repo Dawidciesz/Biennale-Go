@@ -30,6 +30,7 @@
         <activity android:name=".QuizSummaryActivity" />
         <activity android:name=".QuizActivity" />
         <activity android:name=".QuizListActivity" />
+        <activity android:name=".MenuActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

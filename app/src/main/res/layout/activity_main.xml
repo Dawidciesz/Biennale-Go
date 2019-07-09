@@ -1,216 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
-    tools:context="com.example.biennale_go.MainActivity">
+    android:orientation="vertical"
+    android:weightSum="12">
 
-    <GridLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="0dp"
-        android:alignmentMode="alignMargins"
-        android:columnCount="2"
-        android:columnOrderPreserved="false"
-        android:rowCount="3">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical">
 
-        <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/emailPasswordButtons"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="12dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="6dp">
+            android:layout_below="@+id/emailPasswordFields"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
 
-            <LinearLayout
-                android:id="@+id/mapCard"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="true"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="16dp">
+            <Button
+                android:id="@+id/mainMenuButton"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Menu"/>
 
-                <ImageView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:src="@drawable/map"
-                    app:srcCompat="@drawable/map" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="12dp"
-                    android:text="Mapa"
-                    android:textAlignment="center"
-                    android:textColor="#3a9fbf"
-                    android:textSize="30sp" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-        <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="12dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="6dp">
+            <Button
+                android:id="@+id/adminPanelButton"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Admin Panel"/>
+        </LinearLayout>
+    </RelativeLayout>
 
-            <LinearLayout
-                android:id="@+id/quizCard"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="16dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="11"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 
-                <ImageView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:src="@drawable/test" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="12dp"
-                    android:text="Quiz"
-                    android:textAlignment="center"
-                    android:textColor="#3a9fbf"
-                    android:textSize="30sp" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
 
-        <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="12dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="6dp">
 
-            <LinearLayout
-                android:id="@+id/poiCard"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <ImageView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:src="@drawable/marker"
-                    app:srcCompat="@drawable/marker" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="12dp"
-                    android:text="POI"
-                    android:textAlignment="center"
-                    android:textColor="#3a9fbf"
-                    android:textSize="30sp" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-        <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="12dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="6dp">
-
-            <LinearLayout
-                android:id="@+id/routesCard"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <ImageView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:src="@drawable/route" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="12dp"
-                    android:text="Trasy"
-                    android:textAlignment="center"
-                    android:textColor="#3a9fbf"
-                    android:textSize="30sp" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-        <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="12dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="6dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <ImageView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:src="@drawable/users" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="12dp"
-                    android:text="Profil"
-                    android:textAlignment="center"
-                    android:textColor="#3a9fbf"
-                    android:textSize="30sp" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-        <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="12dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="6dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <ImageView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:src="@drawable/rank" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="12dp"
-                    android:text="Ranking"
-                    android:textAlignment="center"
-                    android:textColor="#3a9fbf"
-                    android:textSize="30sp" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-    </GridLayout>
-</ScrollView>
+</LinearLayout>
