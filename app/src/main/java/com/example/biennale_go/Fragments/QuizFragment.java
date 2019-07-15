@@ -1,17 +1,22 @@
-package com.example.biennale_go;
+package com.example.biennale_go.Fragments;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.biennale_go.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class QuizActivity extends AppCompatActivity {
+public class QuizFragment extends Fragment {
     private TextView questionNumberTextView;
     private TextView questionDescriptionTextView;
     private Button questionAnswerA;
@@ -25,20 +30,20 @@ public class QuizActivity extends AppCompatActivity {
     private ArrayList questions;
     private Bundle b;
     private Integer points = 0;
-
+    private  View view;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quiz);
+        view = inflater.inflate(R.layout.activity_quiz, container, false);
 
-        questionNumberTextView = (TextView) findViewById(R.id.questionNumberTextView);
-        questionDescriptionTextView = (TextView) findViewById(R.id.questionDescriptionTextView);
-        questionAnswerA = (Button) findViewById(R.id.answerA);
-        questionAnswerB = (Button) findViewById(R.id.answerB);
-        questionAnswerC = (Button) findViewById(R.id.answerC);
-        questionAnswerD = (Button) findViewById(R.id.answerD);
+        questionNumberTextView = (TextView) view.findViewById(R.id.questionNumberTextView);
+        questionDescriptionTextView = (TextView) view.findViewById(R.id.questionDescriptionTextView);
+        questionAnswerA = (Button) view.findViewById(R.id.answerA);
+        questionAnswerB = (Button) view.findViewById(R.id.answerB);
+        questionAnswerC = (Button) view.findViewById(R.id.answerC);
+        questionAnswerD = (Button) view.findViewById(R.id.answerD);
 
-        b = getIntent().getExtras();
+        b = getArguments();
 
         if (b != null) {
             questions = new ArrayList((ArrayList) b.getSerializable("questions"));
@@ -72,6 +77,7 @@ public class QuizActivity extends AppCompatActivity {
                 checkAnswer("d");
             }
         });
+        return view;
     }
 
 
@@ -94,14 +100,16 @@ public class QuizActivity extends AppCompatActivity {
             questionNumber++;
             fillQuestion();
         } else {
-            Intent intent = new Intent(QuizActivity.this, QuizSummaryActivity.class);
             Bundle b2 = new Bundle();
             b2.putInt("points", points);
             b2.putInt("maxPoints", maxQuestionNumber+1);
             b2.putInt("key", key);
             b2.putSerializable("scoresList", scoresList);
-            intent.putExtras(b2);
-            startActivity(intent);
+            Fragment testFragment = new QuizFragment();
+            testFragment.setArguments(b);
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, testFragment);
+            fragmentTransaction.commit();
         }
     }
 }

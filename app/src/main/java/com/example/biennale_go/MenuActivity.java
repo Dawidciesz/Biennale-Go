@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -108,18 +110,21 @@ public class MenuActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void openRoutesListActivity(){
-        Intent intent = new Intent(this, RoutesListActivity.class);
+    public void openQuizListActivity(){
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("fragment","QuizList");
         startActivity(intent);
     }
 
-    public void openQuizListActivity(){
-        Intent intent = new Intent(this, QuizListActivity.class);
+    public void openRoutesListActivity(){
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("fragment","RoutesList");
         startActivity(intent);
     }
 
     public void openPoiActivity(){
-        Intent intent = new Intent(this, PoiActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("fragment","Poi");
         startActivity(intent);
     }
 

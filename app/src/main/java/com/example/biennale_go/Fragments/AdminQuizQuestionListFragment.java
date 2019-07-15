@@ -27,7 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class QuizQuestionListFragment extends Fragment implements QuizQuestionListAdapter.OnItemClick {
+public class AdminQuizQuestionListFragment extends Fragment implements QuizQuestionListAdapter.OnItemClick {
     private RecyclerView recyclerView;
     private List<String> items = new ArrayList<>();
     private RecyclerView.Adapter adapter;

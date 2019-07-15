@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
     android:padding="20dp"
-    tools:context=".QuizActivity"
+    tools:context=".Fragments.QuizFragment"
     tools:layout_editor_absoluteY="81dp">
 
     <ScrollView

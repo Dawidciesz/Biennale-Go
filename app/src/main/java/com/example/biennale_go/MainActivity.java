@@ -10,18 +10,33 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.biennale_go.Fragments.AdminPanelFragment;
+import com.example.biennale_go.Fragments.PoiFragment;
+import com.example.biennale_go.Fragments.QuizListFragment;
+import com.example.biennale_go.Fragments.RoutesListFragment;
 import com.example.biennale_go.Utility.CurrentUser;
 
 public class MainActivity extends FragmentActivity {
     private Button quizButton, adminPanelButton, mainMenuButton;
     private static final String TAG = "MainActivity";
+    private String startFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CurrentUser.setCurrentUser();
         setContentView(R.layout.activity_main);
-
+        if (getIntent().getExtras() != null) {
+            startFragment = getIntent().getExtras().getString("fragment");
+            if (startFragment.equals("QuizList")) {
+                openQuizList();
+            }
+            else if (startFragment.equals("RoutesList")) {
+                openRoutesList();
+            }
+            else if (startFragment.equals("Poi")) {
+                openPoi();
+            }
+        }
 
 
 
@@ -63,9 +78,25 @@ public class MainActivity extends FragmentActivity {
         fragmentTransaction.replace(R.id.fragment_container, adminPanelFragment);
         fragmentTransaction.commit();
     }
-    public void openQuizListActivity(){
-        Intent intent = new Intent(this, QuizListActivity.class);
-        startActivity(intent);
+    public void openQuizList() {
+        Fragment adminPanelFragment = new QuizListFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, adminPanelFragment);
+        fragmentTransaction.commit();
+    }
+
+    public void openRoutesList() {
+        Fragment adminPanelFragment = new RoutesListFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, adminPanelFragment);
+        fragmentTransaction.commit();
+    }
+
+    public void openPoi() {
+        Fragment adminPanelFragment = new PoiFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, adminPanelFragment);
+        fragmentTransaction.commit();
     }
 
     public void openMenuActivity(){

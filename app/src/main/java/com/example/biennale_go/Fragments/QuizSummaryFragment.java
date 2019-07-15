@@ -1,15 +1,19 @@
-package com.example.biennale_go;
+package com.example.biennale_go.Fragments;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.biennale_go.MainActivity;
+import com.example.biennale_go.R;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -18,7 +22,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class QuizSummaryActivity extends AppCompatActivity {
+public class QuizSummaryFragment extends Fragment {
     private Button exitButton;
     private TextView pointsTextView;
     private Bundle b;
@@ -27,22 +31,23 @@ public class QuizSummaryActivity extends AppCompatActivity {
     private ArrayList scoresList = new ArrayList();
     //    TODO GLOBAL ID
     private Integer id = 1;
+    private View view;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quiz_summary);
-        pointsTextView = (TextView) findViewById(R.id.pointsTextView);
-        exitButton = (Button) findViewById(R.id.exitButton);
-        exitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openMainActivity();
-            }
-        });
-        awardImageView = (ImageView) findViewById(R.id.awardImageView);
+        view = inflater.inflate(R.layout.activity_quiz_summary, container, false);
+        pointsTextView = (TextView) view.findViewById(R.id.pointsTextView);
+//        exitButton = (Button) view.findViewById(R.id.exitButton);
+//        exitButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                openMainActivity();
+//            }
+//        });
+        awardImageView = (ImageView) view.findViewById(R.id.awardImageView);
 
-        b = getIntent().getExtras();
+        b = getArguments();
 
         if (b != null) {
             points =  b.getInt("points");
@@ -62,6 +67,7 @@ public class QuizSummaryActivity extends AppCompatActivity {
 
             updateScoreList();
         }
+        return view;
     }
 
     public void updateScoreList() {
@@ -94,7 +100,7 @@ public class QuizSummaryActivity extends AppCompatActivity {
     }
 
     public void openMainActivity(){
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(getActivity(), MainActivity.class);
         startActivity(intent);
     }
 }

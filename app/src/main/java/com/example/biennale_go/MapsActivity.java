@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.biennale_go.Fragments.PoiFragment;
+import com.example.biennale_go.Fragments.RoutesListFragment;
 import com.example.biennale_go.Utility.DirectionsJSONParser;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -108,7 +110,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void openPoiActivity(){
-        Intent intent = new Intent(this, PoiActivity.class);
+        Intent intent = new Intent(this, PoiFragment.class);
         Bundle b = new Bundle();
         b.putSerializable("names", poiNames);
         b.putSerializable("scores", poiScores);
@@ -120,7 +122,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void openRoutesListActivity(){
-        Intent intent = new Intent(this, RoutesListActivity.class);
+        Intent intent = new Intent(this, RoutesListFragment.class);
         startActivity(intent);
     }
 

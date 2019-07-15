@@ -1,20 +1,23 @@
-package com.example.biennale_go;
+package com.example.biennale_go.Fragments;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.Fragment;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.example.biennale_go.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -26,23 +29,24 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class PoiActivity extends AppCompatActivity {
+public class PoiFragment extends Fragment {
     private Bundle b;
     private LinearLayout poiPanel;
     private RelativeLayout loadingPanel;
     private ArrayList<String> names, scores, addresses, descriptions, images;
     private Button newButton;
-    private static final String TAG = "PoiActivity";
+    private static final String TAG = "PoiFragment";
     //    TODO GLOBAL ID
     private Integer id = 1;
+    private View view;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_poi);
-        loadingPanel = (RelativeLayout) findViewById(R.id.loadingPanel);
-        poiPanel = (LinearLayout) findViewById(R.id.poiPanel);
-        b = getIntent().getExtras();
+        view = inflater.inflate(R.layout.activity_poi, container, false);
+        loadingPanel = (RelativeLayout) view.findViewById(R.id.loadingPanel);
+        poiPanel = (LinearLayout) view.findViewById(R.id.poiPanel);
+        b = getArguments();
 
         if (b != null) {
             names = new ArrayList((ArrayList) b.getSerializable("names"));
@@ -55,6 +59,7 @@ public class PoiActivity extends AppCompatActivity {
         } else {
             fetchPOIScores();
         }
+        return view;
     }
 
     private void switchLoadingPanel() {
@@ -128,7 +133,7 @@ public class PoiActivity extends AppCompatActivity {
             final String address = addresses.get(i);
             final String description = descriptions.get(i);
 
-            newButton = new Button(PoiActivity.this);
+            newButton = new Button(getContext());
             newButton.setText(name);
             newButton.setClickable(true);
             newButton.setGravity(Gravity.CENTER);
@@ -136,25 +141,28 @@ public class PoiActivity extends AppCompatActivity {
             {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(PoiActivity.this, PoiDetailsActivity.class);
                     Bundle b = new Bundle();
                     b.putString("name", name);
                     b.putString("image", image);
                     b.putString("address", address);
                     b.putString("description", description);
                     b.putBoolean("checked", scores.contains(name));
-                    intent.putExtras(b);
-                    startActivity(intent);
+
+                    Fragment testFragment = new PoiDetailsFragment();
+                    testFragment.setArguments(b);
+                    FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_container, testFragment);
+                    fragmentTransaction.commit();
                 }
             });
             if(scores.contains(name)) {
-                Drawable img =  getDrawable( R.drawable.checked );
+                Drawable img = ContextCompat.getDrawable(getContext(), R.drawable.checked );
                 img.setBounds( 0, 0, 60, 60 );
                 newButton.setCompoundDrawables( img, null, img, null );
             }
             poiPanel.addView(newButton);
             // TODO FIX MARGINS
-            newButton = new Button(PoiActivity.this);
+            newButton = new Button(getContext());
             newButton.setVisibility(View.INVISIBLE);
             poiPanel.addView(newButton);
         }
