@@ -23,6 +23,9 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!CurrentUser.isLogged) {
+
+        }
         CurrentUser.setCurrentUser();
         setContentView(R.layout.activity_main);
         if (getIntent().getExtras() != null) {
@@ -101,6 +104,11 @@ public class MainActivity extends FragmentActivity {
 
     public void openMenuActivity(){
         Intent intent = new Intent(this, MenuActivity.class);
+        startActivity(intent);
+    }
+
+    public void openEmailPasswordActivity(){
+        Intent intent = new Intent(this, EmailPasswordActivity.class);
         startActivity(intent);
     }
 

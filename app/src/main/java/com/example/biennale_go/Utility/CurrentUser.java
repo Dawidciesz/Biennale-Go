@@ -24,7 +24,6 @@ public class CurrentUser {
     public static int age;
     public static int score;
 
-
     public static boolean isLogged;
 
 
@@ -52,11 +51,10 @@ public class CurrentUser {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        avatarUrl = document.getData().get("avatar").toString();
-                        name =  document.getData().get("name").toString();
-                        gender = document.getData().get("gender").toString();
                         age = Integer.parseInt(document.getData().get("age").toString());
-                        score = Integer.parseInt(document.getData().get("score").toString());
+                        avatarUrl = document.getData().get("avatar").toString();
+//                        gender = document.getData().get("gender").toString();
+                        name =  document.getData().get("name").toString();
                         score = Integer.parseInt(document.getData().get("score").toString());
                     }
                 }}});

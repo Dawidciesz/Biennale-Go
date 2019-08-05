@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.example.biennale_go.Utility.CurrentUser;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.firebase.auth.FirebaseAuth;
 
 import static com.example.biennale_go.Utility.Constants.ERROR_DIALOG_REQUEST;
 import static com.example.biennale_go.Utility.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
@@ -34,7 +35,7 @@ import static com.example.biennale_go.Utility.Constants.PERMISSIONS_REQUEST_ENAB
 //public class MainActivity extends FragmentActivity {
 public class MenuActivity extends AppCompatActivity {
     private Button button, quizButton, adminPanelButton;
-    private LinearLayout mapCard, quizCard, poiCard, routesCard, adminPanel;
+    private LinearLayout mapCard, quizCard, poiCard, routesCard, adminPanel, logOut;
     private boolean mLocationPermissionGranted = false;
     private static final String TAG = "MainActivity";
 
@@ -78,6 +79,15 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 openMainActivity();
+            }
+        });
+        logOut = (LinearLayout) findViewById(R.id.logOut);
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Intent i = new Intent(MenuActivity.this, EmailPasswordActivity.class);
+                startActivity(i);
             }
         });
     }
@@ -127,6 +137,7 @@ public class MenuActivity extends AppCompatActivity {
         intent.putExtra("fragment","Poi");
         startActivity(intent);
     }
+            
 
     public void openMainActivity(){
         Intent intent = new Intent(this, MainActivity.class);
