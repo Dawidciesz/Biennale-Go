@@ -39,9 +39,9 @@ public class AdminPanelFragment extends Fragment {
     }
 
     public void openAddQuizFragment() {
-        Fragment testFragment = new QuizListFragment();
+        Fragment testFragment = new AdminQuizListFragment();
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.fragment_container, testFragment);
+        fragmentTransaction.replace(R.id.fragment_container, testFragment);
         fragmentTransaction.commit();
     }
 

@@ -1,19 +1,23 @@
-package com.example.biennale_go;
+package com.example.biennale_go.Fragments;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.example.biennale_go.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -23,18 +27,20 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Map;
 
-public class RoutesListActivity extends AppCompatActivity {
+public class RoutesListFragment extends Fragment {
     private LinearLayout routesListPanel;
     private Button newButton;
+    private View view;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_routes_list);
-        routesListPanel = (LinearLayout) findViewById(R.id.routesListPanel);
+        view = inflater.inflate(R.layout.activity_routes_list, container, false);
+        routesListPanel = (LinearLayout) view.findViewById(R.id.routesListPanel);
 
         fetchRoutes();
+        return view;
     }
 
     public ArrayList polylineSerialize(ArrayList polyline) {
@@ -56,7 +62,7 @@ public class RoutesListActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                 if (task.isSuccessful()) {
                     for (final QueryDocumentSnapshot document : task.getResult()) {
                         final ArrayList streets = (ArrayList) document.getData().get("streets");
@@ -66,7 +72,7 @@ public class RoutesListActivity extends AppCompatActivity {
                         final String color = (String) document.getData().get("color");
                         final String image = (String) document.getData().get("image");
 
-                        newButton = new Button(RoutesListActivity.this);
+                        newButton = new Button(getContext());
                         newButton.setText(name);
                         newButton.setClickable(true);
                         newButton.setGravity(Gravity.CENTER);
@@ -74,7 +80,6 @@ public class RoutesListActivity extends AppCompatActivity {
                         {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(RoutesListActivity.this, RoutesDetailsActivity.class);
                                 Bundle b = new Bundle();
                                 b.putString("name", name);
                                 b.putString("description", description);
@@ -82,23 +87,25 @@ public class RoutesListActivity extends AppCompatActivity {
                                 b.putString("image", image);
                                 b.putString("color", color);
                                 b.putSerializable("streets", streets);
-
-                                intent.putExtras(b);
-                                startActivity(intent);
+                                Fragment testFragment = new RoutesDetailsFragment();
+                                testFragment.setArguments(b);
+                                FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                fragmentTransaction.replace(R.id.fragment_container, testFragment);
+                                fragmentTransaction.commit();
                             }
                         });
 
                         routesListPanel.addView(newButton);
 
                         // margin button
-                        newButton = new Button(RoutesListActivity.this);
+                        newButton = new Button(getContext());
                         newButton.setVisibility(View.INVISIBLE);
                         routesListPanel.addView(newButton);
                     }
                 } else {
                     Log.d("Error!", "Error getting documents: ", task.getException());
                 }
-                findViewById(R.id.routesListPanel).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.routesListPanel).setVisibility(View.VISIBLE);
             }
         });
     }
