@@ -35,7 +35,7 @@ import static com.example.biennale_go.Utility.Constants.PERMISSIONS_REQUEST_ENAB
 //public class MainActivity extends FragmentActivity {
 public class MenuActivity extends AppCompatActivity {
     private Button button, quizButton, adminPanelButton;
-    private LinearLayout mapCard, quizCard, poiCard, routesCard, adminPanel, logOut;
+    private LinearLayout mapCard, quizCard, poiCard, routesCard, profilCard, adminPanel, logOut;
     private boolean mLocationPermissionGranted = false;
     private static final String TAG = "MainActivity";
 
@@ -51,6 +51,13 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 openMapActivity();
+            }
+        });
+        profilCard = (LinearLayout) findViewById(R.id.profilCard);
+        profilCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openProfilActivity();
             }
         });
         quizCard = (LinearLayout) findViewById(R.id.quizCard);
@@ -137,7 +144,12 @@ public class MenuActivity extends AppCompatActivity {
         intent.putExtra("fragment","Poi");
         startActivity(intent);
     }
-            
+             public void openProfilActivity(){
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("fragment","Profil");
+        startActivity(intent);
+    }
+
 
     public void openMainActivity(){
         Intent intent = new Intent(this, MainActivity.class);
