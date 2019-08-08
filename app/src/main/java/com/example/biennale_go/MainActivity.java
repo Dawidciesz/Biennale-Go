@@ -11,6 +11,7 @@ import android.widget.Button;
 
 import com.example.biennale_go.Fragments.AdminPanelFragment;
 import com.example.biennale_go.Fragments.PoiFragment;
+import com.example.biennale_go.Fragments.ProfilFragment;
 import com.example.biennale_go.Fragments.QuizListFragment;
 import com.example.biennale_go.Fragments.RoutesListFragment;
 import com.example.biennale_go.Utility.CurrentUser;
@@ -38,6 +39,9 @@ public class MainActivity extends FragmentActivity {
             }
             else if (startFragment.equals("Poi")) {
                 openPoi();
+            }
+            else if (startFragment.equals("Profil")) {
+                openProfil();
             }
         }
 
@@ -82,23 +86,30 @@ public class MainActivity extends FragmentActivity {
         fragmentTransaction.commit();
     }
     public void openQuizList() {
-        Fragment adminPanelFragment = new QuizListFragment();
+        Fragment quizListFragment = new QuizListFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, adminPanelFragment);
+        fragmentTransaction.replace(R.id.fragment_container, quizListFragment);
         fragmentTransaction.commit();
     }
 
     public void openRoutesList() {
-        Fragment adminPanelFragment = new RoutesListFragment();
+        Fragment routesListFragment = new RoutesListFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, adminPanelFragment);
+        fragmentTransaction.replace(R.id.fragment_container, routesListFragment);
         fragmentTransaction.commit();
     }
 
     public void openPoi() {
-        Fragment adminPanelFragment = new PoiFragment();
+        Fragment poiFragment = new PoiFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, adminPanelFragment);
+        fragmentTransaction.replace(R.id.fragment_container, poiFragment);
+        fragmentTransaction.commit();
+    }
+
+    public void openProfil() {
+        Fragment profilFragment = new ProfilFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, profilFragment);
         fragmentTransaction.commit();
     }
 
