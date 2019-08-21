@@ -110,7 +110,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void openPoiActivity(){
-        Intent intent = new Intent(this, PoiFragment.class);
+        Intent intent = new Intent(this, MainActivity.class);
         Bundle b = new Bundle();
         b.putSerializable("names", poiNames);
         b.putSerializable("scores", poiScores);
@@ -118,11 +118,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         b.putSerializable("addresses", poiAddresses);
         b.putSerializable("descriptions", poiDescriptions);
         intent.putExtras(b);
+        intent.putExtra("fragment","Poi");
         startActivity(intent);
     }
 
     public void openRoutesListActivity(){
-        Intent intent = new Intent(this, RoutesListFragment.class);
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("fragment","RoutesList");
         startActivity(intent);
     }
 

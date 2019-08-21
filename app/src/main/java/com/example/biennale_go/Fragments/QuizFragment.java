@@ -105,8 +105,8 @@ public class QuizFragment extends Fragment {
             b2.putInt("maxPoints", maxQuestionNumber+1);
             b2.putInt("key", key);
             b2.putSerializable("scoresList", scoresList);
-            Fragment testFragment = new QuizFragment();
-            testFragment.setArguments(b);
+            Fragment testFragment = new QuizSummaryFragment();
+            testFragment.setArguments(b2);
             FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, testFragment);
             fragmentTransaction.commit();

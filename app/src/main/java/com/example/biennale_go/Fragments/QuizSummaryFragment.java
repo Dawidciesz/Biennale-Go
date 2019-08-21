@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.biennale_go.MainActivity;
+import com.example.biennale_go.MenuActivity;
 import com.example.biennale_go.R;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -38,13 +39,13 @@ public class QuizSummaryFragment extends Fragment {
         super.onCreate(savedInstanceState);
         view = inflater.inflate(R.layout.activity_quiz_summary, container, false);
         pointsTextView = (TextView) view.findViewById(R.id.pointsTextView);
-//        exitButton = (Button) view.findViewById(R.id.exitButton);
-//        exitButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                openMainActivity();
-//            }
-//        });
+        exitButton = (Button) view.findViewById(R.id.exitButton);
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openMainActivity();
+            }
+        });
         awardImageView = (ImageView) view.findViewById(R.id.awardImageView);
 
         b = getArguments();
@@ -63,6 +64,8 @@ public class QuizSummaryFragment extends Fragment {
                 awardImageView.setImageResource( R.drawable.awardsilver );
             } else if(percentage >= 30.0) {
                 awardImageView.setImageResource( R.drawable.awardbronze );
+            } else {
+                awardImageView.setImageResource( R.drawable.award );
             }
 
             updateScoreList();
@@ -100,7 +103,7 @@ public class QuizSummaryFragment extends Fragment {
     }
 
     public void openMainActivity(){
-        Intent intent = new Intent(getActivity(), MainActivity.class);
+        Intent intent = new Intent(getActivity(), MenuActivity.class);
         startActivity(intent);
     }
 }
