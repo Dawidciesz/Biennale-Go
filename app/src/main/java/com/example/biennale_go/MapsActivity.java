@@ -26,6 +26,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -63,6 +65,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList polyline;
     private Bundle b;
     private String polylineColor;
+    private Boolean playerMarkFlag = false;
+    private Marker playerMarker;
+    final LatLngBounds elblagBorder = new LatLngBounds(new LatLng(54.146831,19.386889  ), new LatLng(54.189640, 19.437335));
+
 
     //    TODO GLOBAL ID
     private Integer id = 1;
@@ -142,7 +148,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     void setMapLocation(double latitude, double longtitude) {
         LatLng userCurrentLocation = new LatLng(latitude, longtitude);
         float zoomLevel = 17.0f;
-        mMap.addMarker(new MarkerOptions().position(userCurrentLocation));
+        if(!playerMarkFlag) addPlayerMarker(userCurrentLocation);
+        else playerMarker.setPosition(new LatLng(latitude, longtitude));
         if(polyline == null) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userCurrentLocation, zoomLevel));
         }
@@ -151,6 +158,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             loadingPanel.setVisibility(View.GONE);
             mapPanel.setVisibility(View.VISIBLE);
         }
+    }
+
+    void addPlayerMarker(LatLng userCurrentLocation){
+        playerMarker = mMap.addMarker(new MarkerOptions().position(userCurrentLocation));
+        playerMarkFlag = !playerMarkFlag;
     }
 
     private void checkIfPoi(double player_latitude, double player_longtitude){
@@ -187,61 +199,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        fetchPOIScores();
-        if(polyline != null) drawRoutes();
-
-
-
-//        //TODO ROUTES CODE - TEST
-//        LatLng sydney = new LatLng(-34, 151);
-//        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 16));
-//
-//        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+        mMap.setLatLngBoundsForCameraTarget(elblagBorder);
+        mMap.setMinZoomPreference(13.809352f);
+//        mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
 //            @Override
-//            public void onMapClick(LatLng latLng) {
+//            public void onCameraMoveStarted(int i) {
 //
-//                if (markerPoints.size() > 1) {
-//                    markerPoints.clear();
-//                    mMap.clear();
-//                }
-//
-//                // Adding new item to the ArrayList
-//                markerPoints.add(latLng);
-//
-//                // Creating MarkerOptions
-//                MarkerOptions options = new MarkerOptions();
-//
-//                // Setting the position of the marker
-//                options.position(latLng);
-//
-//                if (markerPoints.size() == 1) {
-//                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-//                } else if (markerPoints.size() == 2) {
-//                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-//                }
-//
-//                // Add new marker to the Google Map Android API V2
-//                mMap.addMarker(options);
-//
-//                // Checks, whether start and end locations are captured
-//                if (markerPoints.size() >= 2) {
-//                    LatLng origin = (LatLng) markerPoints.get(0);
-//                    LatLng dest = (LatLng) markerPoints.get(1);
-//
-//                    // Getting URL to the Google Directions API
-//                    String url = getDirectionsUrl(origin, dest);
-//
-//                    DownloadTask downloadTask = new DownloadTask();
-//
-//                    // Start downloading json data from Google Directions API
-//                    downloadTask.execute(url);
-//                }
-//
+//                float zoom = mMap.getCameraPosition().zoom;
+//                Log.d("test","camera move : "+zoom);
 //            }
 //        });
-        // TEST CODE - END
+        fetchPOIScores();
+        if(polyline != null) drawRoutes();
     }
+
+
     private class DownloadTask extends AsyncTask<String, String, String> {
 
         @Override
