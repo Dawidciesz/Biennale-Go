@@ -49,6 +49,8 @@ public class PoiDetailsFragment extends Fragment {
             descriptionTextView = (TextView) view.findViewById(R.id.descriptionTextView);
             descriptionTextView.setText(description);
             checkedImageView = (ImageView) view.findViewById(R.id.checkedImageView);
+            checkedImageView.setImageResource(R.drawable.checked);
+            Log.d("check test", checked ? "true" : "false");
             if (checked) checkedImageView.setVisibility(View.VISIBLE);
             StrictMode.ThreadPolicy policy = new
                     StrictMode.ThreadPolicy.Builder().permitAll().build();
