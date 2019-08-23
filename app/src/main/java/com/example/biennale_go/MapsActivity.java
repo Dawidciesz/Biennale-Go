@@ -5,7 +5,10 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -13,12 +16,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.example.biennale_go.Fragments.PoiFragment;
-import com.example.biennale_go.Fragments.RoutesListFragment;
 import com.example.biennale_go.Utility.DirectionsJSONParser;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,6 +29,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -64,8 +67,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList markerPoints = new ArrayList();
     private ArrayList polyline;
     private Bundle b;
+    private Button followButton;
     private String polylineColor;
-    private Boolean playerMarkFlag = false;
+    private Boolean playerMarkFlag = false, followPlayerFlag = true;
     private Marker playerMarker;
     final LatLngBounds elblagBorder = new LatLngBounds(new LatLng(54.146831,19.386889  ), new LatLng(54.189640, 19.437335));
 
@@ -84,6 +88,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         loadingPanel = (RelativeLayout) findViewById(R.id.loadingPanel);
         mapPanel = (RelativeLayout) findViewById(R.id.mapPanel);
+
+        followButton = (Button) findViewById(R.id.followButton);
+        followButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                followPlayerFlag = !followPlayerFlag;
+                if (followPlayerFlag) followButton.setBackgroundColor(Color.parseColor("#018786"));
+                else followButton.setBackgroundColor(Color.GRAY);
+            }
+        });
 
         b = getIntent().getExtras();
         if (b != null) {
@@ -113,6 +127,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
         getLocation();
+        if(polyline != null) followPlayerFlag = false; // dont follow player if routes are available
     }
 
     public void openPoiActivity(){
@@ -150,7 +165,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         float zoomLevel = 17.0f;
         if(!playerMarkFlag) addPlayerMarker(userCurrentLocation);
         else playerMarker.setPosition(new LatLng(latitude, longtitude));
-        if(polyline == null) {
+        if(followPlayerFlag) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userCurrentLocation, zoomLevel));
         }
         checkIfPoi(latitude, longtitude);
@@ -161,7 +176,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     void addPlayerMarker(LatLng userCurrentLocation){
-        playerMarker = mMap.addMarker(new MarkerOptions().position(userCurrentLocation));
+        BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.usermarker);
+        Bitmap b=bitmapdraw.getBitmap();
+        Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
+        playerMarker = mMap.addMarker(new MarkerOptions().position(userCurrentLocation).icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
         playerMarkFlag = !playerMarkFlag;
     }
 
@@ -200,7 +218,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setLatLngBoundsForCameraTarget(elblagBorder);
-        mMap.setMinZoomPreference(13.809352f);
+        mMap.setMinZoomPreference(13.8f);
+        try {
+            // Customise the styling of the base map using a JSON object defined
+            // in a raw resource file.
+            boolean success = mMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                            this, R.raw.style_json));
+
+            if (!success) {
+                Log.e("MapsActivityRaw", "Style parsing failed.");
+            }
+        } catch (Resources.NotFoundException e) {
+            Log.e("MapsActivityRaw", "Can't find style.", e);
+        }
 //        mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
 //            @Override
 //            public void onCameraMoveStarted(int i) {
@@ -381,6 +412,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void fetchPOI() {
+        BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.checkedmarker);
+        Bitmap b=bitmapdraw.getBitmap();
+        final Bitmap checkedMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
+        bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.questionmarker);
+        b=bitmapdraw.getBitmap();
+        final Bitmap questionMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
+
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference docRef = db.collection("POI");
         docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -396,11 +435,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         Double longitude = (Double) document.getData().get("longitude");
                         LatLng POI = new LatLng(latitude, longitude);
                         if(poiScores.contains(name)) {
-                            mMap.addMarker(new MarkerOptions().position(POI).title(name).icon(BitmapDescriptorFactory
-                                    .defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                            mMap.addMarker(new MarkerOptions().position(POI).title(name).icon(BitmapDescriptorFactory.fromBitmap(checkedMarker)));
                         } else {
-                            mMap.addMarker(new MarkerOptions().position(POI).title(name).icon(BitmapDescriptorFactory
-                                    .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                            mMap.addMarker(new MarkerOptions().position(POI).title(name).icon(BitmapDescriptorFactory.fromBitmap(questionMarker)));
                         }
 
                         poiNames.add(name);
