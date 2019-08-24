@@ -4,8 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,7 +20,6 @@ import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-//import com.example.bziennale_go.Fragments.AdminPanelFragment;
 import com.example.biennale_go.Utility.CurrentUser;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -32,7 +29,6 @@ import static com.example.biennale_go.Utility.Constants.ERROR_DIALOG_REQUEST;
 import static com.example.biennale_go.Utility.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.example.biennale_go.Utility.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 
-//public class MainActivity extends FragmentActivity {
 public class MenuActivity extends AppCompatActivity {
     private Button button, quizButton, adminPanelButton;
     private LinearLayout mapCard, quizCard, poiCard, routesCard, profilCard, adminPanel, logOut;
@@ -98,29 +94,6 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
     }
-//        button = (Button) findViewById(R.id.button);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                openMapActivity();
-//            }
-//        });
-//        quizButton = (Button) findViewById(R.id.quizButton);
-//        quizButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                openQuizListActivity();
-//            }
-//        });
-
-//        adminPanelButton = (Button) findViewById(R.id.adminPanelButton);
-//        adminPanelButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                openAdminPanelFragment();
-//            }
-//        });
-//    }
 
     public void openMapActivity(){
         Intent intent = new Intent(this, MapsActivity.class);
@@ -150,18 +123,10 @@ public class MenuActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
     public void openMainActivity(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
-
-//    public void openAdminPanelFragment() {
-//        Fragment adminPanelFragment = new AdminPanelFragment();
-//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.fragment_container, adminPanelFragment);
-//        fragmentTransaction.commit();
-//    }
 
     private boolean checkMapServices(){
         if(isServicesOK()){
@@ -282,9 +247,5 @@ public class MenuActivity extends AppCompatActivity {
                 }
             }
         }
-
     }
-
-
-
 }
