@@ -4,4 +4,7 @@
     <string name="title_activity_quiz_list">quizListActivity</string>
     <string name="lista_quizow">Lista quizow:</string>
     <string name="test_1">Test 1</string>
+    <string name="places_visited">%d odwiedzonych ciekawych miejsc</string>
+    <string name="quizes_finished">%d ukończonych quizów</string>
+    <string name="distance_traveled">%.2f pokonanych kilometrów</string>
 </resources>
