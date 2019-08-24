@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -98,6 +99,9 @@ public class QuizListFragment extends Fragment {
                         newButton.setText(document.getData().get("name").toString());
                         newButton.setClickable(true);
                         newButton.setGravity(Gravity.CENTER);
+                        newButton.setBackgroundColor(Color.parseColor("#ffffff"));
+                        newButton.setTextColor(Color.parseColor("#00574b"));
+                        newButton.setPadding(10,0,10,0);
                         newButton.setOnClickListener(new View.OnClickListener()
                         {
                             @Override
