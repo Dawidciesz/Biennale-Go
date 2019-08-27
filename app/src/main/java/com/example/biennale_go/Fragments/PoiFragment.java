@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.Fragment;
 
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -137,6 +138,9 @@ public class PoiFragment extends Fragment {
             newButton.setText(name);
             newButton.setClickable(true);
             newButton.setGravity(Gravity.CENTER);
+            newButton.setBackgroundColor(Color.parseColor("#ffffff"));
+            newButton.setTextColor(Color.parseColor("#00574b"));
+            newButton.setPadding(10,0,10,0);
             newButton.setOnClickListener(new View.OnClickListener()
             {
                 @Override
