@@ -5,7 +5,10 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -13,12 +16,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.example.biennale_go.Fragments.PoiFragment;
-import com.example.biennale_go.Fragments.RoutesListFragment;
 import com.example.biennale_go.Utility.DirectionsJSONParser;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,6 +28,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -62,7 +67,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList markerPoints = new ArrayList();
     private ArrayList polyline;
     private Bundle b;
+    private Button followButton;
     private String polylineColor;
+    private Boolean playerMarkFlag = false, followPlayerFlag = true;
+    private Marker playerMarker;
+    final LatLngBounds elblagBorder = new LatLngBounds(new LatLng(54.146831,19.386889  ), new LatLng(54.189640, 19.437335));
+
 
     //    TODO GLOBAL ID
     private Integer id = 1;
@@ -78,6 +88,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         loadingPanel = (RelativeLayout) findViewById(R.id.loadingPanel);
         mapPanel = (RelativeLayout) findViewById(R.id.mapPanel);
+
+        followButton = (Button) findViewById(R.id.followButton);
+        followButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                followPlayerFlag = !followPlayerFlag;
+                if (followPlayerFlag) followButton.setBackgroundColor(Color.parseColor("#018786"));
+                else followButton.setBackgroundColor(Color.GRAY);
+            }
+        });
 
         b = getIntent().getExtras();
         if (b != null) {
@@ -107,6 +127,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
         getLocation();
+        if(polyline != null) followPlayerFlag = false; // dont follow player if routes are available
     }
 
     public void openPoiActivity(){
@@ -142,8 +163,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     void setMapLocation(double latitude, double longtitude) {
         LatLng userCurrentLocation = new LatLng(latitude, longtitude);
         float zoomLevel = 17.0f;
-        mMap.addMarker(new MarkerOptions().position(userCurrentLocation));
-        if(polyline == null) {
+        if(!playerMarkFlag) addPlayerMarker(userCurrentLocation);
+        else playerMarker.setPosition(new LatLng(latitude, longtitude));
+        if(followPlayerFlag) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userCurrentLocation, zoomLevel));
         }
         checkIfPoi(latitude, longtitude);
@@ -151,6 +173,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             loadingPanel.setVisibility(View.GONE);
             mapPanel.setVisibility(View.VISIBLE);
         }
+    }
+
+    void addPlayerMarker(LatLng userCurrentLocation){
+        BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.usermarker);
+        Bitmap b=bitmapdraw.getBitmap();
+        Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
+        playerMarker = mMap.addMarker(new MarkerOptions().position(userCurrentLocation).icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
+        playerMarkFlag = !playerMarkFlag;
     }
 
     private void checkIfPoi(double player_latitude, double player_longtitude){
@@ -187,61 +217,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        fetchPOIScores();
-        if(polyline != null) drawRoutes();
+        mMap.setLatLngBoundsForCameraTarget(elblagBorder);
+        mMap.setMinZoomPreference(13.8f);
+        try {
+            // Customise the styling of the base map using a JSON object defined
+            // in a raw resource file.
+            boolean success = mMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                            this, R.raw.style_json));
 
-
-
-//        //TODO ROUTES CODE - TEST
-//        LatLng sydney = new LatLng(-34, 151);
-//        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 16));
-//
-//        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            if (!success) {
+                Log.e("MapsActivityRaw", "Style parsing failed.");
+            }
+        } catch (Resources.NotFoundException e) {
+            Log.e("MapsActivityRaw", "Can't find style.", e);
+        }
+//        mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
 //            @Override
-//            public void onMapClick(LatLng latLng) {
+//            public void onCameraMoveStarted(int i) {
 //
-//                if (markerPoints.size() > 1) {
-//                    markerPoints.clear();
-//                    mMap.clear();
-//                }
-//
-//                // Adding new item to the ArrayList
-//                markerPoints.add(latLng);
-//
-//                // Creating MarkerOptions
-//                MarkerOptions options = new MarkerOptions();
-//
-//                // Setting the position of the marker
-//                options.position(latLng);
-//
-//                if (markerPoints.size() == 1) {
-//                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-//                } else if (markerPoints.size() == 2) {
-//                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-//                }
-//
-//                // Add new marker to the Google Map Android API V2
-//                mMap.addMarker(options);
-//
-//                // Checks, whether start and end locations are captured
-//                if (markerPoints.size() >= 2) {
-//                    LatLng origin = (LatLng) markerPoints.get(0);
-//                    LatLng dest = (LatLng) markerPoints.get(1);
-//
-//                    // Getting URL to the Google Directions API
-//                    String url = getDirectionsUrl(origin, dest);
-//
-//                    DownloadTask downloadTask = new DownloadTask();
-//
-//                    // Start downloading json data from Google Directions API
-//                    downloadTask.execute(url);
-//                }
-//
+//                float zoom = mMap.getCameraPosition().zoom;
+//                Log.d("test","camera move : "+zoom);
 //            }
 //        });
-        // TEST CODE - END
+        fetchPOIScores();
+        if(polyline != null) drawRoutes();
     }
+
+
     private class DownloadTask extends AsyncTask<String, String, String> {
 
         @Override
@@ -409,6 +412,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void fetchPOI() {
+        BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.checkedmarker);
+        Bitmap b=bitmapdraw.getBitmap();
+        final Bitmap checkedMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
+        bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.questionmarker);
+        b=bitmapdraw.getBitmap();
+        final Bitmap questionMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
+
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference docRef = db.collection("POI");
         docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -424,11 +435,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         Double longitude = (Double) document.getData().get("longitude");
                         LatLng POI = new LatLng(latitude, longitude);
                         if(poiScores.contains(name)) {
-                            mMap.addMarker(new MarkerOptions().position(POI).title(name).icon(BitmapDescriptorFactory
-                                    .defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                            mMap.addMarker(new MarkerOptions().position(POI).title(name).icon(BitmapDescriptorFactory.fromBitmap(checkedMarker)));
                         } else {
-                            mMap.addMarker(new MarkerOptions().position(POI).title(name).icon(BitmapDescriptorFactory
-                                    .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                            mMap.addMarker(new MarkerOptions().position(POI).title(name).icon(BitmapDescriptorFactory.fromBitmap(questionMarker)));
                         }
 
                         poiNames.add(name);
