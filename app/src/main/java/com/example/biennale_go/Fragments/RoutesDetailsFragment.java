@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.LayoutInflater;
@@ -31,7 +32,7 @@ public class RoutesDetailsFragment extends Fragment {
     private TextView nameTextView, descriptionTextView, streetsTextView;
     private Bundle b;
     private ImageView routesImageView;
-    private Button showOnMapButton;
+    private ImageView showOnMapButton;
     private View view;
 
     @Override
@@ -71,7 +72,7 @@ public class RoutesDetailsFragment extends Fragment {
             }
             routesImageView.setImageBitmap(bmp);
 
-            showOnMapButton = (Button) view.findViewById(R.id.showOnMapButton);
+            showOnMapButton = (ImageView) view.findViewById(R.id.showOnMapButton);
             showOnMapButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
