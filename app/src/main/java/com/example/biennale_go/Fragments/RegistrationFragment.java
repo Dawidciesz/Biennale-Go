@@ -89,7 +89,8 @@ public class RegistrationFragment extends Fragment {
         data.put( "age", age.getText().toString());
         data.put( "avatar", "");
 //        data.put("gender", gender.getText().toString());
-        data.put("name", name.getText().toString());
+    data.put("name", name.getText().toString());
+        data.put("distance_traveled", 0);
         data.put("score", 0);
         db.collection("users").document(email.getText().toString()).set(data);    }
 }
