@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ProgressBar
             android:layout_width="158dp"
@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:visibility="visible"
+        android:visibility="gone"
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="38dp">
 
