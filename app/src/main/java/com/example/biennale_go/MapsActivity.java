@@ -68,7 +68,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList polyline;
     private Bundle b;
     private Button followButton;
-    private String polylineColor;
+    private String polylineColor, searchPoiName;
     private Boolean playerMarkFlag = false, followPlayerFlag = true;
     private Marker playerMarker;
     final LatLngBounds elblagBorder = new LatLngBounds(new LatLng(54.146831,19.386889  ), new LatLng(54.189640, 19.437335));
@@ -103,6 +103,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (b != null) {
             polyline = (ArrayList) b.getSerializable("polyline");
             polylineColor = (String) b.getString("polylineColor");
+            searchPoiName = (String) b.getString("searchPoiName");
         }
 
         poiNames = new ArrayList<String>();
@@ -127,7 +128,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
         getLocation();
-        if(polyline != null) followPlayerFlag = false; // dont follow player if routes are available
+        if(polyline != null || searchPoiName != null) {
+            followPlayerFlag = false; // dont follow player if routes are available
+            if (followPlayerFlag) followButton.setBackgroundColor(Color.parseColor("#018786"));
+            else followButton.setBackgroundColor(Color.GRAY);
+        }
     }
 
     public void openPoiActivity(){
@@ -232,14 +237,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } catch (Resources.NotFoundException e) {
             Log.e("MapsActivityRaw", "Can't find style.", e);
         }
-//        mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
-//            @Override
-//            public void onCameraMoveStarted(int i) {
-//
-//                float zoom = mMap.getCameraPosition().zoom;
-//                Log.d("test","camera move : "+zoom);
-//            }
-//        });
         fetchPOIScores();
         if(polyline != null) drawRoutes();
     }
@@ -439,14 +436,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         } else {
                             mMap.addMarker(new MarkerOptions().position(POI).title(name).icon(BitmapDescriptorFactory.fromBitmap(questionMarker)));
                         }
-
+                        if(searchPoiName != null && searchPoiName.equals(name)) {
+                            float zoomLevel = 17.0f;
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(POI, zoomLevel));
+                        }
                         poiNames.add(name);
                         poiImages.add(image);
                         poiAddresses.add(address);
                         poiDescriptions.add(description);
                         poiLatitude.add(latitude);
                         poiLongitude.add(longitude);
-//                        float zoomLevel = 17.0f;
 //                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(POI, zoomLevel));
                     }
                 } else {
@@ -479,7 +478,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void updatePoiScores(String name) {
         if(!poiScores.contains(name)) {
-            Log.d("It works!", "element is here!");
             poiScores.add(name);
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
             DocumentReference docRef = db.collection("POI_scores").document(id.toString());

@@ -3,6 +3,7 @@ package com.example.biennale_go.Fragments;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.biennale_go.MapsActivity;
 import com.example.biennale_go.R;
 
 import java.io.IOException;
@@ -29,6 +31,7 @@ public class PoiDetailsFragment extends Fragment {
     private TextView nameTextView, addressTextView, descriptionTextView;
     private Bundle b;
     private ImageView PoiImageView, checkedImageView;
+    private ImageView showOnMapButton;
     private View view;
 
     @Override
@@ -69,6 +72,18 @@ public class PoiDetailsFragment extends Fragment {
                 e.printStackTrace();
             }
             PoiImageView.setImageBitmap(bmp);
+
+            showOnMapButton = (ImageView) view.findViewById(R.id.showOnMapButton);
+            showOnMapButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), MapsActivity.class);
+                    Bundle b = new Bundle();
+                    b.putString("searchPoiName", name);
+                    intent.putExtras(b);
+                    startActivity(intent);
+                }
+            });
         }
         return view;
     }

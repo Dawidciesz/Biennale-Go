@@ -84,7 +84,7 @@
         app:srcCompat="@drawable/checked" />
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/showOnMapButton2"
+        android:id="@+id/showOnMapButton"
         android:layout_width="49dp"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
