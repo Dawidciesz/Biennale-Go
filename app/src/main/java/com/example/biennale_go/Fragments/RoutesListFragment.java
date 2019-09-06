@@ -39,7 +39,6 @@ public class RoutesListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         view = inflater.inflate(R.layout.activity_routes_list, container, false);
         routesListPanel = (LinearLayout) view.findViewById(R.id.routesListPanel);
-
         fetchRoutes();
         return view;
     }
@@ -98,10 +97,7 @@ public class RoutesListFragment extends Fragment {
                                 fragmentTransaction.commit();
                             }
                         });
-
                         routesListPanel.addView(newButton);
-
-                        // margin button
                         newButton = new Button(getContext());
                         newButton.setVisibility(View.INVISIBLE);
                         routesListPanel.addView(newButton);
