@@ -3,11 +3,9 @@ package com.example.biennale_go.Fragments;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -19,8 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-
 import com.example.biennale_go.R;
+import com.example.biennale_go.Utility.CurrentUser;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -29,7 +27,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,10 +35,10 @@ public class QuizListFragment extends Fragment {
     private LinearLayout quizListPanel;
     private Button newButton;
     private ArrayList scoresList;
-    private static final String TAG = "QuizListActicity";
     private  View view;
-//    TODO GLOBAL ID
-    private Integer id = 1;
+    private String id = CurrentUser.uId;
+    private static final String TAG = "QuizListActicity";
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.activity_quiz_list, container, false);
@@ -55,7 +52,7 @@ public class QuizListFragment extends Fragment {
     public void fetchScores() {
         // get user score
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("quizzes_scores").document(id.toString());
+        DocumentReference docRef = db.collection("quizzes_scores").document(id);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -94,7 +91,6 @@ public class QuizListFragment extends Fragment {
                     for (final QueryDocumentSnapshot document : task.getResult()) {
                         // generate new button with quizzes data
                         final ArrayList questions = (ArrayList) document.getData().get("questions");
-
                         newButton = new Button(getContext());
                         newButton.setText(document.getData().get("name").toString());
                         newButton.setClickable(true);
@@ -144,8 +140,6 @@ public class QuizListFragment extends Fragment {
                         img.setBounds( 0, 0, 60, 60 );
                         newButton.setCompoundDrawables( img, null, img, null );
                         quizListPanel.addView(newButton);
-
-                        // margin button
                         newButton = new Button(getContext());
                         newButton.setVisibility(View.INVISIBLE);
                         quizListPanel.addView(newButton);
@@ -157,6 +151,4 @@ public class QuizListFragment extends Fragment {
             }
         });
     }
-
-
 }
