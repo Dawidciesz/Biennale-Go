@@ -4,20 +4,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.example.biennale_go.MainActivity;
 import com.example.biennale_go.MenuActivity;
 import com.example.biennale_go.R;
+import com.example.biennale_go.Utility.CurrentUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,8 +27,7 @@ public class QuizSummaryFragment extends Fragment {
     private Integer points, maxPoints, key;
     private ImageView awardImageView;
     private ArrayList scoresList = new ArrayList();
-    //    TODO GLOBAL ID
-    private Integer id = 1;
+    private String id = CurrentUser.uId;
     private View view;
 
     @Override
@@ -98,7 +94,7 @@ public class QuizSummaryFragment extends Fragment {
         Collections.reverse(newScoresList);
 
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("quizzes_scores").document(id.toString());
+        DocumentReference docRef = db.collection("quizzes_scores").document(id);
         docRef.update("scores", newScoresList);
     }
 
