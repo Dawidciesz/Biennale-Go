@@ -3,34 +3,25 @@ package com.example.biennale_go.Fragments;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.example.biennale_go.R;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class QuizFragment extends Fragment {
-    private TextView questionNumberTextView;
-    private TextView questionDescriptionTextView;
-    private Button questionAnswerA;
-    private Button questionAnswerB;
-    private Button questionAnswerC;
-    private Button questionAnswerD;
-    private ArrayList scoresList = new ArrayList();
-
-    private Integer questionNumber = 0;
-    private Integer maxQuestionNumber, key;
-    private ArrayList questions;
+    private TextView questionNumberTextView, questionDescriptionTextView;
+    private Button questionAnswerA, questionAnswerB, questionAnswerC, questionAnswerD;
+    private ArrayList scoresList = new ArrayList(), questions;
+    private Integer questionNumber = 0, maxQuestionNumber, key;
     private Bundle b;
     private Integer points = 0;
-    private  View view;
+    private View view;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
