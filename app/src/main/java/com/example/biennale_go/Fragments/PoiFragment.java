@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.example.biennale_go.R;
+import com.example.biennale_go.Utility.CurrentUser;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -36,10 +37,10 @@ public class PoiFragment extends Fragment {
     private RelativeLayout loadingPanel;
     private ArrayList<String> names, scores, addresses, descriptions, images;
     private Button newButton;
-    private static final String TAG = "PoiFragment";
-    //    TODO GLOBAL ID
-    private Integer id = 1;
+    private String id = CurrentUser.uId;
     private View view;
+    private static final String TAG = "PoiFragment";
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -86,15 +87,10 @@ public class PoiFragment extends Fragment {
                         String image = document.getData().get("image").toString();
                         String address = document.getData().get("address").toString();
                         String description = document.getData().get("description").toString();
-//                        Double latitude = (Double) document.getData().get("latitude");
-//                        Double longitude = (Double) document.getData().get("longitude");
-//                        LatLng POI = new LatLng(latitude, longitude);
                         names.add(name);
                         images.add(image);
                         addresses.add(address);
                         descriptions.add(description);
-//                        poiLatitude.add(latitude);
-//                        poiLongitude.add(longitude);
                     }
                     generatePoiButtons();
                     switchLoadingPanel();
@@ -108,7 +104,7 @@ public class PoiFragment extends Fragment {
 
     private void fetchPOIScores() {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("POI_scores").document(id.toString());
+        DocumentReference docRef = db.collection("POI_scores").document(id);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -165,7 +161,6 @@ public class PoiFragment extends Fragment {
                 newButton.setCompoundDrawables( img, null, img, null );
             }
             poiPanel.addView(newButton);
-            // TODO FIX MARGINS
             newButton = new Button(getContext());
             newButton.setVisibility(View.INVISIBLE);
             poiPanel.addView(newButton);
