@@ -4,12 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -19,7 +16,6 @@ import android.location.LocationManager;
 import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import com.example.biennale_go.Utility.CurrentUser;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -30,7 +26,6 @@ import static com.example.biennale_go.Utility.Constants.PERMISSIONS_REQUEST_ACCE
 import static com.example.biennale_go.Utility.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 
 public class MenuActivity extends AppCompatActivity {
-    private Button button, quizButton, adminPanelButton;
     private LinearLayout mapCard, quizCard, poiCard, routesCard, profilCard, adminPanel, logOut;
     private boolean mLocationPermissionGranted = false;
     private static final String TAG = "MainActivity";
@@ -40,7 +35,6 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         CurrentUser.setCurrentUser();
         setContentView(R.layout.activity_main_menu);
-
 
         mapCard = (LinearLayout) findViewById(R.id.mapCard);
         mapCard.setOnClickListener(new View.OnClickListener() {
@@ -141,11 +135,7 @@ public class MenuActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if(checkMapServices()){
-            if(mLocationPermissionGranted){
-//                getChatrooms();
-//                todo do something when result is true
-            }
-            else{
+            if(!mLocationPermissionGranted){
                 getLocationPermission();
             }
         }
@@ -153,9 +143,9 @@ public class MenuActivity extends AppCompatActivity {
 
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("This application requires GPS to work properly, do you want to enable it?")
+        builder.setMessage("Aplikacja wymaga do działania aktywnej usługi GPS, czy chesz ją aktywować?")
                 .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Tak", new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
                         Intent enableGpsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                         startActivityForResult(enableGpsIntent, PERMISSIONS_REQUEST_ENABLE_GPS);
@@ -168,7 +158,6 @@ public class MenuActivity extends AppCompatActivity {
 
     public boolean isMapsEnabled(){
         final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
-
         if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
             buildAlertMessageNoGps();
             return false;
@@ -177,17 +166,10 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void getLocationPermission() {
-        /*
-         * Request location permission, so that we can get the location of the
-         * device. The result of the permission request is handled by a callback,
-         * onRequestPermissionsResult.
-         */
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mLocationPermissionGranted = true;
-//            getChatrooms();
-            // todo do something when result true
         } else {
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
@@ -238,11 +220,7 @@ public class MenuActivity extends AppCompatActivity {
         Log.d(TAG, "onActivityResult: called.");
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ENABLE_GPS: {
-                if(mLocationPermissionGranted){
-//                    getChatrooms();
-                    // todo do something when result true
-                }
-                else{
+                if(!mLocationPermissionGranted){
                     getLocationPermission();
                 }
             }
