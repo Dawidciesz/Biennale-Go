@@ -2,7 +2,6 @@ package com.example.biennale_go;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -12,7 +11,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,8 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-
-import com.example.biennale_go.Utility.DirectionsJSONParser;
+import com.example.biennale_go.Utility.CurrentUser;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -42,18 +39,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
     private GoogleMap mMap;
@@ -64,7 +50,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<Double> poiLatitude, poiLongitude;
     private RelativeLayout loadingPanel, mapPanel;
     private Double POICollisionRange = (360.0 * 100.0) / 40075000.0; // 100 meters
-    private ArrayList markerPoints = new ArrayList();
     private ArrayList polyline;
     private Bundle b;
     private Button followButton;
@@ -72,10 +57,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Boolean playerMarkFlag = false, followPlayerFlag = true;
     private Marker playerMarker;
     final LatLngBounds elblagBorder = new LatLngBounds(new LatLng(54.146831,19.386889  ), new LatLng(54.189640, 19.437335));
-
-
-    //    TODO GLOBAL ID
-    private Integer id = 1;
+    private String id = CurrentUser.uId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,9 +196,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         ArrayList firstEl = (ArrayList) polyline.get(0);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng((Double) firstEl.get(0), (Double) firstEl.get(1)), 16));
-        // Set listeners for click events.
-//        mMap.setOnPolylineClickListener(this);
-//        mMap.setOnPolygonClickListener(this);
     }
 
     @Override
@@ -225,8 +204,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setLatLngBoundsForCameraTarget(elblagBorder);
         mMap.setMinZoomPreference(13.8f);
         try {
-            // Customise the styling of the base map using a JSON object defined
-            // in a raw resource file.
             boolean success = mMap.setMapStyle(
                     MapStyleOptions.loadRawResourceStyle(
                             this, R.raw.style_json));
@@ -241,153 +218,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if(polyline != null) drawRoutes();
     }
 
-
-    private class DownloadTask extends AsyncTask<String, String, String> {
-
-        @Override
-        protected String doInBackground(String... url) {
-
-            String data = "";
-
-            try {
-                data = downloadUrl(url[0]);
-            } catch (Exception e) {
-                Log.d("Background Task", e.toString());
-            }
-            return data;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-
-            ParserTask parserTask = new ParserTask();
-
-
-            parserTask.execute(result);
-
-        }
-
-    }
-
-    private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
-
-        // Parsing the data in non-ui thread
-        @Override
-        protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
-
-            JSONObject jObject;
-            List<List<HashMap<String, String>>> routes = null;
-
-            try {
-                jObject = new JSONObject(jsonData[0]);
-                DirectionsJSONParser parser = new DirectionsJSONParser();
-
-                routes = parser.parse(jObject);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return routes;
-        }
-
-        @Override
-        protected void onPostExecute(List<List<HashMap<String, String>>> result) {
-            ArrayList points = null;
-            PolylineOptions lineOptions = null;
-            MarkerOptions markerOptions = new MarkerOptions();
-
-            if(result.size() > 0) {
-
-            for (int i = 0; i < result.size(); i++) {
-                points = new ArrayList();
-                lineOptions = new PolylineOptions();
-
-                List<HashMap<String, String>> path = result.get(i);
-
-                for (int j = 0; j < path.size(); j++) {
-                    HashMap<String, String> point = path.get(j);
-
-                    double lat = Double.parseDouble(point.get("lat"));
-                    double lng = Double.parseDouble(point.get("lng"));
-                    LatLng position = new LatLng(lat, lng);
-
-                    points.add(position);
-                }
-
-                lineOptions.addAll(points);
-                lineOptions.width(12);
-                lineOptions.color(Color.RED);
-                lineOptions.geodesic(true);
-            }
-
-            }
-
-// Drawing polyline in the Google Map for the i-th route
-            if(lineOptions != null)
-            mMap.addPolyline(lineOptions);
-        }
-    }
-
-    private String getDirectionsUrl(LatLng origin, LatLng dest) {
-
-        // Origin of route
-        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
-
-        // Destination of route
-        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
-
-        // Sensor enabled
-        String sensor = "sensor=false";
-        String mode = "mode=driving";
-
-        // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + sensor + "&" + mode;
-
-        // Output format
-        String output = "json";
-
-        // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
-
-
-        return url;
-    }
-
-    private String downloadUrl(String strUrl) throws IOException {
-        String data = "";
-        InputStream iStream = null;
-        HttpURLConnection urlConnection = null;
-        try {
-            URL url = new URL(strUrl);
-
-            urlConnection = (HttpURLConnection) url.openConnection();
-
-            urlConnection.connect();
-
-            iStream = urlConnection.getInputStream();
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
-
-            StringBuffer sb = new StringBuffer();
-
-            String line = "";
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-
-            data = sb.toString();
-
-            br.close();
-
-        } catch (Exception e) {
-            Log.d("Exception", e.toString());
-        } finally {
-            iStream.close();
-            urlConnection.disconnect();
-        }
-        return data;
-    }
-
     @Override
     public void onLocationChanged(Location location) {
         setMapLocation(location.getLatitude(), location.getLongitude());
@@ -400,12 +230,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onProviderEnabled(String provider) {
-
+        Log.d("MapsActivity: ", "onProviderEnabled. "+provider);
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-
+        Log.d("MapsActivity: ", "onProviderDisabled. "+provider);
     }
 
     private void fetchPOI() {
@@ -415,7 +245,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.questionmarker);
         b=bitmapdraw.getBitmap();
         final Bitmap questionMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
-
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference docRef = db.collection("POI");
@@ -446,7 +275,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         poiDescriptions.add(description);
                         poiLatitude.add(latitude);
                         poiLongitude.add(longitude);
-//                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(POI, zoomLevel));
                     }
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
@@ -457,7 +285,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void fetchPOIScores() {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("POI_scores").document(id.toString());
+        DocumentReference docRef = db.collection("POI_scores").document(id);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
