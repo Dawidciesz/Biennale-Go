@@ -83,7 +83,6 @@ public class QuizSummaryFragment extends Fragment {
                 newScoresList.add(newHashmap);
             }
             Collections.reverse(newScoresList);
-            Log.d("scoreTestSummary",newScoresList+"");
 
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
             DocumentReference docRef = db.collection("quizzes_scores").document(id);

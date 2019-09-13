@@ -88,7 +88,6 @@ public class QuizListFragment extends Fragment {
                         data.put("scores",scoresArray);
                         db.collection("quizzes_scores").document(CurrentUser.uId).set(data);
                     }
-                    Log.d("scorestest", scores.toString());
                     addButtons();
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
