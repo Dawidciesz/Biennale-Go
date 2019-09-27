@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.biennale_go.R;
+import com.example.biennale_go.Utility.CurrentUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -65,7 +66,7 @@ public class AddQuestionFragment extends Fragment {
         docData.put("answerC", answerC.getText().toString());
         docData.put("answerD", answerD.getText().toString());
         docData.put("correct", "a");
-        docData.put("description", "Cieszewski");
+        docData.put("description", CurrentUser.name);
 
         db.collection("quizes").document(quizName)
                 .collection("questions").document(questionName.equals("") ?
