@@ -107,8 +107,8 @@ public class AdminQuizListFragment extends Fragment implements QuizListAdapter.O
 
     private void addNewQuiz() {
         Map<String, Object> docData = new HashMap<>();
-        docData.put("name", addQuiz.getText().toString());
-        db.collection("quizes").document(addQuiz.getText().toString()).collection("questions");
-        db.collection("quizes").document(addQuiz.getText().toString()).set(docData);
+        docData.put("name",  newQuizName.getText().toString());
+        db.collection("quizes").document( newQuizName.getText().toString()).collection("questions");
+        db.collection("quizes").document( newQuizName.getText().toString()).set(docData);
     }
 }
