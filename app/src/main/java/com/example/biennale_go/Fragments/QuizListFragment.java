@@ -46,12 +46,11 @@ public class QuizListFragment extends Fragment {
         view = inflater.inflate(R.layout.activity_quiz_list, container, false);
         super.onCreate(savedInstanceState);
         quizListPanel = (LinearLayout) view.findViewById(R.id.quizListPanel);
-        fetchQuizzes();
+        fetchQuizzesNames();
         return view;
     }
 
     public void fetchScores() {
-        // get user score
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("quizzes_scores").document(id);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -96,9 +95,9 @@ public class QuizListFragment extends Fragment {
         });
     }
 
-    public void fetchQuizzes() {
+    public void fetchQuizzesNames() {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference docRef = db.collection("quizzes");
+        CollectionReference docRef = db.collection("quizes");
         docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -106,14 +105,37 @@ public class QuizListFragment extends Fragment {
                 if (task.isSuccessful()) {
                     for (final QueryDocumentSnapshot document : task.getResult()) {
                         quizzesNames.add(document.getData().get("name").toString());
-                        quizData.put(document.getData().get("name").toString(), (ArrayList) document.getData().get("questions"));
                     }
-                    fetchScores();
+                    fetchQuizzesData();
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }
             }
         });
+    }
+
+    public void fetchQuizzesData() {
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        for(final Object name : quizzesNames) {
+            CollectionReference docRef = db.collection("quizes").document(name.toString()).collection("questions");
+            docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        ArrayList questionsArray = new ArrayList();
+                        for (final QueryDocumentSnapshot document : task.getResult()) {
+                            questionsArray.add(document.getData());
+                        }
+                        quizData.put(name.toString(), questionsArray);
+                    } else {
+                        Log.d(TAG, "Error getting documents: ", task.getException());
+                    }
+                }
+            });
+        }
+        fetchScores();
+
     }
 
     public void addButtons() {
@@ -140,14 +162,12 @@ public class QuizListFragment extends Fragment {
                     fragmentTransaction.commit();
                 }
             });
-
             newButton.setText(quizzesNames.get(j).toString());
             newButton.setClickable(true);
             newButton.setGravity(Gravity.CENTER);
             newButton.setBackgroundColor(Color.parseColor("#ffffff"));
             newButton.setTextColor(Color.parseColor("#00574b"));
             newButton.setPadding(10,0,10,0);
-
             Drawable img = ContextCompat.getDrawable(getContext(), R.drawable.award);
             Double questionsCount = 0.0;
             if(quizData.get(quizzesNames.get(j).toString()) != null) {

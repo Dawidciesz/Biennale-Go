@@ -118,7 +118,6 @@ public class PoiFragment extends Fragment {
                         scores = new ArrayList<String>();
                         Map<String, Object> data = new HashMap<>();
                         data.put("scores",scores);
-                        Log.d(TAG, "No such document");
                         db.collection("POI_scores").document(CurrentUser.uId).set(data);
                     }
                 } else {

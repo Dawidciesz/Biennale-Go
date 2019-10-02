@@ -37,7 +37,6 @@ public class PoiDetailsFragment extends Fragment {
             address = (String) b.getString("address");
             description = (String) b.getString("description");
             checked = (Boolean) b.getBoolean("checked");
-
             nameTextView = (TextView) view.findViewById(R.id.nameTextView);
             nameTextView.setText(name);
             addressTextView = (TextView) view.findViewById(R.id.addressTextView);
@@ -46,26 +45,15 @@ public class PoiDetailsFragment extends Fragment {
             descriptionTextView.setText(description);
             checkedImageView = (ImageView) view.findViewById(R.id.checkedImageView);
             checkedImageView.setImageResource(R.drawable.checked);
-
             if (checked) checkedImageView.setVisibility(View.VISIBLE);
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
-
             PoiImageView = (ImageView) view.findViewById(R.id.poiImageView);
             URL url = null;
-            try {
-                url = new URL(image);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            try { url = new URL(image); } catch (MalformedURLException e) { e.printStackTrace(); }
             Bitmap bmp = null;
-            try {
-                bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            try { bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream()); } catch (IOException e) { e.printStackTrace(); }
             PoiImageView.setImageBitmap(bmp);
-
             showOnMapButton = (ImageView) view.findViewById(R.id.showOnMapButton);
             showOnMapButton.setOnClickListener(new View.OnClickListener() {
                 @Override

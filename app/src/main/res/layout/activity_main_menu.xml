@@ -112,7 +112,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="12dp"
-                    android:text="POI"
+                    android:text="Formy"
                     android:textAlignment="center"
                     android:textColor="#3a9fbf"
                     android:textSize="30sp" />
