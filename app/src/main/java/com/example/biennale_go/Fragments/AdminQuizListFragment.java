@@ -84,7 +84,6 @@ public class AdminQuizListFragment extends Fragment implements QuizListAdapter.O
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }
-
             }
         });
         return view;
