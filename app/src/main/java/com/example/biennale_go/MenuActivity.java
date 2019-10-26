@@ -50,6 +50,13 @@ public class MenuActivity extends AppCompatActivity {
                 openProfilActivity();
             }
         });
+        profilCard = (LinearLayout) findViewById(R.id.rankingCard);
+        profilCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openRankingFragment();
+            }
+        });
         quizCard = (LinearLayout) findViewById(R.id.quizCard);
         quizCard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,7 +82,7 @@ public class MenuActivity extends AppCompatActivity {
         adminPanel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openMainActivity();
+                openAdminFragment();
             }
         });
         logOut = (LinearLayout) findViewById(R.id.logOut);
@@ -111,9 +118,19 @@ public class MenuActivity extends AppCompatActivity {
         intent.putExtra("fragment","Poi");
         startActivity(intent);
     }
-             public void openProfilActivity(){
+    public void openProfilActivity(){
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("fragment","Profil");
+        startActivity(intent);
+    }
+    public void openRankingFragment(){
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("fragment","Ranking");
+        startActivity(intent);
+    }
+    public void openAdminFragment(){
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("fragment","Admin");
         startActivity(intent);
     }
 

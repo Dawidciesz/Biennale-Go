@@ -4,14 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import com.example.biennale_go.Fragments.LoginFragment;
-import com.example.biennale_go.Fragments.RegistrationFragment;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 public class EmailPasswordActivity extends AppCompatActivity implements View.OnClickListener {
     //todo fix auth
@@ -63,17 +60,21 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
     }
 
     public void openRegistrationFragment() {
-        Fragment registrationFragment = new RegistrationFragment();
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, registrationFragment);
-        fragmentTransaction.commit();
+//        Fragment registrationFragment = new RegistrationFragment();
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.fragment_container, registrationFragment);
+//        fragmentTransaction.commit();
+        Intent intent = new Intent(this, RegestrationFragment.class);
+        startActivity(intent);
     }
 
     public void openLoginFragment() {
-        Fragment loginFragment = new LoginFragment();
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, loginFragment);
-        fragmentTransaction.commit();
+//        Fragment loginFragment = new LoginFragment();
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.fragment_container, loginFragment);
+//        fragmentTransaction.commit();
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 
     public void onClick(View v) {

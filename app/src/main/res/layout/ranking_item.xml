@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#FFFFFF"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+    <TextView
+        android:id="@+id/quizName"
+        android:layout_width="96dp"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/userScore"
+        android:layout_width="96dp"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="22sp"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginVertical="16dp"
+        android:layout_toRightOf="@id/quizName"/>
+
+    <TextView
+        android:id="@+id/userDistanceTraveled"
+        android:textColor="@android:color/white"
+        android:layout_height="48dp"
+        android:layout_width="96dp"
+        android:gravity="center"
+        android:textSize="22sp"
+        android:layout_toRightOf="@id/userScore"/>
+    </LinearLayout>
+
+
+</RelativeLayout>

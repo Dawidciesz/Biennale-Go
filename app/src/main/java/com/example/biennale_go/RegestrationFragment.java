@@ -13,37 +13,45 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class RegestrationFragment extends AppCompatActivity implements View.OnClickListener {
     //todo fix auth
-    FirebaseAuth mAuth;
     private EditText emailField;
     private EditText passwordField;
-    private Button loginUser;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    private EditText ageField;
+    private EditText gender;
+    private EditText nameField;
+    private Button registerButton;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_login);
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
+        setContentView(R.layout.fragment_register);
         emailField = findViewById(R.id.fieldEmail);
         passwordField = findViewById(R.id.fieldPassword);
-        loginUser = findViewById(R.id.emailSignInButton);
-        loginUser.setOnClickListener(new View.OnClickListener() {
+        ageField = findViewById(R.id.fieldAge);
+        nameField = findViewById(R.id.fieldName);
+        registerButton = findViewById(R.id.emailCreateAccountButton);
+        registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int idView = v.getId();
-                if (idView == R.id.emailSignInButton) {
+                if (idView == R.id.emailCreateAccountButton) {
                     if (validate()) {
-                        signIn(emailField.getText().toString(), passwordField.getText().toString());
+                        createAccount(emailField.getText().toString(), passwordField.getText().toString());
                     }
                 }
             }
         });
+
     }
 
     @Override
@@ -60,37 +68,61 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         startActivity(intent);
     }
 
+
+
     public void onClick(View v) {
         openMenuActivity();
     }
 
-    public void signIn(String email, String password) {
-        mAuth.signInWithEmailAndPassword(email, password)
+    public void createAccount(String email, String password) {
+        mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            createUser();
                             openMenuActivity();
                         } else {
-                            emailField.setError("Niepoprawny adres email bądź hasło");
+                            emailField.setError("Niepoprawny adres email");
                         }
                     }
                 });
     }
+    public  void createUser() {
+        Map<String, Object> data = new HashMap<>();
+        data.put( "age", ageField.getText().toString());
+        data.put( "avatar", "");
+//        data.put("gender", gender.getText().toString());
+        data.put("name", nameField.getText().toString());
+        data.put("distance_traveled", 0);
+        data.put("score", 0);
+        db.collection("users").document(emailField.getText().toString()).set(data);
+    }
+
     public boolean validate() {
         boolean isAllcorrect = true;
         if (emailField.getText().toString().length() == 0) {
-            emailField.setError("Adres email jest wymagany");
+            emailField.setError("Adres emailField jest wymagany");
             isAllcorrect = false;
         }
         if (passwordField.getText().toString().length() < 6) {
-            passwordField.setError("Hasło jest wymagane");
+            passwordField.setError("Hasło jest wymagane i musi zawierać nie mniej niż 6 znaków");
+            isAllcorrect = false;
+        }
+        if (ageField.getText().toString().length() == 0) {
+            ageField.setError("Podaj swój wiek");
+            isAllcorrect = false;
+        }
+        else if(Integer.parseInt(ageField.getText().toString()) < 1 ||
+                Integer.parseInt(ageField.getText().toString()) > 130) {
+            ageField.setError("wiek jest niepoprawny");
+        }
+        if (nameField.getText().toString().length() == 0) {
+            nameField.setError("nazwa jest wymagana");
             isAllcorrect = false;
         }
         return isAllcorrect;
     }
-
-
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
     }

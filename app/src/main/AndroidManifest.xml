@@ -24,6 +24,8 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".MenuActivity" />
+        <activity android:name=".RegestrationFragment" />
+        <activity android:name=".LoginActivity" />
         <activity android:name=".MainActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
