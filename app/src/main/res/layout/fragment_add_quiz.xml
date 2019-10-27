@@ -75,7 +75,7 @@
             android:id="@+id/fieldDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Wpisz Opis" />
+            android:hint="Wpisz poprawna odpowiedz a, b, c lub d" />
     </LinearLayout>
 
 

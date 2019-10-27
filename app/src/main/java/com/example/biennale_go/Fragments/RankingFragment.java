@@ -11,6 +11,7 @@ import android.widget.EditText;
 import com.example.biennale_go.Adapters.QuizListAdapter;
 import com.example.biennale_go.Adapters.RankingListAdapter;
 import com.example.biennale_go.R;
+import com.example.biennale_go.Utility.CurrentUser;
 import com.example.biennale_go.Utility.RankingItem;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -70,6 +71,11 @@ public class RankingFragment extends Fragment implements RankingListAdapter.OnIt
                     });
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+                for (int i=0;i<items.size();i++) {
+                    if (items.get(i).getName().equals(CurrentUser.name)) {
+                        recyclerView.smoothScrollToPosition(i);
+                    }
                 }
             }
         });

@@ -60,10 +60,9 @@ public class AdminQuizListFragment extends Fragment implements QuizListAdapter.O
                 } else {
                     Bundle bundle = new Bundle();
                     bundle.putString("quizName", newQuizName.getText().toString());
-                    Fragment testFragment = new AddQuestionFragment();
-                    testFragment.setArguments(bundle);
+                    Fragment addQuestionFragment = new AddQuestionFragment();
+                    addQuestionFragment.setArguments(bundle);
                     FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-//                    fragmentTransaction.replace(R.id.fragment_container, testFragment);
                     fragmentTransaction.commit();
                     newQuizName.setVisibility(View.GONE);
                     addQuiz.setText("Dodaj nowy quiz");

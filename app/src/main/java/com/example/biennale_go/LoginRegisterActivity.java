@@ -10,29 +10,23 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class EmailPasswordActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginRegisterActivity extends AppCompatActivity implements View.OnClickListener {
     //todo fix auth
     FirebaseAuth mAuth;
     private Button registerButton, loginButton;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email_password);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            // User is signed in
-            Intent i = new Intent(EmailPasswordActivity.this, MainActivity.class);
-            startActivity(i);
-        } else {
-            // User is signed out
-        }
+
         registerButton = (Button) findViewById(R.id.registrationButton);
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openRegistrationFragment();
+                openRegistrationActivity();
             }
         });
 
@@ -40,7 +34,7 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openLoginFragment();
+                openLoginActivity();
             }
         });
     }
@@ -48,31 +42,24 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onStart() {
         super.onStart();
-//        // Check if user is signed in (non-null) and update UI accordingly.
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        //TODO
+        if (user != null) {
+            // Użytkownik jest zalogowany
+            Intent i = new Intent(LoginRegisterActivity.this, MenuActivity.class);
+            startActivity(i);
+        }
     }
-
 
     public void openMenuActivity() {
         Intent intent = new Intent(this, MenuActivity.class);
         startActivity(intent);
     }
 
-    public void openRegistrationFragment() {
-//        Fragment registrationFragment = new RegistrationFragment();
-//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.fragment_container, registrationFragment);
-//        fragmentTransaction.commit();
-        Intent intent = new Intent(this, RegestrationFragment.class);
+    public void openRegistrationActivity() {
+        Intent intent = new Intent(this, RegistrationActivity.class);
         startActivity(intent);
     }
 
-    public void openLoginFragment() {
-//        Fragment loginFragment = new LoginFragment();
-//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.fragment_container, loginFragment);
-//        fragmentTransaction.commit();
+    public void openLoginActivity() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }

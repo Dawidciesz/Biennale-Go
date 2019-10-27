@@ -1,5 +1,6 @@
 package com.example.biennale_go.Utility;
 
+import android.util.Log;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -78,6 +79,7 @@ public class CurrentUser {
                         score = score + Integer.parseInt(document.get("points").toString());
                     }
                 } else {
+                    Log.d("POI","get POICount failed");
                 }
             }
         });
@@ -94,6 +96,7 @@ public class CurrentUser {
                         score = score + Integer.parseInt(document.get("points").toString());
                     }
                 } else {
+                    Log.d("QUIZ","get getQuizesCount failed");
                 }
             }
         });

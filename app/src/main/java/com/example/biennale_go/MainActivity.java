@@ -96,6 +96,7 @@ public class MainActivity extends FragmentActivity {
         fragmentTransaction.replace(R.id.fragment_container, adminPanelFragment);
         fragmentTransaction.commit();
     }
+
     public void openQuizList() {
         Fragment quizListFragment = new QuizListFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -137,7 +138,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void openEmailPasswordActivity(){
-        Intent intent = new Intent(this, EmailPasswordActivity.class);
+        Intent intent = new Intent(this, LoginRegisterActivity.class);
         startActivity(intent);
     }
 

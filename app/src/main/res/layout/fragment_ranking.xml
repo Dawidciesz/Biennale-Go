@@ -4,49 +4,63 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/colorPrimaryDark"
-    android:weightSum="10">
+    android:weightSum="15">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:orientation="horizontal"
         android:layout_weight="1"
         android:gravity="center">
 
         <TextView
-            android:id="@+id/username"
+            android:id="@+id/number"
+            android:layout_width="32dp"
+            android:layout_height="48dp"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="22sp"
+            android:text="Lp."
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="16dp"/>
+
+        <TextView
+            android:id="@+id/quizName"
             android:layout_width="96dp"
             android:layout_height="48dp"
             android:gravity="center"
-            android:text="Nazwa"
             android:textColor="@android:color/white"
-            android:textSize="24sp" />
+            android:textSize="22sp"
+            android:text="Nazwa" />
 
         <TextView
             android:id="@+id/userScore"
             android:layout_width="96dp"
             android:layout_height="48dp"
-            android:layout_marginHorizontal="32dp"
-            android:layout_toRightOf="@id/quizName"
             android:gravity="center"
-            android:text="Punkty"
             android:textColor="@android:color/white"
-            android:textSize="24sp" />
+            android:textSize="22sp"
+            android:text="Punkty"
+            android:layout_marginHorizontal="32dp"
+            android:layout_marginVertical="16dp"
+            android:layout_toRightOf="@id/quizName"
+            android:layout_marginRight="16dp"/>
 
         <TextView
             android:id="@+id/userDistanceTraveled"
-            android:layout_width="96dp"
-            android:layout_height="48dp"
-            android:layout_toRightOf="@id/userScore"
-            android:gravity="center"
-            android:text="Pokonany dystans"
             android:textColor="@android:color/white"
-            android:textSize="24sp" />
+            android:layout_height="48dp"
+            android:layout_width="78dp"
+            android:gravity="center"
+            android:textSize="22sp"
+            android:text="dystans"
+            android:layout_toRightOf="@id/userScore"
+            android:layout_marginRight="8dp"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="9"
+        android:layout_weight="14"
         android:gravity="center_horizontal"
         android:orientation="vertical">
         <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"

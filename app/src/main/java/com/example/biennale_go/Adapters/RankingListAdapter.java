@@ -1,12 +1,15 @@
 package com.example.biennale_go.Adapters;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.biennale_go.R;
+import com.example.biennale_go.Utility.CurrentUser;
 import com.example.biennale_go.Utility.RankingItem;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -20,6 +23,8 @@ public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public LinearLayout item;
+        public TextView number;
         public TextView userName;
         public TextView userScore;
         public TextView userDistanceTraveled;
@@ -27,6 +32,8 @@ public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.
 
         public ViewHolder(final View view, OnItemClick onItemClick) {
             super(view);
+            item = view.findViewById(R.id.item);
+            number = view.findViewById(R.id.number);
             userName = view.findViewById(R.id.quizName);
             userScore = view.findViewById(R.id.userScore);
             userDistanceTraveled = view.findViewById(R.id.userDistanceTraveled);
@@ -56,27 +63,15 @@ public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
+        int pos = position + 1;
+        if (items.get(position).getName().equals(CurrentUser.name)) {
+            holder.item.setBackgroundColor(Color.rgb(153, 153, 0));
+        }
+        holder.number.setText(pos + "");
         holder.userName.setText(items.get(position).getName());
         holder.userScore.setText(String.valueOf(items.get(position).getScore()));
         holder.userDistanceTraveled.setText(String.valueOf(items.get(position).getDistanceTraveled()) + "km");
-//        holder.userName.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//            }
-//        });
-
-//        holder.removeButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                db.collection("quizes").document(items.get(position)).delete();
-//                removeItem(position);
-//            }
-//        });
     }
-
-//    public void addItem(String item) {
-//        items.add(item);
-//    }
 
     @Override
     public int getItemCount() {

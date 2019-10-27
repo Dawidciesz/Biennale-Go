@@ -90,7 +90,7 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
-                Intent i = new Intent(MenuActivity.this, EmailPasswordActivity.class);
+                Intent i = new Intent(MenuActivity.this, LoginRegisterActivity.class);
                 startActivity(i);
             }
         });

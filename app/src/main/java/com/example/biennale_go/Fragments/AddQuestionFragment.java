@@ -65,8 +65,7 @@ public class AddQuestionFragment extends Fragment {
         docData.put("answerB", answerB.getText().toString());
         docData.put("answerC", answerC.getText().toString());
         docData.put("answerD", answerD.getText().toString());
-        docData.put("correct", "a");
-        docData.put("description", CurrentUser.name);
+        docData.put("correct", description.getText().toString());
 
         db.collection("quizes").document(quizName)
                 .collection("questions").document(questionName.equals("") ?

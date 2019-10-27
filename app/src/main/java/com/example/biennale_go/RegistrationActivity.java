@@ -19,7 +19,7 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class RegestrationFragment extends AppCompatActivity implements View.OnClickListener {
+public class RegistrationActivity extends AppCompatActivity implements View.OnClickListener {
     //todo fix auth
     private EditText emailField;
     private EditText passwordField;
@@ -91,8 +91,6 @@ public class RegestrationFragment extends AppCompatActivity implements View.OnCl
     public  void createUser() {
         Map<String, Object> data = new HashMap<>();
         data.put( "age", ageField.getText().toString());
-        data.put( "avatar", "");
-//        data.put("gender", gender.getText().toString());
         data.put("name", nameField.getText().toString());
         data.put("distance_traveled", 0);
         data.put("score", 0);
