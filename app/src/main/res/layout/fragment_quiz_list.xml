@@ -19,7 +19,6 @@ android:weightSum="10">
             android:scrollbars="vertical"
             android:layout_weight="9"
             android:gravity="center"
-            android:textColor="@android:color/white"
             android:textSize="22sp" />
     </LinearLayout>
 
@@ -38,7 +37,6 @@ android:weightSum="10">
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:textColor="@android:color/white"
             android:textSize="22sp"
             android:hint="Wpisz nazwę quizu" />
 

@@ -4,9 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="5">
-
-
+    android:weightSum="4">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,13 +18,11 @@
             android:layout_height="wrap_content"
             android:text=""/>
     </LinearLayout>
-    <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4"
+        android:layout_weight="3"
         android:gravity="center_vertical">
 
         <LinearLayout
@@ -37,75 +33,41 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:paddingBottom="16dp">
+            <EditText
+                android:id="@+id/adres"
+                android:textAlignment="center"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:hint="address"
+                android:background="@drawable/input"
+                android:inputType="text"
+                android:layout_marginBottom="10dp"/>
 
             <EditText
-                android:id="@+id/fieldQuestion"
+                android:id="@+id/latitude"
+                android:textAlignment="center"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:hint="szerokoość geograficzna"
+                android:background="@drawable/input"
+                android:inputType="text"
+                android:layout_marginBottom="10dp"/>
+
+            <EditText
+                android:id="@+id/longitude"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/input"
-                android:hint="pytanie"
+                android:hint="długość geograficzna"
                 android:inputType="text"
                 android:textAlignment="center" />
 
             <EditText
-                android:id="@+id/fieldAnswerA"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/input"
-                android:hint="odpowiedź a"
-                android:inputType="text"
-                android:textAlignment="center" />
-
-            <EditText
-                android:id="@+id/fieldAnswerB"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/input"
-                android:hint="odpowiedź c"
-                android:inputType="text"
-                android:textAlignment="center" />
-
-            <EditText
-                android:id="@+id/fieldAnswerC"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/input"
-                android:hint="odpowiedź c"
-                android:inputType="text"
-                android:textAlignment="center" />
-
-            <EditText
-                android:id="@+id/fieldAnswerD"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/input"
-                android:hint="odpowiedź d"
-                android:inputType="text"
-                android:textAlignment="center" />
-
-            <EditText
-                android:id="@+id/correctAnswer"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/input"
-                android:hint="poprawna odpowiedź"
-                android:inputType="text"
-                android:textAlignment="center" />
-
-            <EditText
-                android:id="@+id/fieldDescription"
+                android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="144dp"
                 android:layout_marginBottom="10dp"
@@ -128,17 +90,17 @@
             android:paddingRight="16dp">
 
             <Button
+                android:textColor="#FFFF"
                 android:id="@+id/create"
+                android:background="@drawable/filledbutton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/filledbutton"
-                android:text=" Stwórz POI"
-                android:textColor="#FFFF"
-                android:textSize="16dp" />
+                android:textSize="16dp"
+                android:text=" Stwórz POI" />
         </LinearLayout>
 
 
     </RelativeLayout>
-    </ScrollView>
+
 </LinearLayout>

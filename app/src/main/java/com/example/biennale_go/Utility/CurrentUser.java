@@ -53,7 +53,7 @@ public class CurrentUser {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        avatarUrl = document.getData().get("avatar").toString();
+//                        avatarUrl = document.getData().get("avatar").toString();
                         distance_traveled = Double.parseDouble(document.getData().get("distance_traveled").toString());
                         name =  document.getData().get("name").toString();
                     }

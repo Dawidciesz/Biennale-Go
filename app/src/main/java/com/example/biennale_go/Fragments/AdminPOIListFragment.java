@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.biennale_go.Adapters.QuizListAdapter;
+import com.example.biennale_go.Adapters.POIListAdapter;
 import com.example.biennale_go.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -31,13 +31,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
 
-public class AdminQuizListFragment extends Fragment implements QuizListAdapter.OnItemClick {
+public class AdminPOIListFragment extends Fragment implements POIListAdapter.OnItemClick {
     private RecyclerView recyclerView;
     private List<String> items = new ArrayList<>();
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private Button addQuiz;
-    private EditText newQuizName;
+    private Button addPOI;
+    private EditText newPOIName;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -46,34 +46,34 @@ public class AdminQuizListFragment extends Fragment implements QuizListAdapter.O
         recyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new QuizListAdapter(items, this);
+        adapter = new POIListAdapter(items, this);
         recyclerView.setAdapter(adapter);
-        newQuizName = (EditText) view.findViewById(R.id.fieldNewQuiz);
-        newQuizName.setVisibility(View.GONE);
-        addQuiz = (Button) view.findViewById(R.id.addNewQuizButton);
-        addQuiz.setOnClickListener(new View.OnClickListener() {
+        newPOIName = (EditText) view.findViewById(R.id.fieldNewQuiz);
+        newPOIName.setVisibility(View.GONE);
+        addPOI = (Button) view.findViewById(R.id.addNewQuizButton);
+        addPOI.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!newQuizName.isShown()) {
-                    newQuizName.setVisibility(View.VISIBLE);
-                    addQuiz.setText("Stwórz quiz");
+                if (!newPOIName.isShown()) {
+                    newPOIName.setVisibility(View.VISIBLE);
+                    addPOI.setText("Stwórz nowe POI");
                 } else {
                     Bundle bundle = new Bundle();
-                    bundle.putString("quizName", newQuizName.getText().toString());
-                    Fragment addQuestionFragment = new AddQuestionFragment();
-                    addQuestionFragment.setArguments(bundle);
+                    bundle.putString("POIName", newPOIName.getText().toString());
+                    Fragment addPOIFragment = new AddPOIFragment();
+                    addPOIFragment.setArguments(bundle);
                     FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment_container, addQuestionFragment);
+                    fragmentTransaction.replace(R.id.fragment_container, addPOIFragment);
                     fragmentTransaction.commit();
-                    newQuizName.setVisibility(View.GONE);
-                    addQuiz.setText("Dodaj nowy quiz");
-                    addNewQuiz();
+                    newPOIName.setVisibility(View.GONE);
+                    addPOI.setText("Dodaj nowy quiz");
+                    addNewPOI();
                 }
             }
         });
 
         addItemsToAdapter();
-        db.collection("quizes").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("POI").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -95,19 +95,27 @@ public class AdminQuizListFragment extends Fragment implements QuizListAdapter.O
 
     @Override
     public void onItemClick(int posision) {
+//        Bundle bundle = new Bundle();
+//        bundle.putString("POIName", items.get(posision));
+//        Fragment testFragment = new AdminQuizQuestionListFragment();
+//        testFragment.setArguments(bundle);
+//        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.fragment_container, testFragment);
+//        fragmentTransaction.commit();
+
         Bundle bundle = new Bundle();
-        bundle.putString("quizName", items.get(posision));
-        Fragment testFragment = new AdminQuizQuestionListFragment();
+        bundle.putString("POIName", items.get(posision));
+        Fragment testFragment = new AddPOIFragment();
         testFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, testFragment);
         fragmentTransaction.commit();
     }
 
-    private void addNewQuiz() {
+    private void addNewPOI() {
         Map<String, Object> docData = new HashMap<>();
-        docData.put("name",  newQuizName.getText().toString());
-        db.collection("quizes").document( newQuizName.getText().toString()).collection("questions");
-        db.collection("quizes").document( newQuizName.getText().toString()).set(docData);
+        docData.put("name",  newPOIName.getText().toString());
+//        db.collection("POI").document( newQuizName.getText().toString()).collection("questions");
+        db.collection("POI").document( newPOIName.getText().toString()).set(docData);
     }
 }
