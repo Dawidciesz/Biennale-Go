@@ -48,6 +48,7 @@ public class AdminPOIListFragment extends Fragment implements POIListAdapter.OnI
         recyclerView.setLayoutManager(layoutManager);
         adapter = new POIListAdapter(items, this);
         recyclerView.setAdapter(adapter);
+        addPOI.setText("Dodaj nowy POI");
         newPOIName = (EditText) view.findViewById(R.id.fieldNewQuiz);
         newPOIName.setVisibility(View.GONE);
         addPOI = (Button) view.findViewById(R.id.addNewQuizButton);
@@ -66,7 +67,7 @@ public class AdminPOIListFragment extends Fragment implements POIListAdapter.OnI
                     fragmentTransaction.replace(R.id.fragment_container, addPOIFragment);
                     fragmentTransaction.commit();
                     newPOIName.setVisibility(View.GONE);
-                    addPOI.setText("Dodaj nowy quiz");
+                    addPOI.setText("Dodaj nowy POI");
                     addNewPOI();
                 }
             }

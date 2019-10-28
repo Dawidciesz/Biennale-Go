@@ -100,7 +100,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     public boolean validate() {
         boolean isAllcorrect = true;
         if (emailField.getText().toString().length() == 0) {
-            emailField.setError("Adres emailField jest wymagany");
+            emailField.setError("Adres email jest wymagany");
             isAllcorrect = false;
         }
         if (passwordField.getText().toString().length() < 6) {
@@ -114,6 +114,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         else if(Integer.parseInt(ageField.getText().toString()) < 1 ||
                 Integer.parseInt(ageField.getText().toString()) > 130) {
             ageField.setError("wiek jest niepoprawny");
+            isAllcorrect = false;
         }
         if (nameField.getText().toString().length() == 0) {
             nameField.setError("nazwa jest wymagana");
