@@ -48,10 +48,10 @@ public class AdminPOIListFragment extends Fragment implements POIListAdapter.OnI
         recyclerView.setLayoutManager(layoutManager);
         adapter = new POIListAdapter(items, this);
         recyclerView.setAdapter(adapter);
-        addPOI.setText("Dodaj nowy POI");
         newPOIName = (EditText) view.findViewById(R.id.fieldNewQuiz);
         newPOIName.setVisibility(View.GONE);
         addPOI = (Button) view.findViewById(R.id.addNewQuizButton);
+        addPOI.setText("Dodaj nowy POI");
         addPOI.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
