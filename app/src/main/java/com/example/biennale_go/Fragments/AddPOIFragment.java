@@ -46,12 +46,6 @@ public class AddPOIFragment extends Fragment {
         });
 
         this.POIName = getArguments().getString("POIName");
-//        if (getArguments().getString("questionName") != null) {
-//            this.questionName = getArguments().getString("questionName");
-//            question.setVisibility(View.GONE);
-//        } else {
-//            this.questionName = "";
-//        }
         return view;
     }
 
@@ -61,8 +55,8 @@ public class AddPOIFragment extends Fragment {
         docData.put("description", description.getText().toString());
         docData.put("image", "");
         docData.put("name", POIName);
-        docData.put("latitude", latitude.getText().toString());
-        docData.put("longitude", longitude.getText().toString());
+        docData.put("latitude", Double.parseDouble(latitude.getText().toString()));
+        docData.put("longitude", Double.parseDouble(longitude.getText().toString()));
 
         db.collection("POI").document(POIName).set(docData);
     }
