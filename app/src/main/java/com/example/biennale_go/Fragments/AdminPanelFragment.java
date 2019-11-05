@@ -28,13 +28,13 @@ public class AdminPanelFragment extends Fragment {
                 openAddQuizFragment();
             }
         });
-//        addPOI = (Button) view.findViewById(R.id.addPOIButton);
-//        addPOI.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                openAddPOIFragment();
-//            }
-//        });
+        addPOI = (Button) view.findViewById(R.id.addPOIButton);
+        addPOI.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openAddPOIFragment();
+            }
+        });
         return view;
     }
 
@@ -45,10 +45,10 @@ public class AdminPanelFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
-//    public void openAddPOIFragment() {
-//        Fragment testFragment = new
-//        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.fragment_container, testFragment);
-//        fragmentTransaction.commit();
-//    }
+    public void openAddPOIFragment() {
+        Fragment testFragment = new AdminPOIListFragment();
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, testFragment);
+        fragmentTransaction.commit();
+    }
 }

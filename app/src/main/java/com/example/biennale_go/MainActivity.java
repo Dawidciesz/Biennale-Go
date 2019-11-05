@@ -7,17 +7,18 @@ import androidx.fragment.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 
 import com.example.biennale_go.Fragments.AdminPanelFragment;
 import com.example.biennale_go.Fragments.PoiFragment;
 import com.example.biennale_go.Fragments.ProfilFragment;
 import com.example.biennale_go.Fragments.QuizListFragment;
+import com.example.biennale_go.Fragments.RankingFragment;
 import com.example.biennale_go.Fragments.RoutesListFragment;
 import com.example.biennale_go.Utility.CurrentUser;
 
 public class MainActivity extends FragmentActivity {
-    private Button quizButton, adminPanelButton, mainMenuButton;
+    private ImageView quizButton, mapButton, mainMenuButton;
     private static final String TAG = "MainActivity";
     private String startFragment;
 
@@ -43,6 +44,12 @@ public class MainActivity extends FragmentActivity {
             else if (startFragment.equals("Profil")) {
                 openProfil();
             }
+            else if (startFragment.equals("Ranking")) {
+                openRanking();
+            }
+            else if (startFragment.equals("Admin")) {
+                openAdminPanelFragment();
+            }
         }
 
 
@@ -62,21 +69,25 @@ public class MainActivity extends FragmentActivity {
 //            }
 //        });
 
-        adminPanelButton = (Button) findViewById(R.id.adminPanelButton);
-        adminPanelButton.setOnClickListener(new View.OnClickListener() {
+        mapButton = (ImageView) findViewById(R.id.map);
+        mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openAdminPanelFragment();
+                openMapActivity();
             }
         });
 
-        mainMenuButton = (Button) findViewById(R.id.mainMenuButton);
+        mainMenuButton = (ImageView) findViewById(R.id.menu);
         mainMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openMenuActivity();
             }
         });
+    }
+    public void openMapActivity(){
+        Intent intent = new Intent(this, MapsActivity.class);
+        startActivity(intent);
     }
 
     public void openAdminPanelFragment() {
@@ -85,6 +96,7 @@ public class MainActivity extends FragmentActivity {
         fragmentTransaction.replace(R.id.fragment_container, adminPanelFragment);
         fragmentTransaction.commit();
     }
+
     public void openQuizList() {
         Fragment quizListFragment = new QuizListFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -113,13 +125,20 @@ public class MainActivity extends FragmentActivity {
         fragmentTransaction.commit();
     }
 
+    public void openRanking() {
+        Fragment rankingFragment = new RankingFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, rankingFragment);
+        fragmentTransaction.commit();
+    }
+
     public void openMenuActivity(){
         Intent intent = new Intent(this, MenuActivity.class);
         startActivity(intent);
     }
 
     public void openEmailPasswordActivity(){
-        Intent intent = new Intent(this, EmailPasswordActivity.class);
+        Intent intent = new Intent(this, LoginRegisterActivity.class);
         startActivity(intent);
     }
 

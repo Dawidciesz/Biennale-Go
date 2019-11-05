@@ -83,7 +83,7 @@ public class AdminQuizQuestionListFragment extends Fragment implements QuizQuest
 
     @Override
     public void onItemClick(int posision) {
-        Log.d(TAG, "onItemClick: xdxdxd    " + posision);
+        Log.d(TAG, "onItemClick:    " + posision);
         Bundle bundle = new Bundle();
         bundle.putString("quizName", getArguments().getString("quizName"));
         bundle.putString("questionName", items.get(posision));

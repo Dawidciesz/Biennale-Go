@@ -1,89 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/add_quiz_layout"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="4">
+    android:weightSum="5">
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="256dp"
-        android:layout_weight="3"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:gravity="center_horizontal"
         android:orientation="vertical">
-
-        <EditText
-            android:id="@+id/fieldQuestion"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/successText"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Wpisz Pytanie"
-            android:inputType="textEmailAddress" />
-
-        <LinearLayout
-            android:id="@+id/questionsAB"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/emailPasswordFields"
-            android:orientation="horizontal"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp">
-
-            <EditText
-                android:id="@+id/fieldAnswerA"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Odpowiedź A" />
-
-            <EditText
-                android:id="@+id/fieldAnswerB"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Odpowiedź B" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/questionsCD"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/emailPasswordFields"
-            android:orientation="horizontal"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp">
-
-            <EditText
-                android:id="@+id/fieldAnswerC"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Odpowiedź C" />
-
-            <EditText
-                android:id="@+id/fieldAnswerD"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Odpowiedź D" />
-        </LinearLayout>
-
-
-        <EditText
-            android:id="@+id/fieldDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Wpisz Opis" />
+            android:text=""/>
     </LinearLayout>
-
-
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="4"
         android:gravity="center_vertical">
+
+        <LinearLayout
+            android:id="@+id/emailPasswordFields"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="16dp">
+
+            <EditText
+                android:id="@+id/fieldQuestion"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/input"
+                android:hint="pytanie"
+                android:inputType="text"
+                android:textAlignment="center" />
+
+            <EditText
+                android:id="@+id/fieldAnswerA"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/input"
+                android:hint="odpowiedź a"
+                android:inputType="text"
+                android:textAlignment="center" />
+
+            <EditText
+                android:id="@+id/fieldAnswerB"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/input"
+                android:hint="odpowiedź c"
+                android:inputType="text"
+                android:textAlignment="center" />
+
+            <EditText
+                android:id="@+id/fieldAnswerC"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/input"
+                android:hint="odpowiedź c"
+                android:inputType="text"
+                android:textAlignment="center" />
+
+            <EditText
+                android:id="@+id/fieldAnswerD"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/input"
+                android:hint="odpowiedź d"
+                android:inputType="text"
+                android:textAlignment="center" />
+
+            <EditText
+                android:id="@+id/correctAnswer"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/input"
+                android:hint="poprawna odpowiedź"
+                android:inputType="text"
+                android:textAlignment="center" />
+
+            <EditText
+                android:id="@+id/fieldDescription"
+                android:layout_width="match_parent"
+                android:layout_height="144dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/input"
+                android:ems="10"
+                android:hint="opis"
+                android:inputType="text"
+                android:textAlignment="center" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/emailPasswordButtons"
@@ -95,15 +128,17 @@
             android:paddingRight="16dp">
 
             <Button
-                android:id="@+id/addNewQuizButton"
-                style="@style/Widget.AppCompat.Button.Colored"
+                android:id="@+id/create"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Dodaj QUIZ"/>
-
+                android:background="@drawable/filledbutton"
+                android:text="dodaj pytanie"
+                android:textColor="#FFFF"
+                android:textSize="16dp" />
         </LinearLayout>
 
-    </RelativeLayout>
 
+    </RelativeLayout>
+    </ScrollView>
 </LinearLayout>

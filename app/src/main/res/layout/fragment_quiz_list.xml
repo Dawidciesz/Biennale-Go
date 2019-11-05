@@ -3,19 +3,13 @@
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:orientation="vertical"
-android:weightSum="5">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
-    </LinearLayout>
+android:weightSum="10">
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2"
+        android:layout_weight="9"
         android:gravity="center_horizontal"
         android:orientation="vertical">
         <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -23,7 +17,9 @@ android:weightSum="5">
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical"
-            android:layout_weight="2" />
+            android:layout_weight="9"
+            android:gravity="center"
+            android:textSize="22sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -36,9 +32,12 @@ android:weightSum="5">
         android:paddingRight="16dp">
         <EditText
             android:id="@+id/fieldNewQuiz"
+            android:background="@drawable/input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="22sp"
             android:hint="Wpisz nazwę quizu" />
 
         <Button
@@ -47,6 +46,7 @@ android:weightSum="5">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center"
             android:text="Dodaj nowy QUIZ" />
     </LinearLayout>
 </LinearLayout>

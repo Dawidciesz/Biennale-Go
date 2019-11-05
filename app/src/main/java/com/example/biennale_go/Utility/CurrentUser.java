@@ -1,5 +1,6 @@
 package com.example.biennale_go.Utility;
 
+import android.util.Log;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,9 +53,9 @@ public class CurrentUser {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        avatarUrl = document.getData().get("avatar").toString();
-                        name =  document.getData().get("name").toString();
+//                        avatarUrl = document.getData().get("avatar").toString();
                         distance_traveled = Double.parseDouble(document.getData().get("distance_traveled").toString());
+                        name =  document.getData().get("name").toString();
                     }
                 }}});
     }
@@ -78,6 +79,7 @@ public class CurrentUser {
                         score = score + Integer.parseInt(document.get("points").toString());
                     }
                 } else {
+                    Log.d("POI","get POICount failed");
                 }
             }
         });
@@ -94,6 +96,7 @@ public class CurrentUser {
                         score = score + Integer.parseInt(document.get("points").toString());
                     }
                 } else {
+                    Log.d("QUIZ","get getQuizesCount failed");
                 }
             }
         });

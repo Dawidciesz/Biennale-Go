@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3"
+        android:layout_weight="1"
         android:gravity="center_horizontal"
         android:orientation="vertical">
         <TextView
@@ -22,49 +22,62 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="3"
         android:gravity="center_vertical">
 
         <LinearLayout
             android:id="@+id/emailPasswordFields"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:paddingLeft="16dp"
-            android:paddingRight="16dp">
+            android:paddingRight="16dp"
+            android:paddingBottom="16dp">
 
             <EditText
                 android:id="@+id/fieldEmail"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
                 android:layout_weight="1"
                 android:hint="email"
-                android:inputType="textEmailAddress" />
+                android:background="@drawable/input"
+                android:inputType="textEmailAddress"
+                android:layout_marginBottom="10dp"/>
 
             <EditText
                 android:id="@+id/fieldPassword"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="10dp"
                 android:layout_weight="1"
-                android:hint="password"
-                android:inputType="textPassword" />
+                android:background="@drawable/input"
+                android:hint="hasło"
+                android:inputType="textPassword"
+                android:textAlignment="center" />
+
             <EditText
                 android:id="@+id/fieldAge"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="10dp"
                 android:layout_weight="1"
+                android:background="@drawable/input"
                 android:ems="10"
+                android:hint="wiek"
                 android:inputType="number"
-                android:hint="Wiek" />
+                android:textAlignment="center" />
+
             <EditText
                 android:id="@+id/fieldName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
                 android:layout_weight="1"
+                android:background="@drawable/input"
                 android:ems="30"
-                android:hint="Nazwa"
+                android:hint="nazwa"
                 android:inputType="textPersonName"
-                />
+                android:textAlignment="center" />
         </LinearLayout>
 
         <LinearLayout
@@ -77,12 +90,14 @@
             android:paddingRight="16dp">
 
             <Button
+                android:textColor="#FFFF"
                 android:id="@+id/emailCreateAccountButton"
-                style="@style/Widget.AppCompat.Button.Colored"
+                android:background="@drawable/filledbutton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="zarejestruj" />
+                android:textSize="16dp"
+                android:text=" Załóż konto" />
         </LinearLayout>
 
 

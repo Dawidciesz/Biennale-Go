@@ -13,18 +13,17 @@ import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-public class QuizQuestionListAdapter extends RecyclerView.Adapter<QuizQuestionListAdapter.ViewHolder> {
+public class POIListAdapter extends RecyclerView.Adapter<POIListAdapter.ViewHolder> {
     public List<String> items;
-    private QuizQuestionListAdapter.OnItemClick monItemClicklister;
-    private String quizName;
+    private OnItemClick monItemClicklister;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView textView;
-        public QuizQuestionListAdapter.OnItemClick onItemClickListener;
+        public OnItemClick onItemClickListener;
         public Button removeButton;
 
-        public ViewHolder(final View view, QuizQuestionListAdapter.OnItemClick onItemClick) {
+        public ViewHolder(final View view, OnItemClick onItemClick) {
             super(view);
             textView = view.findViewById(R.id.quizItem);
             this.onItemClickListener = onItemClick;
@@ -38,37 +37,34 @@ public class QuizQuestionListAdapter extends RecyclerView.Adapter<QuizQuestionLi
         }
     }
 
-    public QuizQuestionListAdapter(List<String> myDataset, QuizQuestionListAdapter.OnItemClick onItemClick, String quizName) {
+    public POIListAdapter(List<String> myDataset, OnItemClick onItemClick) {
         items = myDataset;
         this.monItemClicklister = onItemClick;
-        this.quizName = quizName;
     }
 
     @Override
-    public QuizQuestionListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public POIListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.admin_list_item, parent, false);
-        QuizQuestionListAdapter.ViewHolder viewHolder = new QuizQuestionListAdapter.ViewHolder(v, monItemClicklister);
+
+        ViewHolder viewHolder = new ViewHolder(v, monItemClicklister);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(QuizQuestionListAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.textView.setText(items.get(position));
         holder.textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
             }
         });
 
         holder.removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.collection("quizes").document(quizName).collection("questions").document(items.get(position)).delete();
+                db.collection("POI").document(items.get(position)).delete();
                 removeItem(position);
-
-
             }
         });
     }
