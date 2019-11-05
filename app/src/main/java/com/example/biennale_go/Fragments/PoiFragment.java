@@ -30,6 +30,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PoiFragment extends Fragment {
     private Bundle b;
@@ -113,7 +115,10 @@ public class PoiFragment extends Fragment {
                     if (document.exists()) {
                         scores = (ArrayList<String>) document.getData().get("scores");
                     } else {
-                        Log.d(TAG, "No such document");
+                        scores = new ArrayList<String>();
+                        Map<String, Object> data = new HashMap<>();
+                        data.put("scores",scores);
+                        db.collection("POI_scores").document(CurrentUser.uId).set(data);
                     }
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());

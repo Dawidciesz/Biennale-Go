@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +25,10 @@ public class QuizSummaryFragment extends Fragment {
     private Button exitButton;
     private TextView pointsTextView;
     private Bundle b;
-    private Integer points, maxPoints, key;
+    private Integer points, maxPoints;
     private ImageView awardImageView;
     private ArrayList scoresList = new ArrayList();
-    private String id = CurrentUser.uId;
+    private String id = CurrentUser.uId, name;
     private View view;
 
     @Override
@@ -47,9 +48,9 @@ public class QuizSummaryFragment extends Fragment {
         b = getArguments();
 
         if (b != null) {
+            name = b.getString("name");
             points =  b.getInt("points");
             maxPoints =  b.getInt("maxPoints");
-            key =  b.getInt("key");
             scoresList = new ArrayList((ArrayList) b.getSerializable("scoresList"));
             pointsTextView.setText(points + "/" + maxPoints);
 
@@ -70,32 +71,23 @@ public class QuizSummaryFragment extends Fragment {
     }
 
     public void updateScoreList() {
-        Map<String, Integer> scores = new HashMap<String, Integer>();
-        for(int i=0; i<scoresList.size(); i++) {
-            Map<String, String> temp = new HashMap<String, String>();
-            temp.putAll((HashMap<String,String>)scoresList.get(i));
-            String name = temp.get("name");
-            Integer score;
-            if(i == key && Integer.parseInt(temp.get("score")) < points) {
-                score = points;
-            } else {
-                score = Integer.parseInt(temp.get("score"));
+        HashMap scoresMap = new HashMap();
+        scoresMap = (HashMap) scoresList.get(0);
+        if((Integer) scoresMap.get(name) < points) {
+            scoresMap.put(name, points);
+            ArrayList newScoresList = new ArrayList();
+            for ( Object hashKey : scoresMap.keySet() ) {
+                HashMap<String, String> newHashmap = new HashMap<String, String>();
+                newHashmap.put("name", hashKey.toString());
+                newHashmap.put("score", scoresMap.get(hashKey).toString());
+                newScoresList.add(newHashmap);
             }
-            scores.put(name, score);
-        }
+            Collections.reverse(newScoresList);
 
-        ArrayList newScoresList = new ArrayList();
-        for ( String hashKey : scores.keySet() ) {
-            HashMap<String, String> newHashmap = new HashMap<String, String>();
-            newHashmap.put("name", hashKey);
-            newHashmap.put("score", scores.get(hashKey).toString());
-            newScoresList.add(newHashmap);
+            final FirebaseFirestore db = FirebaseFirestore.getInstance();
+            DocumentReference docRef = db.collection("quizzes_scores").document(id);
+            docRef.update("scores", newScoresList);
         }
-        Collections.reverse(newScoresList);
-
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("quizzes_scores").document(id);
-        docRef.update("scores", newScoresList);
     }
 
     public void openMainActivity(){

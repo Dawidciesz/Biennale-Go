@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +18,9 @@ public class QuizFragment extends Fragment {
     private TextView questionNumberTextView, questionDescriptionTextView;
     private Button questionAnswerA, questionAnswerB, questionAnswerC, questionAnswerD;
     private ArrayList scoresList = new ArrayList(), questions;
-    private Integer questionNumber = 0, maxQuestionNumber, key;
+    private Integer questionNumber = 0, maxQuestionNumber;
     private Bundle b;
+    private String name;
     private Integer points = 0;
     private View view;
 
@@ -37,9 +39,13 @@ public class QuizFragment extends Fragment {
         b = getArguments();
 
         if (b != null) {
+            if(b.getSerializable("questions") != null) {
+
+            }
+            name = b.getString("name");
             questions = new ArrayList((ArrayList) b.getSerializable("questions"));
+            if(b.getSerializable("scoresList") != null)
             scoresList = new ArrayList((ArrayList) b.getSerializable("scoresList"));
-            key = b.getInt("key");
             maxQuestionNumber = questions.size()-1;
             fillQuestion();
         }
@@ -92,9 +98,9 @@ public class QuizFragment extends Fragment {
             fillQuestion();
         } else {
             Bundle b2 = new Bundle();
+            b2.putString("name",name);
             b2.putInt("points", points);
             b2.putInt("maxPoints", maxQuestionNumber+1);
-            b2.putInt("key", key);
             b2.putSerializable("scoresList", scoresList);
             Fragment testFragment = new QuizSummaryFragment();
             testFragment.setArguments(b2);
