@@ -18,7 +18,7 @@ import com.example.biennale_go.Fragments.RoutesListFragment;
 import com.example.biennale_go.Utility.CurrentUser;
 
 public class MainActivity extends FragmentActivity {
-    private ImageView quizButton, mapButton, mainMenuButton;
+    private ImageView mapButton, mainMenuButton;
     private static final String TAG = "MainActivity";
     private String startFragment;
 
@@ -51,23 +51,6 @@ public class MainActivity extends FragmentActivity {
                 openAdminPanelFragment();
             }
         }
-
-
-
-//        button = (Button) findViewById(R.id.button);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                openMapActivity();
-//            }
-//        });
-//        quizButton = (Button) findViewById(R.id.quizButton);
-//        quizButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                openQuizListActivity();
-//            }
-//        });
 
         mapButton = (ImageView) findViewById(R.id.map);
         mapButton.setOnClickListener(new View.OnClickListener() {
@@ -136,14 +119,5 @@ public class MainActivity extends FragmentActivity {
         Intent intent = new Intent(this, MenuActivity.class);
         startActivity(intent);
     }
-
-    public void openEmailPasswordActivity(){
-        Intent intent = new Intent(this, LoginRegisterActivity.class);
-        startActivity(intent);
-    }
-
-
-
-
 
 }

@@ -11,18 +11,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    //todo fix auth
     FirebaseAuth mAuth;
     private EditText emailField;
     private EditText passwordField;
     private Button loginUser;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +46,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onStart() {
         super.onStart();
-//        // Check if user is signed in (non-null) and update UI accordingly.
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        //TODO
     }
-
 
     public void openMenuActivity() {
         Intent intent = new Intent(this, MenuActivity.class);
@@ -89,7 +82,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
         return isAllcorrect;
     }
-
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {

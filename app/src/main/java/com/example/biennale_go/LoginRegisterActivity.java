@@ -11,8 +11,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginRegisterActivity extends AppCompatActivity implements View.OnClickListener {
-    //todo fix auth
-    FirebaseAuth mAuth;
     private Button registerButton, loginButton;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -43,7 +41,6 @@ public class LoginRegisterActivity extends AppCompatActivity implements View.OnC
     public void onStart() {
         super.onStart();
         if (user != null) {
-            // Użytkownik jest zalogowany
             Intent i = new Intent(LoginRegisterActivity.this, MenuActivity.class);
             startActivity(i);
         }

@@ -85,13 +85,6 @@ public class RankingFragment extends Fragment implements RankingListAdapter.OnIt
 
     @Override
     public void onItemClick(int posision) {
-//        Bundle bundle = new Bundle();
-//        bundle.putString("quizName", items.get(posision));
-//        Fragment testFragment = new AdminQuizQuestionListFragment();
-//        testFragment.setArguments(bundle);
-//        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.fragment_container, testFragment);
-//        fragmentTransaction.commit();
     }
 
 }

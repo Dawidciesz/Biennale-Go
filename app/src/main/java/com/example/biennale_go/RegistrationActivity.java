@@ -20,7 +20,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class RegistrationActivity extends AppCompatActivity implements View.OnClickListener {
-    //todo fix auth
     private EditText emailField;
     private EditText passwordField;
     private EditText ageField;
@@ -57,9 +56,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onStart() {
         super.onStart();
-//        // Check if user is signed in (non-null) and update UI accordingly.
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        //TODO
     }
 
 

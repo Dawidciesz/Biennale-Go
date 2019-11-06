@@ -21,6 +21,7 @@ public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.
     public List<RankingItem> items;
     private OnItemClick monItemClicklister;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private int i = 0;
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public LinearLayout item;
@@ -64,11 +65,15 @@ public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         int pos = position + 1;
-        if (items.get(position).getName().equals(CurrentUser.name)) {
+        holder.userName.setText(items.get(position).getName());
+        if (CurrentUser.name.equals((holder.userName.getText().toString()))) {
             holder.item.setBackgroundColor(Color.rgb(153, 153, 0));
+
+        }
+        else {
+            holder.item.setBackgroundColor(Color.rgb(60, 117, 90));
         }
         holder.number.setText(pos + "");
-        holder.userName.setText(items.get(position).getName());
         holder.userScore.setText(String.valueOf(items.get(position).getScore()));
         holder.userDistanceTraveled.setText(String.valueOf(items.get(position).getDistanceTraveled()) + "km");
     }

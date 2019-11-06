@@ -54,6 +54,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Double POICollisionRange = (360.0 * 100.0) / 40075000.0; // 100 meters
     private ArrayList polyline;
     private Bundle b;
+    private double userLat = 0;
+    private double userLong = 0;
     private Button followButton;
     private String polylineColor, searchPoiName;
     private Boolean playerMarkFlag = false, followPlayerFlag = true;
@@ -65,7 +67,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -152,6 +153,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     void setMapLocation(double latitude, double longtitude) {
         LatLng userCurrentLocation = new LatLng(latitude, longtitude);
         float zoomLevel = 17.0f;
+        if (userLat < 1) {
+            userLat = latitude;
+            userLong = longtitude;
+        }
+        else if(userLat != userCurrentLocation.latitude && userLong != userCurrentLocation.longitude) {
+            Location locationA = new Location("A");
+            locationA.setLatitude(userLat);
+            locationA.setLongitude(userLong);
+            Location locationB = new Location("B");
+            locationB.setLatitude(userCurrentLocation.latitude);
+            locationB.setLongitude(userCurrentLocation.longitude);
+            CurrentUser.distance += Math.round(locationA.distanceTo(locationB));
+            if (CurrentUser.distance >= 100) {
+                CurrentUser.distance_traveled += CurrentUser.distance;
+                CurrentUser.distance = 0;
+                updateData();
+            }
+            userLat = latitude;
+            userLong = longtitude;
+        }
         if(!playerMarkFlag) addPlayerMarker(userCurrentLocation);
         else playerMarker.setPosition(new LatLng(latitude, longtitude));
         if(followPlayerFlag) {
@@ -163,7 +184,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mapPanel.setVisibility(View.VISIBLE);
         }
     }
-
+    public void updateData() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, Object> data = new HashMap<>();
+        data.put("distance_traveled", CurrentUser.distance_traveled /1000);
+        data.put("score", Math.round(CurrentUser.distance_traveled /100));
+        db.collection("users").document(CurrentUser.email).update(data);
+    }
     void addPlayerMarker(LatLng userCurrentLocation){
         BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.usermarker);
         Bitmap b=bitmapdraw.getBitmap();
@@ -311,11 +338,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void updatePoiScores(String name) {
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
         if(!poiScores.contains(name)) {
             poiScores.add(name);
-            final FirebaseFirestore db = FirebaseFirestore.getInstance();
             DocumentReference docRef = db.collection("POI_scores").document(id.toString());
             docRef.update("scores", poiScores);
+            Map<String, Object> data = new HashMap<>();
+            data.put("name", 1);
+            db.collection("users").document(CurrentUser.email).collection("POI_visited").document(name).set(data);
+        }
+        else {
+            DocumentReference docCount = db.collection("users").document(CurrentUser.email).collection("POI_visited").document(name);
+            docCount.update("visited_count", CurrentUser.visitedPOIMap.get(name).toString() + 1);
         }
     }
 }
