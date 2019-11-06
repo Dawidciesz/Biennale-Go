@@ -78,7 +78,6 @@ public class AdminQuizQuestionListFragment extends Fragment implements QuizQuest
     }
 
     public void addItemsToAdapter() {
-
     }
 
     @Override

@@ -104,7 +104,9 @@ public class QuizListFragment extends Fragment {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (final QueryDocumentSnapshot document : task.getResult()) {
-                        quizzesNames.add(document.getData().get("name").toString());
+                        if (document.getData().get("name") != null) {
+                            quizzesNames.add(document.getData().get("name").toString());
+                        }
                     }
                     fetchQuizzesData();
                 } else {
@@ -135,7 +137,6 @@ public class QuizListFragment extends Fragment {
             });
         }
         fetchScores();
-
     }
 
     public void addButtons() {

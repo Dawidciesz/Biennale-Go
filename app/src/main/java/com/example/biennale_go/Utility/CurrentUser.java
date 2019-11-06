@@ -11,7 +11,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 
@@ -20,11 +22,12 @@ public class CurrentUser {
     public static String uId;
     public static String name;
     public static String email;
-    public static String avatarUrl;
     public static int score = 0;
     public static double distance_traveled;
+    public static double distance = 0;
     public static List<String> visitedPOIList = new ArrayList<>();
     public static List<String> completedQuizes = new ArrayList<>();
+    public static Map<String, Object> visitedPOIMap = new HashMap<>();
     public static String favoritePOI;
     public static int favoritePOICount;
     public static boolean isLogged;
@@ -72,6 +75,7 @@ public class CurrentUser {
                     for (DocumentSnapshot document : task.getResult()) {
                         visitedNumber = Integer.parseInt(document.get("visited_count").toString());
                         visitedPOIList.add(document.getId());
+                        visitedPOIMap.put(document.getId(), visitedNumber);
                         if (visitedNumber > favoritePOICount) {
                             favoritePOICount = visitedNumber;
                             favoritePOI = document.getId();

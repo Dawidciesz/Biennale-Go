@@ -96,13 +96,6 @@ public class AdminPOIListFragment extends Fragment implements POIListAdapter.OnI
 
     @Override
     public void onItemClick(int posision) {
-//        Bundle bundle = new Bundle();
-//        bundle.putString("POIName", items.get(posision));
-//        Fragment testFragment = new AdminQuizQuestionListFragment();
-//        testFragment.setArguments(bundle);
-//        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.fragment_container, testFragment);
-//        fragmentTransaction.commit();
 
         Bundle bundle = new Bundle();
         bundle.putString("POIName", items.get(posision));
@@ -116,7 +109,6 @@ public class AdminPOIListFragment extends Fragment implements POIListAdapter.OnI
     private void addNewPOI() {
         Map<String, Object> docData = new HashMap<>();
         docData.put("name",  newPOIName.getText().toString());
-//        db.collection("POI").document( newQuizName.getText().toString()).collection("questions");
         db.collection("POI").document( newPOIName.getText().toString()).set(docData);
     }
 }
