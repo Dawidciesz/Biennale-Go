@@ -93,6 +93,7 @@ public class ProfilFragment extends Fragment {
                             String name = temp.get("name");
                             Integer score = Integer.parseInt(temp.get("score"));
                             if (score > 0){
+                                CurrentUser.score += score;
                             scores.put(name, score);
                             }
                         }

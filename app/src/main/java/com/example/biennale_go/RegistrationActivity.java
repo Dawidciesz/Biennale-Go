@@ -6,11 +6,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.biennale_go.Utility.CurrentUser;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -91,7 +93,15 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         data.put("distance_traveled", 0);
         data.put("score", 0);
         db.collection("users").document(emailField.getText().toString()).set(data);
-    }
+
+
+            DocumentReference docRef = db.collection("users").document(CurrentUser.uId);
+            Map<String, Object> info = new HashMap<>();
+            data.put("name", nameField.getText().toString());
+            data.put("visited_count", 0);
+            docRef.collection("POI_visited").document(nameField.getText().toString()).set(info);
+
+        }
 
     public boolean validate() {
         boolean isAllcorrect = true;

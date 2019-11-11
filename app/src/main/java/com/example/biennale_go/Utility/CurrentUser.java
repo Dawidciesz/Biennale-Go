@@ -43,8 +43,8 @@ public class CurrentUser {
             email = currentUser.getEmail();
             uId = currentUser.getUid();
             setCurrentUserInfo(email);
-            getPOICount(email);
-            getQuizesCount(email);
+//            getPOICount(email);
+//            getQuizesCount(email);
         }
     }
     private static void setCurrentUserInfo(String email) {
@@ -63,46 +63,46 @@ public class CurrentUser {
                 }}});
     }
 
-    private static void getPOICount(String email) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("users").document(email).collection("POI_visited").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            int visitedNumber = 0;
+//    private static void getPOICount(String email) {
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        db.collection("users").document(email).collection("POI_visited").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            int visitedNumber = 0;
+//
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                favoritePOICount = 0;
+//                if (task.isSuccessful()) {
+//                    for (DocumentSnapshot document : task.getResult()) {
+//                        visitedNumber = Integer.parseInt(document.get("visited_count").toString());
+//                        visitedPOIList.add(document.getId());
+//                        visitedPOIMap.put(document.getId(), visitedNumber);
+//                        if (visitedNumber > favoritePOICount) {
+//                            favoritePOICount = visitedNumber;
+//                            favoritePOI = document.getId();
+//                        }
+//                        score = score + Integer.parseInt(document.get("points").toString());
+//                    }
+//                } else {
+//                    Log.d("POI","get POICount failed");
+//                }
+//            }
+//        });
+//    }
+//
+//    private static void getQuizesCount(String email) {
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        db.collection("users").document(email).collection("quizes_scores").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    for (DocumentSnapshot document : task.getResult()) {
+//                        completedQuizes.add(document.getId());
+//                        score = score + Integer.parseInt(document.get("points").toString());
+//                    }
+//                } else {
+//                    Log.d("QUIZ","get getQuizesCount failed");
+//                }
+//            }
+//        });
 
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                favoritePOICount = 0;
-                if (task.isSuccessful()) {
-                    for (DocumentSnapshot document : task.getResult()) {
-                        visitedNumber = Integer.parseInt(document.get("visited_count").toString());
-                        visitedPOIList.add(document.getId());
-                        visitedPOIMap.put(document.getId(), visitedNumber);
-                        if (visitedNumber > favoritePOICount) {
-                            favoritePOICount = visitedNumber;
-                            favoritePOI = document.getId();
-                        }
-                        score = score + Integer.parseInt(document.get("points").toString());
-                    }
-                } else {
-                    Log.d("POI","get POICount failed");
-                }
-            }
-        });
-    }
-
-    private static void getQuizesCount(String email) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("users").document(email).collection("quizes_completed").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (DocumentSnapshot document : task.getResult()) {
-                        completedQuizes.add(document.getId());
-                        score = score + Integer.parseInt(document.get("points").toString());
-                    }
-                } else {
-                    Log.d("QUIZ","get getQuizesCount failed");
-                }
-            }
-        });
-    }
 }
