@@ -15,6 +15,8 @@ import com.example.biennale_go.Utility.CurrentUser;
 import com.example.biennale_go.Utility.RankingItem;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -42,6 +44,7 @@ public class RankingFragment extends Fragment implements RankingListAdapter.OnIt
     private RecyclerView.LayoutManager layoutManager;
     private EditText newQuizName;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private ArrayList<String> scores = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -49,6 +52,7 @@ public class RankingFragment extends Fragment implements RankingListAdapter.OnIt
         recyclerView = (RecyclerView) view.findViewById(R.id.ranking_list_recycler);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
+        fetchPOIScores();
         adapter = new RankingListAdapter(items, this);
         recyclerView.setAdapter(adapter);
         newQuizName = (EditText) view.findViewById(R.id.fieldNewQuiz);
@@ -58,10 +62,18 @@ public class RankingFragment extends Fragment implements RankingListAdapter.OnIt
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        items.add(new RankingItem(document.get("name").toString(),
-                                Integer.parseInt(document.get("score").toString()),
-                                Double.parseDouble(document.get("distance_traveled").toString())));
-                        adapter.notifyDataSetChanged();
+                        if (document.get("name").toString().equals(CurrentUser.name)) {
+
+                            items.add(new RankingItem(document.get("name").toString(),
+                                    Integer.parseInt(document.get("score").toString()) + (scores.size() * 3),
+                                    Double.parseDouble(document.get("distance_traveled").toString())));
+                            adapter.notifyDataSetChanged();
+                        } else {
+                            items.add(new RankingItem(document.get("name").toString(),
+                                    Integer.parseInt(document.get("score").toString()),
+                                    Double.parseDouble(document.get("distance_traveled").toString())));
+                            adapter.notifyDataSetChanged();
+                        }
                     }
                     Collections.sort(items, new Comparator<RankingItem>() {
                         @Override
@@ -82,6 +94,28 @@ public class RankingFragment extends Fragment implements RankingListAdapter.OnIt
         return view;
     }
 
+    private void fetchPOIScores() {
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("POI_scores").document(CurrentUser.uId);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        scores = (ArrayList<String>) document.getData().get("scores");
+                    } else {
+                        scores = new ArrayList<String>();
+                        Map<String, Object> data = new HashMap<>();
+                        data.put("scores", scores);
+                        db.collection("POI_scores").document(CurrentUser.uId).set(data);
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
 
     @Override
     public void onItemClick(int posision) {

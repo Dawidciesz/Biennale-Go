@@ -19,15 +19,9 @@ import com.example.biennale_go.Fragments.QuizListFragment;
 import com.example.biennale_go.Fragments.RankingFragment;
 import com.example.biennale_go.Fragments.RoutesListFragment;
 import com.example.biennale_go.Utility.CurrentUser;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
 
 public class MainActivity extends FragmentActivity {
     private ImageView mapButton, mainMenuButton;
@@ -76,7 +70,6 @@ public class MainActivity extends FragmentActivity {
                 openMenuActivity();
             }
         });
-        refreshScore();
     }
 
     public void openMapActivity() {
@@ -129,62 +122,5 @@ public class MainActivity extends FragmentActivity {
     public void openMenuActivity() {
         Intent intent = new Intent(this, MenuActivity.class);
         startActivity(intent);
-    }
-
-    public void refreshScore() {
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("quizzes_scores").document(CurrentUser.uId);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        CurrentUser.score = 0;
-                        scoresList = new ArrayList((ArrayList) document.getData().get("scores"));
-                        for (int i = 0; i < scoresList.size(); i++) {
-                            Map<String, String> temp = new HashMap<String, String>();
-                            temp.putAll((HashMap<String, String>) scoresList.get(i));
-                            Integer score = Integer.parseInt(temp.get("score"));
-                            if (score > 0) {
-                                CurrentUser.score += score;
-                            }
-                            CurrentUser.score += CurrentUser.distance_traveled;
-                        }
-                    } else {
-                    }
-
-                } else {
-                    Log.d("", "get failed with ", task.getException());
-                }
-            }
-
-        });
-
-        DocumentReference doc = db.collection("POI_scores").document(CurrentUser.uId);
-        doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        poiScores = (ArrayList<String>) document.getData().get("scores");
-                    } else {
-                        poiScores = new ArrayList<String>();
-                        Map<String, Object> data = new HashMap<>();
-                        data.put("scores", poiScores);
-                        Log.d(TAG, "No such document");
-                        db.collection("POI_scores").document(CurrentUser.uId).set(data);
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
-        if (poiScores != null) {
-            CurrentUser.score += poiScores.size();
-        }
-        DocumentReference docUpdateScores = db.collection("users").document(CurrentUser.email);
-        docRef.update("score", CurrentUser.score);
     }
 }

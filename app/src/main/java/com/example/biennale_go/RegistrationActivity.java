@@ -95,13 +95,13 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         db.collection("users").document(emailField.getText().toString()).set(data);
 
 
-            DocumentReference docRef = db.collection("users").document(CurrentUser.uId);
-            Map<String, Object> info = new HashMap<>();
-            data.put("name", nameField.getText().toString());
-            data.put("visited_count", 0);
-            docRef.collection("POI_visited").document(nameField.getText().toString()).set(info);
 
-        }
+        DocumentReference docRef =   db.collection("users").document(emailField.getText().toString());
+        Map<String, Object> info = new HashMap<>();
+        info.put("name", nameField.getText().toString());
+        info.put("visited_count", 0);
+        docRef.collection("POI_visited").document(nameField.getText().toString()).set(info);
+    }
 
     public boolean validate() {
         boolean isAllcorrect = true;

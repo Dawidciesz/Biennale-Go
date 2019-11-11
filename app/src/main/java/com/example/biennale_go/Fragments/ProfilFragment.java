@@ -38,7 +38,7 @@ public class ProfilFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         view = inflater.inflate(R.layout.fragment_profil, container, false);
-
+        CurrentUser.getPOICount(CurrentUser.email);
         fetchScores();
         userName = (TextView) view.findViewById(R.id.userName);
         userName.setText(CurrentUser.name);
@@ -65,6 +65,7 @@ public class ProfilFragment extends Fragment {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         poiScores = (ArrayList<String>) document.getData().get("scores");
+                        CurrentUser.poiScores = poiScores;
                     } else {
                         poiScores = new ArrayList<String>();
                     }

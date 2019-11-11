@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -13,15 +12,18 @@ import com.example.biennale_go.Utility.CurrentUser;
 import com.example.biennale_go.Utility.RankingItem;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
+
 
 public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.ViewHolder> {
     public List<RankingItem> items;
     private OnItemClick monItemClicklister;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private int i = 0;
+    private ArrayList<String> scores = new ArrayList<>();
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public LinearLayout item;
