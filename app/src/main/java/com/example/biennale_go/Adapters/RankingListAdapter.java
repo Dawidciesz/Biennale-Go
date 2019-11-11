@@ -68,7 +68,6 @@ public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.
         holder.userName.setText(items.get(position).getName());
         if (CurrentUser.name.equals((holder.userName.getText().toString()))) {
             holder.item.setBackgroundColor(Color.rgb(153, 153, 0));
-
         }
         else {
             holder.item.setBackgroundColor(Color.rgb(60, 117, 90));

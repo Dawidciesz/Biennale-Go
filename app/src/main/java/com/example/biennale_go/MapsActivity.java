@@ -343,10 +343,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             poiScores.add(name);
             DocumentReference docRef = db.collection("POI_scores").document(id.toString());
             docRef.update("scores", poiScores);
-            Map<String, Object> data = new HashMap<>();
-            data.put("name", name);
-            data.put("visited_count", 0);
-            db.collection("users").document(CurrentUser.email).collection("POI_visited").document(name).set(data);
         }
         else {
             DocumentReference docCount = db.collection("users").document(CurrentUser.email).collection("POI_visited").document(name);
