@@ -30,6 +30,7 @@ public class QuizSummaryFragment extends Fragment {
     private ArrayList scoresList = new ArrayList();
     private String id = CurrentUser.uId, name;
     private View view;
+    private int scoresTotal = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -76,6 +77,7 @@ public class QuizSummaryFragment extends Fragment {
         if((Integer) scoresMap.get(name) < points) {
             scoresMap.put(name, points);
             ArrayList newScoresList = new ArrayList();
+            scoresTotal += points;
             for ( Object hashKey : scoresMap.keySet() ) {
                 HashMap<String, String> newHashmap = new HashMap<String, String>();
                 newHashmap.put("name", hashKey.toString());
@@ -87,6 +89,9 @@ public class QuizSummaryFragment extends Fragment {
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
             DocumentReference docRef = db.collection("quizzes_scores").document(id);
             docRef.update("scores", newScoresList);
+
+            DocumentReference docUpdateScores = db.collection("users").document(CurrentUser.email);
+            docUpdateScores.update("score", scoresTotal);
         }
     }
 

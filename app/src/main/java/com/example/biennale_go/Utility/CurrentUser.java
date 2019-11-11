@@ -29,6 +29,7 @@ public class CurrentUser {
     public static List<String> completedQuizes = new ArrayList<>();
     public static Map<String, Object> visitedPOIMap = new HashMap<>();
     public static String favoritePOI;
+    public static ArrayList<String> poiScores = new ArrayList<>();
     public static int favoritePOICount;
     public static boolean isLogged;
 
@@ -63,31 +64,30 @@ public class CurrentUser {
                 }}});
     }
 
-//    private static void getPOICount(String email) {
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        db.collection("users").document(email).collection("POI_visited").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            int visitedNumber = 0;
-//
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                favoritePOICount = 0;
-//                if (task.isSuccessful()) {
-//                    for (DocumentSnapshot document : task.getResult()) {
-//                        visitedNumber = Integer.parseInt(document.get("visited_count").toString());
-//                        visitedPOIList.add(document.getId());
-//                        visitedPOIMap.put(document.getId(), visitedNumber);
-//                        if (visitedNumber > favoritePOICount) {
-//                            favoritePOICount = visitedNumber;
-//                            favoritePOI = document.getId();
-//                        }
-//                        score = score + Integer.parseInt(document.get("points").toString());
-//                    }
-//                } else {
-//                    Log.d("POI","get POICount failed");
-//                }
-//            }
-//        });
-//    }
+    public static void getPOICount(String email) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users").document(email).collection("POI_visited").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            int visitedNumber = 0;
+
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                favoritePOICount = 0;
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot document : task.getResult()) {
+                        visitedNumber = Integer.parseInt(document.get("visited_count").toString());
+                        visitedPOIList.add(document.getId());
+                        visitedPOIMap.put(document.getId(), visitedNumber);
+                        if (visitedNumber > favoritePOICount) {
+                            favoritePOICount = visitedNumber;
+                            favoritePOI = document.getId();
+                        }
+                    }
+                } else {
+                    Log.d("POI","get POICount failed");
+                }
+            }
+        });
+    }
 //
 //    private static void getQuizesCount(String email) {
 //        FirebaseFirestore db = FirebaseFirestore.getInstance();
