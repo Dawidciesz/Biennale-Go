@@ -51,7 +51,7 @@ public class ProfilFragment extends Fragment {
         favoritePlaceText.setText(CurrentUser.favoritePOI);
 
         distanceTraveledText = (TextView) view.findViewById(R.id.route_text_botom);
-        distanceTraveledText.setText(getResources().getString(R.string.distance_traveled, CurrentUser.distance_traveled));
+        distanceTraveledText.setText(getResources().getString(R.string.distance_traveled, CurrentUser.distance_traveled/1000));
 
         return view;
     }

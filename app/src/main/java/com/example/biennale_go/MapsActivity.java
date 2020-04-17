@@ -19,11 +19,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.example.biennale_go.Utility.CurrentUser;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -56,6 +58,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Bundle b;
     private double userLat = 0;
     private double userLong = 0;
+    private CameraPosition cameraPosition;
     private Button followButton;
     private String polylineColor, searchPoiName;
     private Boolean playerMarkFlag = false, followPlayerFlag = true;
@@ -141,9 +144,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     void getLocation() {
         try {
+
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000,
+                    10, this);
+//            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+//            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000,
+//                    10, this);
         }
         catch(SecurityException e) {
             e.printStackTrace();
@@ -161,13 +168,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Location locationA = new Location("A");
             locationA.setLatitude(userLat);
             locationA.setLongitude(userLong);
+//            locationA.setLatitude(userLat);
+//            locationA.setLongitude(userLong);
+//            locationA.setLatitude(playerMarker.getPosition().latitude);
+//            locationA.setLongitude(playerMarker.getPosition().longitude);
             Location locationB = new Location("B");
             locationB.setLatitude(userCurrentLocation.latitude);
             locationB.setLongitude(userCurrentLocation.longitude);
-            CurrentUser.distance += Math.round(locationA.distanceTo(locationB));
-            if (CurrentUser.distance >= 100) {
+            CurrentUser.distance = Math.round(locationA.distanceTo(locationB));
+            if (CurrentUser.distance >= 8 && CurrentUser.distance <= 40) {
                 CurrentUser.distance_traveled += CurrentUser.distance;
-                CurrentUser.distance = 0;
                 updateData();
             }
             userLat = latitude;
@@ -187,7 +197,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void updateData() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> data = new HashMap<>();
-        data.put("distance_traveled", CurrentUser.distance_traveled /1000);
+        data.put("distance_traveled", CurrentUser.distance_traveled);
         data.put("score", Math.round(CurrentUser.distance_traveled /100));
         db.collection("users").document(CurrentUser.email).update(data);
     }
@@ -232,6 +242,48 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         mMap.setLatLngBoundsForCameraTarget(elblagBorder);
         mMap.setMinZoomPreference(13.8f);
+
+        mMap.setBuildingsEnabled(true);
+//        CameraPosition cameraPosition = new CameraPosition.Builder()
+//                .target(elblagBorder.getCenter())
+//                .zoom(12)
+//                .bearing(300)
+//                .tilt(45)
+//                .build();
+//        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),
+//                30000, null);
+
+        mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                LatLngBounds.Builder b = new LatLngBounds.Builder();
+                b.include(new LatLng(54.146831,19.386889));
+                b.include( new LatLng(54.189640, 19.437335));
+                CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(b.build(),  20);
+                mMap.animateCamera(cu, 10, new GoogleMap.CancelableCallback() {
+                    @Override
+                    public void onFinish() {
+                        Log.e(TAG, "Start animate onFinish");
+                        CameraPosition cp = new CameraPosition.Builder()
+                                .zoom(21.0f)
+                                .target(playerMarker.getPosition())
+                                .tilt(45.0f)
+                                .bearing(35.0f)
+                                .build();
+                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cp));
+//                mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cp));
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        Log.e(TAG, "Start animate onCancel");
+                    }
+                });
+            }
+        });
+
+
+
         try {
             boolean success = mMap.setMapStyle(
                     MapStyleOptions.loadRawResourceStyle(
@@ -351,8 +403,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             docinfo.collection("POI_visited").document(name).set(info);
         }
         else {
-            DocumentReference docCount = db.collection("users").document(CurrentUser.email).collection("POI_visited").document(name);
-            docCount.update("visited_count", CurrentUser.visitedPOIMap.get(name).toString() + 1);
+            if (CurrentUser.visitedPOIMap.get(name) != null) {
+                DocumentReference docCount = db.collection("users").document(CurrentUser.email).collection("POI_visited").document(name);
+                docCount.update("visited_count", Integer.parseInt(CurrentUser.visitedPOIMap.get(name).toString()) + 1);
+            }
         }
     }
 }
