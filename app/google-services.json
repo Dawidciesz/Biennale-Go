@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1098753502328",
+    "firebase_url": "https://biennale-34843.firebaseio.com",
+    "project_id": "biennale-34843",
+    "storage_bucket": "biennale-34843.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1098753502328:android:9b54f678a1a369fd",
+        "android_client_info": {
+          "package_name": "com.example.biennale_go"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1098753502328-g3htoil4bpoj31mgtir4aqdp4t6krl97.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.biennale_go",
+            "certificate_hash": "6673286eb35e9a1da7c1f40440f855d34f9e6974"
+          }
+        },
+        {
+          "client_id": "1098753502328-2u950vhhekqvjolpkan0398npii5n1v7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDinrZS-Qy6GTHe232nqAxjbJziTd33mzs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1098753502328-2u950vhhekqvjolpkan0398npii5n1v7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
