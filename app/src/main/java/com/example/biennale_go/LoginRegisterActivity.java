@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginRegisterActivity extends AppCompatActivity implements View.OnClickListener {
@@ -18,6 +21,8 @@ public class LoginRegisterActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_email_password);
 
         registerButton = (Button) findViewById(R.id.registrationButton);
@@ -40,7 +45,14 @@ public class LoginRegisterActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onStart() {
         super.onStart();
-        if (user != null) {
+        //TODO auto logowanie :)
+        // Check for existing Google Sign In account, if the user is already signed in
+        // the GoogleSignInAccount will be non-null.
+
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        if (user != null
+//                || account != null
+        ) {
             Intent i = new Intent(LoginRegisterActivity.this, MenuActivity.class);
             startActivity(i);
         }
@@ -57,7 +69,7 @@ public class LoginRegisterActivity extends AppCompatActivity implements View.OnC
     }
 
     public void openLoginActivity() {
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, LoginActivityGoogleFB.class);
         startActivity(intent);
     }
 
