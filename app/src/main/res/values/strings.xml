@@ -7,4 +7,6 @@
     <string name="places_visited">%d odwiedzonych ciekawych miejsc</string>
     <string name="quizes_finished">%d ukończonych quizów</string>
     <string name="distance_traveled">%.2f pokonanych kilometrów</string>
+    <string name="facebook_app_id">522658445309367</string>
+    <string name="fb_login_protocol_scheme">fb522658445309367</string>
 </resources>
