@@ -14,6 +14,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -65,6 +66,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Marker playerMarker;
     final LatLngBounds elblagBorder = new LatLngBounds(new LatLng(54.146831,19.386889  ), new LatLng(54.189640, 19.437335));
     private String id = CurrentUser.uId;
+    private ImageView galleryLogo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         loadingPanel = (RelativeLayout) findViewById(R.id.loadingPanel);
         mapPanel = (RelativeLayout) findViewById(R.id.mapPanel);
+
+        galleryLogo = (ImageView) findViewById(R.id.galleryLogo);
+        galleryLogo.startAnimation(AnimationUtils.loadAnimation(this, R.anim.loading_scale));
 
         followButton = (Button) findViewById(R.id.followButton);
         followButton.setOnClickListener(new View.OnClickListener() {

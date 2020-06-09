@@ -15,7 +15,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import com.example.biennale_go.R;
 import com.example.biennale_go.Utility.CurrentUser;
@@ -39,11 +41,14 @@ public class QuizListFragment extends Fragment {
     private ArrayList questions = new ArrayList(), quizzesNames = new ArrayList(), scoresList = new ArrayList();
     private Map<String, Integer> scores = new HashMap<String, Integer>();
     private Map<String, Object> quizData = new HashMap<>();
+    private ImageView galleryLogo;
     private static final String TAG = "QuizListActicity";
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.activity_quiz_list, container, false);
+        galleryLogo = (ImageView) view.findViewById(R.id.galleryLogo);
+        galleryLogo.startAnimation(AnimationUtils.loadAnimation(this.getContext(), R.anim.loading_scale));
         super.onCreate(savedInstanceState);
         quizListPanel = (LinearLayout) view.findViewById(R.id.quizListPanel);
         fetchQuizzesNames();

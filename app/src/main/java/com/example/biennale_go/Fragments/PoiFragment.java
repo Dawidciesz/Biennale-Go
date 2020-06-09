@@ -14,7 +14,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -41,6 +43,7 @@ public class PoiFragment extends Fragment {
     private Button newButton;
     private String id = CurrentUser.uId;
     private View view;
+    private ImageView galleryLogo;
     private static final String TAG = "PoiFragment";
 
 
@@ -50,6 +53,10 @@ public class PoiFragment extends Fragment {
         view = inflater.inflate(R.layout.activity_poi, container, false);
         loadingPanel = (RelativeLayout) view.findViewById(R.id.loadingPanel);
         poiPanel = (LinearLayout) view.findViewById(R.id.poiPanel);
+
+        galleryLogo = (ImageView) view.findViewById(R.id.galleryLogo);
+        galleryLogo.startAnimation(AnimationUtils.loadAnimation(this.getContext(), R.anim.loading_scale));
+
         b = getArguments();
 
         if (b != null) {

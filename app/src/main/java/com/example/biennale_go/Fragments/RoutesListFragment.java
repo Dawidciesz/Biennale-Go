@@ -15,7 +15,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.biennale_go.R;
@@ -33,11 +35,15 @@ public class RoutesListFragment extends Fragment {
     private LinearLayout routesListPanel;
     private Button newButton;
     private View view;
+    private ImageView galleryLogo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         view = inflater.inflate(R.layout.activity_routes_list, container, false);
+
+        galleryLogo = (ImageView) view.findViewById(R.id.galleryLogo);
+        galleryLogo.startAnimation(AnimationUtils.loadAnimation(this.getContext(), R.anim.loading_scale));
         routesListPanel = (LinearLayout) view.findViewById(R.id.routesListPanel);
         fetchRoutes();
         return view;

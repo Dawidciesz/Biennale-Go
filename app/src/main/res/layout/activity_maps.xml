@@ -10,13 +10,16 @@
         android:id="@+id/loadingPanel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@android:color/white"
         android:gravity="center"
         android:visibility="visible">
 
-        <ProgressBar
-            android:layout_width="158dp"
-            android:layout_height="136dp"
-            android:indeterminate="true" />
+        <ImageView
+            android:id="@+id/galleryLogo"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/logo_gallery" />
+
     </RelativeLayout>
 
     <RelativeLayout
