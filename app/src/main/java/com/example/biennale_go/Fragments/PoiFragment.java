@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.example.biennale_go.Classes.poiClass;
 import com.example.biennale_go.R;
 import com.example.biennale_go.Utility.CurrentUser;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,6 +33,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +42,8 @@ public class PoiFragment extends Fragment {
     private Bundle b;
     private LinearLayout poiPanel;
     private RelativeLayout loadingPanel;
-    private ArrayList<String> names, scores, addresses, descriptions, images;
+    private ArrayList<String> scores;
+    private ArrayList<poiClass> poiList;
     private Button newButton;
     private String id = CurrentUser.uId;
     private View view;
@@ -60,11 +64,11 @@ public class PoiFragment extends Fragment {
         b = getArguments();
 
         if (b != null) {
-            names = new ArrayList((ArrayList) b.getSerializable("names"));
-            scores = new ArrayList((ArrayList) b.getSerializable("scores"));
-            images = new ArrayList((ArrayList) b.getSerializable("images"));
-            addresses = new ArrayList((ArrayList) b.getSerializable("addresses"));
-            descriptions = new ArrayList((ArrayList) b.getSerializable("descriptions"));
+//            names = new ArrayList((ArrayList) b.getSerializable("names"));
+//            scores = new ArrayList((ArrayList) b.getSerializable("scores"));
+//            images = new ArrayList((ArrayList) b.getSerializable("images"));
+//            addresses = new ArrayList((ArrayList) b.getSerializable("addresses"));
+//            descriptions = new ArrayList((ArrayList) b.getSerializable("descriptions"));
             generatePoiButtons();
             switchLoadingPanel();
         } else {
@@ -81,10 +85,12 @@ public class PoiFragment extends Fragment {
     }
 
     private void fetchPOI() {
-        names = new ArrayList();
-        images = new ArrayList();
-        addresses = new ArrayList();
-        descriptions = new ArrayList();
+        poiList = new ArrayList();
+//        names = new ArrayList();
+//        images = new ArrayList();
+//        addresses = new ArrayList();
+//        descriptions = new ArrayList();
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference docRef = db.collection("POI");
         docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -96,11 +102,19 @@ public class PoiFragment extends Fragment {
                         String image = document.getData().get("image").toString();
                         String address = document.getData().get("address").toString();
                         String description = document.getData().get("description").toString();
-                        names.add(name);
-                        images.add(image);
-                        addresses.add(address);
-                        descriptions.add(description);
+                        Double latitude = (Double) document.getData().get("latitude");
+                        Double longitude = (Double) document.getData().get("longitude");
+
+                        poiClass newPoi = new poiClass(name, description, address, image, latitude, longitude);
+
+                        poiList.add(newPoi);
+
+//                        names.add(name);
+//                        images.add(image);
+//                        addresses.add(address);
+//                        descriptions.add(description);
                     }
+                    sortPoiList();
                     generatePoiButtons();
                     switchLoadingPanel();
                 } else {
@@ -110,6 +124,16 @@ public class PoiFragment extends Fragment {
         });
     }
 
+    private void sortPoiList(){
+        Comparator<poiClass> compareByName = new Comparator<poiClass>() {
+            @Override
+            public int compare(poiClass o1, poiClass o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        };
+
+        Collections.sort(poiList, compareByName);
+    }
 
     private void fetchPOIScores() {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -136,11 +160,18 @@ public class PoiFragment extends Fragment {
     }
 
     private void generatePoiButtons() {
-        for (Integer i = 0; i<names.size(); i++) {
-            final String name = names.get(i);
-            final String image = images.get(i);
-            final String address = addresses.get(i);
-            final String description = descriptions.get(i);
+        String categorySign = "";
+
+        for (Integer i = 0; i<poiList.size(); i++) {
+            final String name = poiList.get(i).getName();
+            final String image = poiList.get(i).getImage();
+            final String address = poiList.get(i).getAddress();
+            final String description = poiList.get(i).getDescription();
+
+            if(!categorySign.equals(name.substring(0, 1))){
+                categorySign = name.substring(0, 1);
+                generateCategorySign(categorySign);
+            }
 
             newButton = new Button(getContext());
             newButton.setText(name);
@@ -177,5 +208,20 @@ public class PoiFragment extends Fragment {
             newButton.setVisibility(View.INVISIBLE);
             poiPanel.addView(newButton);
         }
+    }
+
+    private void generateCategorySign(String categorySign) {
+            newButton = new Button(getContext());
+            newButton.setText(categorySign.toUpperCase());
+            newButton.setClickable(false);
+            newButton.setGravity(Gravity.CENTER);
+            newButton.setBackgroundColor(Color.parseColor("#ffffff"));
+            newButton.setTextColor(Color.parseColor("#00574b"));
+            newButton.setPadding(10,0,10,0);
+
+            poiPanel.addView(newButton);
+            newButton = new Button(getContext());
+            newButton.setVisibility(View.INVISIBLE);
+            poiPanel.addView(newButton);
     }
 }
