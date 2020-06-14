@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +49,7 @@ public class PoiFragment extends Fragment {
     private String id = CurrentUser.uId;
     private View view;
     private ImageView galleryLogo;
+    private boolean firstSign = true;
     private static final String TAG = "PoiFragment";
 
 
@@ -64,11 +66,6 @@ public class PoiFragment extends Fragment {
         b = getArguments();
 
         if (b != null) {
-//            names = new ArrayList((ArrayList) b.getSerializable("names"));
-//            scores = new ArrayList((ArrayList) b.getSerializable("scores"));
-//            images = new ArrayList((ArrayList) b.getSerializable("images"));
-//            addresses = new ArrayList((ArrayList) b.getSerializable("addresses"));
-//            descriptions = new ArrayList((ArrayList) b.getSerializable("descriptions"));
             generatePoiButtons();
             switchLoadingPanel();
         } else {
@@ -86,10 +83,6 @@ public class PoiFragment extends Fragment {
 
     private void fetchPOI() {
         poiList = new ArrayList();
-//        names = new ArrayList();
-//        images = new ArrayList();
-//        addresses = new ArrayList();
-//        descriptions = new ArrayList();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference docRef = db.collection("POI");
@@ -108,11 +101,6 @@ public class PoiFragment extends Fragment {
                         poiClass newPoi = new poiClass(name, description, address, image, latitude, longitude);
 
                         poiList.add(newPoi);
-
-//                        names.add(name);
-//                        images.add(image);
-//                        addresses.add(address);
-//                        descriptions.add(description);
                     }
                     sortPoiList();
                     generatePoiButtons();
@@ -177,9 +165,9 @@ public class PoiFragment extends Fragment {
             newButton.setText(name);
             newButton.setClickable(true);
             newButton.setGravity(Gravity.CENTER);
-            newButton.setBackgroundColor(Color.parseColor("#ffffff"));
-            newButton.setTextColor(Color.parseColor("#00574b"));
-            newButton.setPadding(10,0,10,0);
+            newButton.setBackgroundResource(R.drawable.list_button_selector);
+            newButton.setTextColor(Color.parseColor("#000000"));
+            newButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, 35);
             newButton.setOnClickListener(new View.OnClickListener()
             {
                 @Override
@@ -198,30 +186,35 @@ public class PoiFragment extends Fragment {
                     fragmentTransaction.commit();
                 }
             });
-            if(scores.contains(name)) {
-                Drawable img = ContextCompat.getDrawable(getContext(), R.drawable.checked );
-                img.setBounds( 0, 0, 60, 60 );
-                newButton.setCompoundDrawables( img, null, img, null );
-            }
-            poiPanel.addView(newButton);
-            newButton = new Button(getContext());
-            newButton.setVisibility(View.INVISIBLE);
+//            if(scores.contains(name)) {
+//                Drawable img = ContextCompat.getDrawable(getContext(), R.drawable.checked );
+//                img.setBounds( 0, 0, 60, 60 );
+//                newButton.setCompoundDrawables( img, null, img, null );
+//            }
             poiPanel.addView(newButton);
         }
     }
 
     private void generateCategorySign(String categorySign) {
-            newButton = new Button(getContext());
-            newButton.setText(categorySign.toUpperCase());
-            newButton.setClickable(false);
-            newButton.setGravity(Gravity.CENTER);
-            newButton.setBackgroundColor(Color.parseColor("#ffffff"));
-            newButton.setTextColor(Color.parseColor("#00574b"));
-            newButton.setPadding(10,0,10,0);
+        if(firstSign){
+        firstSign = false;
+    }else{
+        newButton = new Button(getContext());
+        newButton.setText("");
+        newButton.setClickable(false);
+        newButton.setBackgroundColor(Color.parseColor("#ffffff"));
+        newButton.setTextColor(Color.parseColor("#000000"));
+        poiPanel.addView(newButton);
+    }
 
-            poiPanel.addView(newButton);
-            newButton = new Button(getContext());
-            newButton.setVisibility(View.INVISIBLE);
-            poiPanel.addView(newButton);
+        newButton = new Button(getContext());
+        newButton.setText(categorySign.toUpperCase());
+        newButton.setClickable(false);
+        newButton.setGravity(Gravity.CENTER);
+        newButton.setBackgroundColor(Color.parseColor("#ffffff"));
+        newButton.setTextColor(Color.parseColor("#000000"));
+        newButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, 35);
+
+        poiPanel.addView(newButton);
     }
 }
