@@ -6,16 +6,21 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.example.biennale_go.MapsActivity;
 import com.example.biennale_go.R;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -29,7 +34,7 @@ public class PoiDetailsFragment extends Fragment {
     private View view;
     private ImageView galleryLogo;
     private RelativeLayout loadingPanel;
-
+    private LinearLayout poiDetailsPanel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -38,9 +43,12 @@ public class PoiDetailsFragment extends Fragment {
         b = getArguments();
 
         loadingPanel = (RelativeLayout) view.findViewById(R.id.loadingPanel);
+        poiDetailsPanel = (LinearLayout) view.findViewById(R.id.poiDetailsPanel);
 
         galleryLogo = (ImageView) view.findViewById(R.id.galleryLogo);
         galleryLogo.startAnimation(AnimationUtils.loadAnimation(this.getContext(), R.anim.loading_scale));
+
+        setInformationButtons();
 
         if (b != null) {
             switchLoadingPanel();
@@ -84,7 +92,36 @@ public class PoiDetailsFragment extends Fragment {
     private void switchLoadingPanel() {
         if(loadingPanel.getVisibility() != View.GONE) {
             loadingPanel.setVisibility(View.GONE);
+            poiDetailsPanel.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void setInformationButtons(){
+        Button addressBtn, descriptionBtn;
+
+        addressBtn = (Button) view.findViewById(R.id.addressBtn);
+        addressBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(addressTextView.getVisibility() == View.GONE){
+                    addressTextView.setVisibility(View.VISIBLE);
+                    descriptionTextView.setVisibility(View.GONE);
+                }
+                else addressTextView.setVisibility(View.GONE);
+            }
+        });
+
+        descriptionBtn = (Button) view.findViewById(R.id.descriptionBtn);
+        descriptionBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(descriptionTextView.getVisibility() == View.GONE){
+                    descriptionTextView.setVisibility(View.VISIBLE);
+                    addressTextView.setVisibility(View.GONE);
+                }
+                else descriptionTextView.setVisibility(View.GONE);
+            }
+        });
     }
 }
 

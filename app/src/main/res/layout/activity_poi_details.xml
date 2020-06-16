@@ -9,17 +9,37 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimaryDark">
+        android:background="@color/cardview_light_background"
+        android:visibility="visible">
 
         <LinearLayout
+            android:id="@+id/poiDetailsPanel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/nameTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/design_default_color_on_primary"
+                android:gravity="center"
+                android:paddingLeft="15dp"
+                android:paddingTop="15dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="15dp"
+                android:text="TextView"
+                android:textColor="@android:color/widget_edittext_dark"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="278dp" />
 
             <ImageView
                 android:id="@+id/poiImageView"
                 android:layout_width="match_parent"
-                android:layout_height="265dp"
+                android:layout_height="397dp"
                 android:cropToPadding="false"
                 android:scaleType="fitXY"
                 android:visibility="visible"
@@ -28,44 +48,56 @@
                 tools:layout_editor_absoluteY="2dp"
                 tools:srcCompat="@color/colorAccent" />
 
-            <TextView
-                android:id="@+id/nameTextView"
+
+            <Button
+                android:id="@+id/addressBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/design_default_color_secondary_variant"
-                android:paddingLeft="15dp"
-                android:paddingTop="15dp"
-                android:paddingRight="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/list_button_selector"
                 android:paddingBottom="15dp"
-                android:text="TextView"
-                android:textColor="@android:color/white"
-                tools:layout_editor_absoluteX="8dp"
-                tools:layout_editor_absoluteY="278dp" />
+                android:text="ULICA" />
 
             <TextView
                 android:id="@+id/addressTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/colorPrimary"
+                android:background="@color/cardview_light_background"
+                android:gravity="center"
                 android:paddingLeft="15dp"
                 android:paddingTop="15dp"
                 android:paddingRight="15dp"
                 android:paddingBottom="15dp"
                 android:text="TextView"
-                android:textColor="@android:color/white"
+                android:textColor="@android:color/widget_edittext_dark"
+                android:visibility="gone"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="306dp" />
+
+
+            <Button
+                android:id="@+id/descriptionBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/list_button_selector"
+                android:paddingBottom="15dp"
+                android:text="OPIS" />
 
             <TextView
                 android:id="@+id/descriptionTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="right|fill|fill_horizontal|left"
                 android:paddingLeft="15dp"
                 android:paddingTop="15dp"
                 android:paddingRight="15dp"
                 android:paddingBottom="15dp"
                 android:text="TextView"
-                android:textColor="@android:color/white"
+                android:textColor="@android:color/widget_edittext_dark"
+                android:visibility="gone"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="334dp" />
         </LinearLayout>
@@ -76,9 +108,8 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/checked" />
@@ -92,8 +123,8 @@
         android:layout_alignParentRight="true"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:src="@drawable/map"
+        android:visibility="invisible"
         app:civ_border_color="@android:color/white"
         app:civ_border_width="5dp"
         app:civ_circle_background_color="@android:color/white"
@@ -106,7 +137,7 @@
         android:layout_height="match_parent"
         android:background="@android:color/white"
         android:gravity="center"
-        android:visibility="visible">
+        android:visibility="invisible">
 
         <ImageView
             android:id="@+id/galleryLogo"
