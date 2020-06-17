@@ -7,6 +7,7 @@
     tools:context=".Fragments.PoiDetailsFragment">
 
     <ScrollView
+        android:id="@+id/poiDetailsScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/cardview_light_background"
@@ -31,8 +32,9 @@
                 android:paddingTop="15dp"
                 android:paddingRight="15dp"
                 android:paddingBottom="15dp"
-                android:text="TextView"
+                android:text="AUTHOR NAME"
                 android:textColor="@android:color/widget_edittext_dark"
+                android:textSize="24dp"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="278dp" />
 
@@ -57,7 +59,8 @@
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/list_button_selector"
                 android:paddingBottom="15dp"
-                android:text="ULICA" />
+                android:text="ULICA"
+                android:textSize="16dp" />
 
             <TextView
                 android:id="@+id/addressTextView"
@@ -84,10 +87,37 @@
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/list_button_selector"
                 android:paddingBottom="15dp"
-                android:text="OPIS" />
+                android:text="OPIS"
+                android:textSize="16dp" />
 
             <TextView
                 android:id="@+id/descriptionTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right|fill|fill_horizontal|left"
+                android:paddingLeft="15dp"
+                android:paddingTop="15dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="15dp"
+                android:text="TextView"
+                android:textColor="@android:color/widget_edittext_dark"
+                android:visibility="gone"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="334dp" />
+
+            <Button
+                android:id="@+id/aboutBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/list_button_selector"
+                android:paddingBottom="15dp"
+                android:text="O AUTORZE"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/aboutTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="right|fill|fill_horizontal|left"

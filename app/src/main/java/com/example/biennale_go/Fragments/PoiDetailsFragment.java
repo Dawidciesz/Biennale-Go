@@ -12,11 +12,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import com.example.biennale_go.MapsActivity;
 import com.example.biennale_go.R;
@@ -28,13 +30,16 @@ import java.net.URL;
 public class PoiDetailsFragment extends Fragment {
     private String name, image, address, description;
     private Boolean checked;
-    private TextView nameTextView, addressTextView, descriptionTextView;
+    private TextView nameTextView, addressTextView, descriptionTextView, aboutTextView;
     private Bundle b;
     private ImageView PoiImageView, checkedImageView, showOnMapButton;
     private View view;
     private ImageView galleryLogo;
     private RelativeLayout loadingPanel;
     private LinearLayout poiDetailsPanel;
+    private Animation animFadeIn, animFadeOut;
+    private ScrollView poiDetailsScrollView;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -44,9 +49,13 @@ public class PoiDetailsFragment extends Fragment {
 
         loadingPanel = (RelativeLayout) view.findViewById(R.id.loadingPanel);
         poiDetailsPanel = (LinearLayout) view.findViewById(R.id.poiDetailsPanel);
+        poiDetailsScrollView = (ScrollView) view.findViewById(R.id.poiDetailsScrollView);
 
         galleryLogo = (ImageView) view.findViewById(R.id.galleryLogo);
         galleryLogo.startAnimation(AnimationUtils.loadAnimation(this.getContext(), R.anim.loading_scale));
+
+        animFadeIn = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
+        animFadeOut = AnimationUtils.loadAnimation(getContext(), R.anim.fade_out);
 
         setInformationButtons();
 
@@ -63,6 +72,8 @@ public class PoiDetailsFragment extends Fragment {
             addressTextView.setText(address);
             descriptionTextView = (TextView) view.findViewById(R.id.descriptionTextView);
             descriptionTextView.setText(description);
+            aboutTextView = (TextView) view.findViewById(R.id.aboutTextView);
+            aboutTextView.setText(description);
             checkedImageView = (ImageView) view.findViewById(R.id.checkedImageView);
             checkedImageView.setImageResource(R.drawable.checked);
             if (checked) checkedImageView.setVisibility(View.VISIBLE);
@@ -97,17 +108,39 @@ public class PoiDetailsFragment extends Fragment {
     }
 
     private void setInformationButtons(){
-        Button addressBtn, descriptionBtn;
+        Button addressBtn, descriptionBtn, aboutBtn;
 
         addressBtn = (Button) view.findViewById(R.id.addressBtn);
         addressBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                aboutTextView.clearAnimation();
+                descriptionTextView.clearAnimation();
+                addressTextView.clearAnimation();
+
                 if(addressTextView.getVisibility() == View.GONE){
                     addressTextView.setVisibility(View.VISIBLE);
                     descriptionTextView.setVisibility(View.GONE);
+                    aboutTextView.setVisibility(View.GONE);
+
+                    addressTextView.startAnimation(animFadeIn);
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    poiDetailsScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                                }
+                            }, 100);
                 }
-                else addressTextView.setVisibility(View.GONE);
+                else {
+                    addressTextView.startAnimation(animFadeOut);
+
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    addressTextView.setVisibility(View.GONE);
+                                }
+                            }, 500);
+                }
             }
         });
 
@@ -115,11 +148,67 @@ public class PoiDetailsFragment extends Fragment {
         descriptionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                aboutTextView.clearAnimation();
+                descriptionTextView.clearAnimation();
+                addressTextView.clearAnimation();
+
                 if(descriptionTextView.getVisibility() == View.GONE){
                     descriptionTextView.setVisibility(View.VISIBLE);
                     addressTextView.setVisibility(View.GONE);
+                    aboutTextView.setVisibility(View.GONE);
+
+                    descriptionTextView.startAnimation(animFadeIn);
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    poiDetailsScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                                }
+                            }, 100);
                 }
-                else descriptionTextView.setVisibility(View.GONE);
+                else {
+                    descriptionTextView.startAnimation(animFadeOut);
+
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    descriptionTextView.setVisibility(View.GONE);
+                                }
+                            }, 500);
+                }
+            }
+        });
+
+        aboutBtn = (Button) view.findViewById(R.id.aboutBtn);
+        aboutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                aboutTextView.clearAnimation();
+                descriptionTextView.clearAnimation();
+                addressTextView.clearAnimation();
+
+                if(aboutTextView.getVisibility() == View.GONE){
+                    aboutTextView.setVisibility(View.VISIBLE);
+                    descriptionTextView.setVisibility(View.GONE);
+                    addressTextView.setVisibility(View.GONE);
+
+                    aboutTextView.startAnimation(animFadeIn);
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    poiDetailsScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                                }
+                            }, 100);
+                }
+                else {
+                    aboutTextView.startAnimation(animFadeOut);
+
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    aboutTextView.setVisibility(View.GONE);
+                                }
+                            }, 500);
+                }
             }
         });
     }
