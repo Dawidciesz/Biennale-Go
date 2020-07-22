@@ -53,7 +53,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<String> poiNames, poiAddresses, poiDescriptions, poiImages, poiScores;
     private ArrayList<Double> poiLatitude, poiLongitude;
     private RelativeLayout loadingPanel, mapPanel;
-    private Double POICollisionRange = (360.0 * 100.0) / 40075000.0; // 100 meters
+    private Double POICollisionRange = (360.0 * 30.0) / 40075000.0; // 100 meters
     private ArrayList polyline;
     private Bundle b;
     private double userLat = 0;
@@ -146,7 +146,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         try {
 
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000,
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
                     10, this);
 //            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
 //            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000,

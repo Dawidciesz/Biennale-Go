@@ -53,13 +53,13 @@ public class LoginRegisterActivity extends AppCompatActivity implements View.OnC
         if (user != null
 //                || account != null
         ) {
-            Intent i = new Intent(LoginRegisterActivity.this, MenuActivity.class);
+            Intent i = new Intent(LoginRegisterActivity.this, MainActivity.class);
             startActivity(i);
         }
     }
 
     public void openMenuActivity() {
-        Intent intent = new Intent(this, MenuActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 

@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -68,6 +69,7 @@ public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.
     public void onBindViewHolder(ViewHolder holder, final int position) {
         int pos = position + 1;
         holder.userName.setText(items.get(position).getName());
+        holder.userScore.setAnimation(AnimationUtils.loadAnimation(holder.userName.getContext(),R.anim.item_anim));
         if (CurrentUser.name.equals((holder.userName.getText().toString()))) {
             holder.item.setBackgroundColor(Color.rgb(153, 153, 0));
         }
@@ -75,7 +77,10 @@ public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.
             holder.item.setBackgroundColor(Color.rgb(60, 117, 90));
         }
         holder.number.setText(pos + "");
+        holder.number.setAnimation(AnimationUtils.loadAnimation(holder.userName.getContext(),R.anim.item_anim));
+        holder.userScore.setAnimation(AnimationUtils.loadAnimation(holder.userName.getContext(),R.anim.item_anim));
         holder.userScore.setText(String.valueOf(items.get(position).getScore()));
+        holder.userDistanceTraveled.setAnimation(AnimationUtils.loadAnimation(holder.userName.getContext(),R.anim.item_anim));
         holder.userDistanceTraveled.setText(String.valueOf(items.get(position).getDistanceTraveled()) + "km");
     }
 
