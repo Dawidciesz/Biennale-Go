@@ -115,7 +115,7 @@ public class LoginActivityGoogleFB extends AppCompatActivity implements View.OnC
         startActivity(intent);
     }
     public void openMenuActivity() {
-        Intent intent = new Intent(this, MenuActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 

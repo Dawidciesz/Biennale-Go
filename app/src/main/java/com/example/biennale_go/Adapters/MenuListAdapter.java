@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.biennale_go.R;
 import com.example.biennale_go.Utility.CurrentUser;
+import com.example.biennale_go.Utility.MenuListItem;
 import com.example.biennale_go.Utility.RankingItem;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -22,7 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHolder> {
-    public List<RankingItem> items;
+    public List<MenuListItem> items;
     private OnMenuItemClick onItemClicklister;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private int i = 0;
@@ -48,7 +49,7 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
         }
     }
 
-    public MenuListAdapter(List<RankingItem> myDataset, OnMenuItemClick onItemClickListener) {
+    public MenuListAdapter(List<MenuListItem> myDataset, OnMenuItemClick onItemClickListener) {
         items = myDataset;
         this.onItemClicklister = onItemClickListener;
     }
@@ -65,7 +66,7 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         int pos = position + 1;
-        holder.picture.setImageResource(R.drawable.awardgold);
+        holder.picture.setImageDrawable(items.get(position).getImage());
         holder.userName.setText(items.get(position).getName());
         holder.userName.setAnimation(AnimationUtils.loadAnimation(holder.userName.getContext(),R.anim.item_anim));
         holder.picture.setAnimation(AnimationUtils.loadAnimation(holder.picture.getContext(),R.anim.item_anim));
