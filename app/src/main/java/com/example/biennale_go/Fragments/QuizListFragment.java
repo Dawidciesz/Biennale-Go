@@ -164,7 +164,7 @@ public class QuizListFragment extends Fragment {
                     ArrayList scoresList = new ArrayList();
                     scoresList.add(scores);
                     b.putSerializable("scoresList", scoresList);
-                    Fragment testFragment = new QuizFragment();
+                    Fragment testFragment = new QuizLevelFragment();
                     testFragment.setArguments(b);
                     FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.fragment_container, testFragment);
