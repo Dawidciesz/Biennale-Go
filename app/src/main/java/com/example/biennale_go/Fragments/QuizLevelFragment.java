@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -25,12 +26,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class QuizLevelFragment extends Fragment {
-    private LinearLayout quizLevelPanel;
+    private LinearLayout quizLevelPanel, headerContainer;
+    private RelativeLayout loadingPanel, preLayout;
     private TextView quizNameTextView;
     private Bundle b;
     private String name;
     private View view;
     private Button newButton;
+    private Integer quizLevel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -39,13 +42,18 @@ public class QuizLevelFragment extends Fragment {
 
         quizNameTextView = (TextView) view.findViewById(R.id.quizNameTextView);
         quizLevelPanel = (LinearLayout) view.findViewById(R.id.quizLevelPanel);
+        headerContainer = (LinearLayout) view.findViewById(R.id.headerContainer);
+        loadingPanel = (RelativeLayout) view.findViewById(R.id.loadingPanel);
+        preLayout = (RelativeLayout) view.findViewById(R.id.preLayout);
+
         b = getArguments();
 
         if (b != null) {
             name = b.getString("name");
             quizNameTextView.setText(name);
             addButtons();
-
+            headerContainer.setVisibility(View.VISIBLE);
+            loadingPanel.setVisibility(View.GONE);
         }
 
         return view;
@@ -61,8 +69,11 @@ public class QuizLevelFragment extends Fragment {
             {
                 @Override
                 public void onClick(View v) {
+                    quizLevel = j;
+                    preLayout.setVisibility(View.VISIBLE);
+
 //                    Bundle b = new Bundle();
-//                    b.putString("name", quizzesNames.get(j).toString());
+//                    b.putString("name", name);
 //                    if(quizData.get(quizzesNames.get(j).toString()) != null) {
 //                        b.putSerializable("questions", (ArrayList) quizData.get(quizzesNames.get(j).toString()));
 //                    }
