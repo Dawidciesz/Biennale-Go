@@ -21,7 +21,6 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".MenuActivity" />
         <activity android:name=".RegistrationActivity" />
@@ -60,7 +59,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginRegisterActivity" >
+
+            android:name=".LoginRegisterActivity"
+            android:theme="@style/TabAppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

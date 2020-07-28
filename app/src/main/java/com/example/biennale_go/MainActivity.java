@@ -13,10 +13,13 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,7 +36,10 @@ import com.example.biennale_go.Fragments.QuizListFragment;
 import com.example.biennale_go.Fragments.RankingFragment;
 import com.example.biennale_go.Fragments.RoutesListFragment;
 import com.example.biennale_go.Utility.CurrentUser;
+import com.example.biennale_go.Utility.MenuListItem;
 import com.example.biennale_go.Utility.RankingItem;
+import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.security.MessageDigest;
@@ -57,7 +63,7 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
     private RecyclerView recyclerView;
     private RelativeLayout listView;
     private LinearLayout buttons;
-    private List<RankingItem> items = new ArrayList<>();
+    private List<MenuListItem> items = new ArrayList<>();
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private EditText newQuizName;
@@ -68,15 +74,20 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         PackageInfo info;
+        Resources res = getResources();
 
 //
-        items.add(new RankingItem("MAPA", 3, 3));
-        items.add(new RankingItem("QUIZ", 3, 3));
-        items.add(new RankingItem("FORMY", 3, 3));
-        items.add(new RankingItem("TRASY", 3, 3));
-        items.add(new RankingItem("PROFIL", 3, 3));
-        items.add(new RankingItem("RANKING", 3, 3));
+        items.add(new MenuListItem("MAPA", res.getDrawable(R.drawable.ic_formy, getTheme()), 3, 3));
+        items.add(new MenuListItem("QUIZ", res.getDrawable(R.drawable.ic_formy, getTheme()), 3, 3));
+        items.add(new MenuListItem("FORMY",res.getDrawable(R.drawable.ic_formy, getTheme()), 3, 3));
+        items.add(new MenuListItem("TRASY", res.getDrawable(R.drawable.ic_formy, getTheme()), 3, 3));
+        items.add(new MenuListItem("PROFIL", res.getDrawable(R.drawable.ic_formy, getTheme()), 3, 3));
+        items.add(new MenuListItem("RANKING", res.getDrawable(R.drawable.ic_formy, getTheme()),  3, 3));
+        items.add(new MenuListItem("WYLOGUJ", res.getDrawable(R.drawable.ic_formy, getTheme()),  3, 3));
 //
         try {
             info = getPackageManager().getPackageInfo("com.example.biennale_go", PackageManager.GET_SIGNATURES);
@@ -337,7 +348,12 @@ view.setZ(1);
             } else if (fragmentName.equals("ADMIN")) {
                 openAdminPanelFragment();
             } else if (fragmentName.equals("MAPA")) {
-                openMapActivity();
+                openMapActivity();}
+              else if (fragmentName.equals("WYLOGUJ")) {
+                FirebaseAuth.getInstance().signOut();
+                LoginManager.getInstance().logOut();
+                Intent i = new Intent(MainActivity.this, LoginRegisterActivity.class);
+                startActivity(i);
             }
         }
         slideUp(listView,0);

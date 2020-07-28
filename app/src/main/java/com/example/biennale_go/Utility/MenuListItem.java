@@ -1,16 +1,14 @@
 package com.example.biennale_go.Utility;
 
+import android.graphics.drawable.Drawable;
+
+import androidx.appcompat.widget.AppCompatImageView;
+
 public class MenuListItem {
 
     private String name;
-    private int score;
-    private double distanceTraveled;
+    private Drawable image;
 
-    public MenuListItem(String name, int score, double distanceTraveled) {
-        this.name = name;
-        this.score = score;
-        this.distanceTraveled = distanceTraveled;
-    }
     public String getName() {
         return name;
     }
@@ -19,13 +17,14 @@ public class MenuListItem {
         this.name = name;
     }
 
-    public int getScore() {
-        return score;
+    public MenuListItem(String name, Drawable image, int score, double distanceTraveled) {
+        this.name = name;
+        this.image = image;
+        this.score = score;
+        this.distanceTraveled = distanceTraveled;
     }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
+    private int score;
 
     public double getDistanceTraveled() {
         return distanceTraveled;
@@ -35,4 +34,13 @@ public class MenuListItem {
         this.distanceTraveled = distanceTraveled;
     }
 
+    private double distanceTraveled;
+
+    public Drawable getImage() {
+        return image;
+    }
+
+    public void setImage(Drawable image) {
+        this.image = image;
+    }
 }

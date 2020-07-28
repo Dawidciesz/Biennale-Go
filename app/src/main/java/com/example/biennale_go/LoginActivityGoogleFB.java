@@ -1,9 +1,12 @@
 package com.example.biennale_go;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import com.facebook.AccessToken;
@@ -36,7 +39,7 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class LoginActivityGoogleFB extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivityGoogleFB extends Activity implements View.OnClickListener {
     FirebaseAuth mAuth;
 
     private Button emailLogin;
@@ -48,6 +51,8 @@ public class LoginActivityGoogleFB extends AppCompatActivity implements View.OnC
     private GoogleSignInClient mGoogleSignInClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
         AppEventsLogger.activateApp(getApplication());
@@ -115,7 +120,7 @@ public class LoginActivityGoogleFB extends AppCompatActivity implements View.OnC
         startActivity(intent);
     }
     public void openMenuActivity() {
-        Intent intent = new Intent(this, MenuActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
