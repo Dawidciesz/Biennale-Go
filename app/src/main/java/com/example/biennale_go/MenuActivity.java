@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.Signature;
@@ -17,6 +19,8 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.example.biennale_go.Utility.CurrentUser;
@@ -33,17 +37,23 @@ import static com.example.biennale_go.Utility.Constants.ERROR_DIALOG_REQUEST;
 import static com.example.biennale_go.Utility.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.example.biennale_go.Utility.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 
-public class MenuActivity extends AppCompatActivity {
+public class MenuActivity extends Activity {
     private LinearLayout mapCard, quizCard, poiCard, routesCard, profilCard, adminPanel, logOut;
     private boolean mLocationPermissionGranted = false;
     private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+//Remove notification bar
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         super.onCreate(savedInstanceState);
 
         PackageInfo info;
         try {
+
             info = getPackageManager().getPackageInfo("com.example.biennale_go", PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
                 MessageDigest md;

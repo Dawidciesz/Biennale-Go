@@ -1,8 +1,11 @@
 package com.example.biennale_go;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -21,7 +24,7 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class RegistrationActivity extends AppCompatActivity implements View.OnClickListener {
+public class RegistrationActivity extends Activity implements View.OnClickListener {
     private EditText emailField;
     private EditText passwordField;
     private EditText ageField;
@@ -33,12 +36,13 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.fragment_register);
         emailField = findViewById(R.id.fieldEmail);
         passwordField = findViewById(R.id.fieldPassword);
-        ageField = findViewById(R.id.fieldAge);
         nameField = findViewById(R.id.fieldName);
         registerButton = findViewById(R.id.emailCreateAccountButton);
         registerButton.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +92,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     }
     public  void createUser() {
         Map<String, Object> data = new HashMap<>();
-        data.put( "age", ageField.getText().toString());
+        data.put( "age", 0);
         data.put("name", nameField.getText().toString());
         data.put("distance_traveled", 0);
         data.put("score", 0);

@@ -138,43 +138,6 @@
                     android:visibility="visible"
                     app:srcCompat="@drawable/marker" />
             </LinearLayout>
-            <!--<LinearLayout-->
-            <!--android:id="@+id/emailPasswordButtons"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_below="@+id/emailPasswordFields"-->
-            <!--android:orientation="horizontal"-->
-
-            <!--android:paddingLeft="16dp"-->
-
-            <!--android:paddingRight="16dp">-->
-
-            <!--<ImageView-->
-            <!--android:id="@+id/menu"-->
-            <!--android:layout_width="48dp"-->
-            <!--android:layout_height="48dp"-->
-            <!--android:src="@drawable/test"-->
-            <!--app:srcCompat="@drawable/test"-->
-            <!--android:layout_marginLeft="8dp"-->
-            <!--android:layout_marginRight="16dp"-->
-            <!--android:visibility="visible"-->
-            <!--android:transitionName="transision_menu"/>-->
-
-            <!--<ImageView-->
-            <!--android:id="@+id/map"-->
-            <!--android:layout_width="48dp"-->
-            <!--android:layout_height="48dp"-->
-            <!--android:layout_marginRight="8dp"-->
-            <!--android:src="@drawable/map"-->
-            <!--android:layout_gravity="right"-->
-            <!--app:srcCompat="@drawable/map"-->
-            <!--android:visibility="visible"/>-->
-            <!--</LinearLayout>-->
-        <!--<View-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="1dp"-->
-        <!--android:background="#FFFFFF"/>-->
-
 
             <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/fragment_container"
