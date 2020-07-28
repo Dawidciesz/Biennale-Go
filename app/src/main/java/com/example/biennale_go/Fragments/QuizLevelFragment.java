@@ -32,7 +32,7 @@ public class QuizLevelFragment extends Fragment {
     private Bundle b;
     private String name;
     private View view;
-    private Button newButton;
+    private Button newButton, startQuizButton;
     private Integer quizLevel;
 
     @Override
@@ -45,6 +45,7 @@ public class QuizLevelFragment extends Fragment {
         headerContainer = (LinearLayout) view.findViewById(R.id.headerContainer);
         loadingPanel = (RelativeLayout) view.findViewById(R.id.loadingPanel);
         preLayout = (RelativeLayout) view.findViewById(R.id.preLayout);
+        startQuizButton = (Button) view.findViewById(R.id.startQuizButton);
 
         b = getArguments();
 
@@ -54,6 +55,18 @@ public class QuizLevelFragment extends Fragment {
             addButtons();
             headerContainer.setVisibility(View.VISIBLE);
             loadingPanel.setVisibility(View.GONE);
+
+            startQuizButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v) {
+                    Fragment testFragment = new QuizFragment();
+                    testFragment.setArguments(b);
+                    FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_container, testFragment);
+                    fragmentTransaction.commit();
+                }
+            });
         }
 
         return view;
