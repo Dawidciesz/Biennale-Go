@@ -48,42 +48,66 @@
 
             <Button
                 android:id="@+id/emailSignInButton"
-                android:background="@drawable/filledbutton"
-                android:layout_width="wrap_content"
+                android:background="@drawable/emptybutton"
+                android:layout_width="240dp"
                 android:layout_height="64dp"
                 android:layout_weight="1"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 android:layout_gravity="center"
+                android:fontFamily="sans-serif-light"
 
-                android:textColor="#FFF"
+                android:textColor="#000"
                 android:text=" Zaloguj się" />
 
             <Button
                 android:id="@+id/googleSignIn"
-                android:layout_width="wrap_content"
+                android:layout_width="240dp"
                 android:layout_height="64dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:layout_weight="1"
-                android:layout_gravity="center"
-                android:background="@drawable/filledbutton"
-                android:text="google"
-                android:textColor="#FFF"
-                android:textSize="16dp" />
+                android:textAllCaps="false"
+                android:fontFamily="sans-serif-light"
 
+                android:layout_gravity="center"
+                android:background="@drawable/emptybutton"
+                android:text="Zaloguj się przez Google"
+                android:textColor="#000"
+                android:textSize="16sp" />
+
+
+
+        <RelativeLayout
+            android:id="@+id/facebook_custom_buttom"
+            android:layout_height="64dp"
+            android:layout_width="240dp"
+            android:background="@drawable/emptybutton"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            >
+            <TextView
+                android:id="@+id/facebook_text"
+                android:layout_height="64dp"
+                android:layout_width="240dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif-light"
+
+                android:text="Zaloguj się przez Facebook"
+                android:textColor="#000000"
+                android:textSize="16sp" />
             <com.facebook.login.widget.LoginButton
                 android:id="@+id/facebookSignIn"
+                android:layout_height="64dp"
+                android:layout_width="wrap_content"
                 android:layout_gravity="center"
 
-                android:layout_width="wrap_content"
-                android:layout_height="64dp"
-                android:layout_weight="1"
-                android:background="@drawable/filledbutton"
-                android:text=" "
-                android:textColor="#FFF"
-                android:textSize="16dp"
+                android:visibility="invisible"
+                android:background="@drawable/emptybutton"
+                android:textColor="#000"
+                android:textSize="16sp"
                 tools:text=" " />
-
+        </RelativeLayout>
         </LinearLayout>
 
 

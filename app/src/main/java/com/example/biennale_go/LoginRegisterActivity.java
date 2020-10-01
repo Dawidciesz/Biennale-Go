@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,6 +40,7 @@ public class LoginRegisterActivity extends FragmentActivity  implements View.OnC
     private ImageView[] dots;
     private ViewPager2 viewPager;
     private ViewPagerFragmentAdapter pagerAdapter;
+    private ImageView galleryLogo;
     LinearLayout sliderDotspanel;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -48,6 +50,7 @@ public class LoginRegisterActivity extends FragmentActivity  implements View.OnC
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email_password);
+
         viewPager = (ViewPager2) findViewById(R.id.pagerr);
         ArrayList<Fragment> arrayList = new ArrayList<>();
         sliderDotspanel = (LinearLayout) findViewById(R.id.SliderDots);
@@ -103,9 +106,9 @@ public class LoginRegisterActivity extends FragmentActivity  implements View.OnC
                 }
 
                 dots[position].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.active_dot));
-
             }
         });
+
     }
 //    @Override
 //    public void onBackPressed() {

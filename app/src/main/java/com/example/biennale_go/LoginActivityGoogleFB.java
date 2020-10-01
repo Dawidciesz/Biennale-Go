@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -45,6 +46,7 @@ public class LoginActivityGoogleFB extends Activity implements View.OnClickListe
     private Button emailLogin;
     private Button googleLogin;
     private LoginButton facebookLogin;
+    private RelativeLayout facebookCustomButton;
     private CallbackManager callbackManager;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -66,6 +68,13 @@ public class LoginActivityGoogleFB extends Activity implements View.OnClickListe
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         googleLogin = findViewById(R.id.googleSignIn);
+        facebookCustomButton = findViewById(R.id.facebook_custom_buttom);
+        facebookCustomButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                facebookLogin.performClick();
+            }
+        });
         googleLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,7 +125,7 @@ public class LoginActivityGoogleFB extends Activity implements View.OnClickListe
 
     }
     public void openLoginActivity() {
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, AccountSettingsActivity.class);
         startActivity(intent);
     }
     public void openMenuActivity() {

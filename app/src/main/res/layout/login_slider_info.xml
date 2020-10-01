@@ -7,62 +7,7 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF">
 
-    <RelativeLayout
-        android:id="@+id/list_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#FFFFFF"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/topBar"
-            android:layout_width="match_parent"
-            android:layout_height="90dp"
-            android:background="#231f20"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/upButton"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_vertical|right"
-                android:layout_marginLeft="30dp"
-
-                android:src="@drawable/menu"
-                android:transitionName="transision_menu"
-                android:visibility="visible"
-                app:srcCompat="@drawable/menu" />
-
-
-            <TextView
-                android:id="@+id/quizName"
-                android:layout_width="215dp"
-                android:layout_height="36dp"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center_vertical|center"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="10dp"
-                android:text="BIENNALE GO"
-                android:textColor="#fbfbfb"
-                android:textSize="30dp"
-                android:textStyle="bold" />
-
-
-            <ImageView
-                android:id="@+id/topRightButton"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_vertical|end"
-
-                android:layout_marginRight="30dp"
-                android:src="@drawable/poi"
-                android:transitionName="transision_menu"
-                android:visibility="visible"
-                app:srcCompat="@drawable/marker" />
-
-
-        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/info"
@@ -85,7 +30,7 @@
 
 
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="48dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
                     android:text="Zajoguj się,"
@@ -97,7 +42,9 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintVertical_bias="0.0"
+                    android:fontFamily="sans-serif-light"
+                    />
 
                 <TextView
                     android:id="@+id/underTitle"
@@ -105,7 +52,7 @@
                     android:layout_height="208dp"
 
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="92dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
                     android:text="wybierz jedną z tras                                 i odkrywaj wraz z nami elbląskie formy przestrzenne."
@@ -116,17 +63,19 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.025" />
+                    app:layout_constraintTop_toBottomOf="@+id/title"
+                    app:layout_constraintVertical_bias="0.005"
+                    android:fontFamily="sans-serif-light"
+                    />
 
                 <TextView
                     android:id="@+id/nextToImg"
                     android:layout_width="277dp"
-                    android:layout_height="291dp"
+                    android:layout_height="261dp"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="400dp"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="15dp"
+                    android:layout_marginBottom="8dp"
                     android:gravity="end"
                     android:text="Zasada jest prosta,
 za każdym razem
@@ -145,7 +94,8 @@ je ze swoimi znajomymi!"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="1.0" />
+                    android:fontFamily="sans-serif-light"
+                    />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </RelativeLayout>
@@ -162,6 +112,3 @@ je ze swoimi znajomymi!"
 
 
 
-
-
-</RelativeLayout>

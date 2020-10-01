@@ -66,7 +66,7 @@ public class RegistrationActivity extends Activity implements View.OnClickListen
 
 
     public void openMenuActivity() {
-        Intent intent = new Intent(this, MenuActivity.class);
+        Intent intent = new Intent(this, AccountSettingsActivity.class);
         startActivity(intent);
     }
 
@@ -115,15 +115,6 @@ public class RegistrationActivity extends Activity implements View.OnClickListen
         }
         if (passwordField.getText().toString().length() < 6) {
             passwordField.setError("Hasło jest wymagane i musi zawierać nie mniej niż 6 znaków");
-            isAllcorrect = false;
-        }
-        if (ageField.getText().toString().length() == 0) {
-            ageField.setError("Podaj swój wiek");
-            isAllcorrect = false;
-        }
-        else if(Integer.parseInt(ageField.getText().toString()) < 1 ||
-                Integer.parseInt(ageField.getText().toString()) > 130) {
-            ageField.setError("wiek jest niepoprawny");
             isAllcorrect = false;
         }
         if (nameField.getText().toString().length() == 0) {

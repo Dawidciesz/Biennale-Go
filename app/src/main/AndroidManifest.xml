@@ -25,6 +25,7 @@
         <activity android:name=".MenuActivity" />
         <activity android:name=".RegistrationActivity" />
         <activity android:name=".LoginActivity" />
+        <activity android:name=".AccountSettingsActivity" />
         <activity android:name=".LoginActivityGoogleFB" />
         <activity android:name=".MainActivity" />
         <meta-data

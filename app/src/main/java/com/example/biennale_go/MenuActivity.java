@@ -132,6 +132,12 @@ public class MenuActivity extends Activity {
                 startActivity(i);
             }
         });
+
+        if(savedInstanceState.getString("fragmnet").equals("roads")) {
+            openRoutesListActivity();
+        } else if(savedInstanceState.getString("fragmnet").equals("pois")) {
+            openPoiActivity();
+        }
     }
 
     public void openMapActivity(){

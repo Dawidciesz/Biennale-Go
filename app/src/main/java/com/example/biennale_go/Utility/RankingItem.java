@@ -5,7 +5,7 @@ public class RankingItem {
     private String name;
     private int score;
     private double distanceTraveled;
-
+    private boolean expanded;
     public RankingItem(String name, int score, double distanceTraveled) {
         this.name = name;
         this.score = score;
@@ -35,4 +35,11 @@ public class RankingItem {
         this.distanceTraveled = distanceTraveled;
     }
 
+    public boolean isExpanded() {
+        return expanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        this.expanded = expanded;
+    }
 }

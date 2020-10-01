@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,7 +14,131 @@
         android:background="#FFFFFF"
         android:gravity="center_horizontal"
         android:orientation="vertical">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/imageView4"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:adjustViewBounds="true"
+            android:layout_marginTop="90dp"
+            android:background="@drawable/profiltab"
+            app:layout_constraintTop_toBottomOf="@+id/topBar"
+            android:scaleType="centerCrop">
 
+            <ImageView
+                android:id="@+id/profilPicture"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_gravity="center_vertical|right"
+
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="87dp"
+
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/ic_formy"
+                android:textAlignment="center"
+                android:transitionName="transision_menu"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/profilForm"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/menu" />
+
+            <TextView
+                android:id="@+id/profilForm"
+                android:layout_width="0dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical|center"
+                android:text="01"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                app:layout_constraintBaseline_toBaselineOf="@+id/profilKm"
+                app:layout_constraintEnd_toStartOf="@+id/profilKm"
+                app:layout_constraintStart_toEndOf="@+id/profilPicture" />
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_gravity="center_vertical|center"
+                android:layout_marginBottom="23dp"
+                android:text="FORMY"
+                android:textColor="#FFFFFF"
+
+                android:textAlignment="center"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/profilName"
+                app:layout_constraintEnd_toEndOf="@+id/profilForm"
+                app:layout_constraintStart_toStartOf="@+id/profilForm"
+                app:layout_constraintTop_toBottomOf="@+id/profilKm" />
+
+            <TextView
+                android:id="@+id/profilKm"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_gravity="center_vertical|center"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:textColor="#FFFFFF"
+
+                android:text="02"
+                android:textAlignment="center"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/textView16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/profilForm"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="0dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical|center"
+                android:text="KM"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+
+                android:textSize="16dp"
+                android:textStyle="bold"
+                app:layout_constraintBaseline_toBaselineOf="@+id/textView16"
+                app:layout_constraintEnd_toEndOf="@+id/profilKm"
+                app:layout_constraintStart_toEndOf="@+id/profilForm" />
+
+            <TextView
+                android:id="@+id/profilName"
+                android:layout_width="169dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical|center"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="WERONIKA"
+                android:textColor="#FFFFFF"
+
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.907"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.972" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="left"
+                tools:layout_editor_absoluteX="411dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
         <LinearLayout
             android:id="@+id/topBar"
             android:layout_width="match_parent"
@@ -37,10 +162,10 @@
             <TextView
                 android:id="@+id/quizName"
                 android:layout_width="215dp"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="10dp"
                 android:layout_height="36dp"
                 android:layout_gravity="center_vertical|center"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="10dp"
                 android:text="BIENNALE GO"
                 android:textColor="#fbfbfb"
                 android:textSize="30dp"
@@ -64,7 +189,7 @@
             android:id="@+id/ranking_list_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="140dp"
+            android:layout_marginTop="240dp"
             android:scrollbars="vertical"
             app:layout_constraintTop_toBottomOf="@+id/topBar" />
 
@@ -75,19 +200,18 @@
             android:layout_alignBottom="@id/ranking_list_recycler"
             android:background="#000000"
             android:gravity="bottom" />
+
     </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_vertical">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
 
-        >
-
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/emailPasswordButtons"
@@ -116,10 +240,10 @@
 
                     <TextView
                         android:layout_width="215dp"
-                        android:layout_marginLeft="40dp"
-                        android:layout_marginRight="10dp"
                         android:layout_height="36dp"
                         android:layout_gravity="center_vertical|center"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="10dp"
                         android:text="BIENNALE GO"
                         android:textColor="#fbfbfb"
                         android:textSize="30dp"
@@ -143,12 +267,10 @@
                 android:id="@+id/fragment_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailPasswordButtons" />
-        />
-    </LinearLayout>
-        </RelativeLayout>
+                app:layout_constraintTop_toBottomOf="@+id/emailPasswordButtons" />
 
-
+        </LinearLayout>
+    </RelativeLayout>
 
 
 </RelativeLayout>

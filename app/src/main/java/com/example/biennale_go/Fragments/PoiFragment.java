@@ -2,12 +2,10 @@ package com.example.biennale_go.Fragments;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.Fragment;
 
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -21,7 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.example.biennale_go.Classes.poiClass;
+import com.example.biennale_go.Classes.PoiClass;
 import com.example.biennale_go.R;
 import com.example.biennale_go.Utility.CurrentUser;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -44,7 +42,7 @@ public class PoiFragment extends Fragment {
     private LinearLayout poiPanel;
     private RelativeLayout loadingPanel;
     private ArrayList<String> scores;
-    private ArrayList<poiClass> poiList;
+    private ArrayList<PoiClass> poiList;
     private Button newButton;
     private String id = CurrentUser.uId;
     private View view;
@@ -98,7 +96,7 @@ public class PoiFragment extends Fragment {
                         Double latitude = (Double) document.getData().get("latitude");
                         Double longitude = (Double) document.getData().get("longitude");
 
-                        poiClass newPoi = new poiClass(name, description, address, image, latitude, longitude);
+                        PoiClass newPoi = new PoiClass(name, description, address, image, latitude, longitude);
 
                         poiList.add(newPoi);
                     }
@@ -113,9 +111,9 @@ public class PoiFragment extends Fragment {
     }
 
     private void sortPoiList(){
-        Comparator<poiClass> compareByName = new Comparator<poiClass>() {
+        Comparator<PoiClass> compareByName = new Comparator<PoiClass>() {
             @Override
-            public int compare(poiClass o1, poiClass o2) {
+            public int compare(PoiClass o1, PoiClass o2) {
                 return o1.getName().compareTo(o2.getName());
             }
         };

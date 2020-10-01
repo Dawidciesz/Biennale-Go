@@ -1,6 +1,6 @@
 package com.example.biennale_go.Classes;
 
-public class poiClass {
+public class PoiClass {
     private String name;
     private String description;
     private String address;
@@ -56,11 +56,11 @@ public class poiClass {
         this.longitude = longitude;
     }
 
-    public poiClass(){
+    public PoiClass(){
         super();
     }
 
-    public poiClass(String name, String description, String address, String image, Double latitude, Double longitude) {
+    public PoiClass(String name, String description, String address, String image, Double latitude, Double longitude) {
         this.name = name;
         this.description = description;
         this.address = address;

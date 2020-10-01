@@ -1,5 +1,6 @@
 package com.example.biennale_go;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -26,6 +27,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.biennale_go.Adapters.MenuListAdapter;
 import com.example.biennale_go.Adapters.RankingListAdapter;
@@ -44,11 +46,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends FragmentActivity implements MenuListAdapter.OnMenuItemClick{
+public class MainActivity extends FragmentActivity implements MenuListAdapter.OnMenuItemClick {
     private ImageView mapButton, upButton, mainMenuButton;
     private static final String TAG = "MainActivity";
     private String startFragment;
@@ -58,19 +61,23 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
     private int y;
     Button myButton;
     boolean isUp;
-//    boolean isFinished;
+    boolean isProfilUp;
+    //    boolean isFinished;
     private int yDelta;
     private RecyclerView recyclerView;
     private RelativeLayout listView;
-    private LinearLayout buttons;
+    private ConstraintLayout profilBar;
+    private LinearLayout buttons, topBar;
     private List<MenuListItem> items = new ArrayList<>();
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private EditText newQuizName;
+    private TextView pointsForm, pointsKm, profilName;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ArrayList<String> scores = new ArrayList<>();
     ObjectAnimator oax;
     ObjectAnimator oay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,11 +90,11 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
 //
         items.add(new MenuListItem("MAPA", res.getDrawable(R.drawable.ic_formy, getTheme()), 3, 3));
         items.add(new MenuListItem("QUIZ", res.getDrawable(R.drawable.ic_formy, getTheme()), 3, 3));
-        items.add(new MenuListItem("FORMY",res.getDrawable(R.drawable.ic_formy, getTheme()), 3, 3));
+        items.add(new MenuListItem("FORMY", res.getDrawable(R.drawable.ic_formy, getTheme()), 3, 3));
         items.add(new MenuListItem("TRASY", res.getDrawable(R.drawable.ic_formy, getTheme()), 3, 3));
         items.add(new MenuListItem("PROFIL", res.getDrawable(R.drawable.ic_formy, getTheme()), 3, 3));
-        items.add(new MenuListItem("RANKING", res.getDrawable(R.drawable.ic_formy, getTheme()),  3, 3));
-        items.add(new MenuListItem("WYLOGUJ", res.getDrawable(R.drawable.ic_formy, getTheme()),  3, 3));
+        items.add(new MenuListItem("RANKING", res.getDrawable(R.drawable.ic_formy, getTheme()), 3, 3));
+        items.add(new MenuListItem("WYLOGUJ", res.getDrawable(R.drawable.ic_formy, getTheme()), 3, 3));
 //
         try {
             info = getPackageManager().getPackageInfo("com.example.biennale_go", PackageManager.GET_SIGNATURES);
@@ -120,9 +127,13 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
                 openMapActivity();
             }
         });
-
+        profilBar = (ConstraintLayout) findViewById(R.id.imageView4);
         listView = (RelativeLayout) findViewById(R.id.list_view);
         buttons = (LinearLayout) findViewById(R.id.emailPasswordButtons);
+        topBar = (LinearLayout) findViewById(R.id.topBar);
+        pointsForm = (TextView) findViewById(R.id.profilForm);
+        pointsKm = (TextView) findViewById(R.id.profilKm);
+        profilName = (TextView) findViewById(R.id.profilName);
         upButton = (ImageView) findViewById(R.id.upButton);
         upButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,7 +150,9 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         });
 
         isUp = false;
+        isProfilUp = false;
 //        isFinished = true;
+
     }
 
     public void openMapActivity() {
@@ -196,14 +209,22 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
 
 
     // slide the view from top of itself to the current position
-    public void slideDown(View view, int yHight){
+    public void slideDown(View view, int yHight) {
         view.setVisibility(View.VISIBLE);
+//        CurrentUser.getPOICount();
+
+        pointsForm.setText(String.valueOf(CurrentUser.visitedPOIList.size()));
+
+
+        DecimalFormat df = new DecimalFormat("###.###");
+        df.setMinimumFractionDigits(2);
+        pointsKm.setText(String.valueOf( df.format(CurrentUser.distance_traveled/1000)));
+        profilName.setText(String.valueOf(CurrentUser.name));
+
         int hightOfY = yHight;
 //
         if (yHight > 1)
             hightOfY = yHight - view.getHeight();
-
-
 
 
         // Create animators for x and y axes
@@ -216,89 +237,28 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         set.setDuration(800);
         set.playTogether(oax, oay);
         set.start();
-buttons.setZ(0);
-view.setZ(1);
-//
-//
-//
-//
-////        isFinished = false;
-//        if (yHight ==0)
-//          yHight = 0 - view.getHeight();
-//        TranslateAnimation animate = new TranslateAnimation(
-//                0,                 // fromXDelta
-//                0,                 // toXDelta
-//                0 - view.getHeight(),  // fromYDelta
-//                0);
-//        animate.setDuration(1111);
-//        animate.setFillAfter(true);
-////        animate.setAnimationListener(new Animation.AnimationListener() {
-////            @Override
-////            public void onAnimationStart(Animation animation) {
-////                isFinished = false;
-////            }
-////            @Override
-////            public void onAnimationEnd(Animation animation) {
-////                isFinished = true;
-////            }
-////            @Override
-////            public void onAnimationRepeat(Animation animation) {
-////            }
-////        });
-//        view.startAnimation(animate);
+        buttons.setZ(0);
         view.setZ(1);
-//        if (animate.hasEnded()) {
-//            isFinished = true;
-//        }
+        view.setZ(1);
+
+
+
+
+
     }
 
-    // slide the view from its current position to below itself
-    public void slideUp(View view, int yHight){
-
-
-
-
-
-// Create animators for x and y axes
+    public void slideUp(View view, int yHight) {
         oax = ObjectAnimator.ofInt(view, "translationX", 0, 0);
         oay = ObjectAnimator.ofFloat(view, "translationY", yHight, -view.getHeight());
 
-
-// Combine Animators and start them together
         AnimatorSet set = new AnimatorSet();
         set.setDuration(800);
         set.playTogether(oax, oay);
         set.start();
-
-
-
-        //        isFinished = false;
-//        TranslateAnimation animate = new TranslateAnimation(
-//                0,                 // fromXDelta
-//                0,                 // toXDelta
-//                yHight,                 // fromYDelta
-//               0 - view.getHeight()); // toYDelta
-//        animate.setDuration(1111);
-//        animate.setFillAfter(true);
-////        animate.setAnimationListener(new Animation.AnimationListener() {
-////            @Override
-////            public void onAnimationStart(Animation animation) {
-////                isFinished = false;
-////            }
-////            @Override
-////            public void onAnimationEnd(Animation animation) {
-////                isFinished = true;
-////            }
-////            @Override
-////            public void onAnimationRepeat(Animation animation) {
-////            }
-////        });
-//        view.startAnimation(animate);
-//        view.setZ(1);
-//        if (animate.hasEnded()) {
-////            isFinished = true;
-//        }
     }
+
+
+
 
     public void onSlideViewButtonClick() {
 
@@ -311,11 +271,9 @@ view.setZ(1);
 
         listView.getLocationOnScreen(location);
 
-//        ValueAnimator valueAnimator = ValueAnimator.ofFloat(0f, 500f);
-////        valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-////        valueAnimator.geta
+
         if (oax != null)
-        y = Math.round((Float) oay.getAnimatedValue());
+            y = Math.round((Float) oay.getAnimatedValue());
         else
             y = -2000;
         if (isUp
@@ -325,11 +283,44 @@ view.setZ(1);
         } else if (isUp == false
 //                && isFinished
         ) {
-          slideDown(listView , y);
+            slideDown(listView, y);
         }
         isUp = !isUp;
     }
+    public void slideProfilDown(View view, int yHight) {
+        view.setVisibility(View.VISIBLE);
+        int hightOfY = yHight;
 
+        if (yHight > 1)
+            hightOfY = yHight - view.getHeight();
+
+
+        // Create animators for x and y axes
+        oax = ObjectAnimator.ofInt(view, "translationX", -3000, view.getWidth());
+        oay = ObjectAnimator.ofFloat(view, "translationY", -100,  topBar.getHeight());
+//        oay = ObjectAnimator.ofFloat(view, "translationY", 0,  view.getHeight());
+
+
+// Combine Animators and start them together
+        AnimatorSet set = new AnimatorSet();
+        set.setDuration(800);
+        set.playTogether(oax, oay);
+        set.start();
+        view.setZ(0);
+     ;
+    }
+
+    public void slideProfilUp(View view, int yHight) {
+        oax = ObjectAnimator.ofInt(view, "translationX", view.getWidth(), 0);
+        oay = ObjectAnimator.ofFloat(view, "translationY", topBar.getHeight(),-100);
+//        oay = ObjectAnimator.ofFloat(view, "translationY", yHight, view.getHeight());
+
+        AnimatorSet set = new AnimatorSet();
+        set.setDuration(800);
+        set.playTogether(oax, oay);
+        set.start();
+        view.setZ(0);
+    }
     @Override
     public void onMenuItemClick(int position) {
 
@@ -342,73 +333,46 @@ view.setZ(1);
             } else if (fragmentName.equals("FORMY")) {
                 openPoi();
             } else if (fragmentName.equals("PROFIL")) {
-                openProfil();
-            } else if (fragmentName.equals("RANKING")) {
-                openRanking();
-            } else if (fragmentName.equals("ADMIN")) {
-                openAdminPanelFragment();
-            } else if (fragmentName.equals("MAPA")) {
-                openMapActivity();}
-              else if (fragmentName.equals("WYLOGUJ")) {
-                FirebaseAuth.getInstance().signOut();
-                LoginManager.getInstance().logOut();
-                Intent i = new Intent(MainActivity.this, LoginRegisterActivity.class);
-                startActivity(i);
-            }
-        }
-        slideUp(listView,0);
-        isUp = !isUp;
-    }
-}
 
-    //
-//    private void revealFAB() {
-////        View view = (RecyclerView) findViewById(R.id.ranking_list_recycler);
-//        recyclerView = (RecyclerView) findViewById(R.id.ranking_list_recycler);
-//        layoutManager = new LinearLayoutManager(this);
-//        recyclerView.setLayoutManager(layoutManager);
-//        adapter = new RankingListAdapter(items, null);
-//        recyclerView.setAdapter(adapter);
-//        newQuizName = (EditText) recyclerView.findViewById(R.id.fieldNewQuiz);
+
+//                int[] location = new int[2];
+//
+//                profilBar.getLocationOnScreen(location);
 //
 //
+//                if (oax != null)
+//                    y = Math.round((Float) oay.getAnimatedValue());
+//                else
+//                    y = 0;
+//                if (isProfilUp
+////                && isFinished
+//                ) {
+//                    slideProfilUp(profilBar, y);
+//                } else if (isProfilUp == false
+////                && isFinished
+//                ) {
+//                    slideProfilDown(profilBar, y);
+//                }
 //
-//        int cx = recyclerView.getWidth() / 2;
-//        int cy = 0;
 //
-//        float finalRadius = (float) Math.hypot(cx,  recyclerView.getHeight()/2);
-//        Animator anim = ViewAnimationUtils.createCircularReveal(recyclerView, 32, cy, 0, finalRadius);
-//        anim.setDuration(2000);
-//        recyclerView.setVisibility(View.VISIBLE);
-//
-//        anim.start();
-//
-//
-//
-//
-//
-////        View view = inflater.inflate(R.layout.fragment_ranking, container, false);
-//
-//    }
-//
-//    private void hideFAB() {
-//        final View view = findViewById(R.layout.fragment_ranking);
-//
-//        int cx = view.getWidth() / 2;
-//        int cy = view.getHeight() / 2;
-//
-//        float initialRadius = (float) Math.hypot(cx, cy);
-//
-//        Animator anim = ViewAnimationUtils.createCircularReveal(view, cx, cy, initialRadius, 0);
-//
-//        anim.addListener(new AnimatorListenerAdapter() {
-//            @Override
-//            public void onAnimationEnd(Animator animation) {
-//                super.onAnimationEnd(animation);
-//                view.setVisibility(View.INVISIBLE);
-//            }
-//        });
-//
-//        anim.start();
-//    }
+//                    isProfilUp = !isProfilUp;
+
+
+                } else if (fragmentName.equals("RANKING")) {
+                    openRanking();
+                } else if (fragmentName.equals("ADMIN")) {
+                    openAdminPanelFragment();
+                } else if (fragmentName.equals("MAPA")) {
+                    openMapActivity();
+                } else if (fragmentName.equals("WYLOGUJ")) {
+                    FirebaseAuth.getInstance().signOut();
+                    LoginManager.getInstance().logOut();
+                    Intent i = new Intent(MainActivity.this, LoginRegisterActivity.class);
+                    startActivity(i);
+                }
+            }
+                slideUp(listView, 0);
+                isUp = !isUp;
+        }
+    }
 
