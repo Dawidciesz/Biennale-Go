@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.biennale_go.MainActivity;
 import com.example.biennale_go.MenuActivity;
 import com.example.biennale_go.R;
 import com.example.biennale_go.Utility.CurrentUser;
@@ -37,6 +39,7 @@ public class QuizSummaryFragment extends Fragment {
         super.onCreate(savedInstanceState);
         view = inflater.inflate(R.layout.activity_quiz_summary, container, false);
         pointsTextView = (TextView) view.findViewById(R.id.pointsTextView);
+
         exitButton = (Button) view.findViewById(R.id.exitButton);
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,16 +58,16 @@ public class QuizSummaryFragment extends Fragment {
             scoresList = new ArrayList((ArrayList) b.getSerializable("scoresList"));
             pointsTextView.setText(points + "/" + maxPoints);
 
-            Double percentage = (Double.valueOf(points)/Double.valueOf(maxPoints)) * 100;
-            if(percentage >= 80.0) {
-                awardImageView.setImageResource( R.drawable.awardgold );
-            } else if(percentage >= 50.0) {
-                awardImageView.setImageResource( R.drawable.awardsilver );
-            } else if(percentage >= 30.0) {
-                awardImageView.setImageResource( R.drawable.awardbronze );
-            } else {
-                awardImageView.setImageResource( R.drawable.award );
-            }
+//            Double percentage = (Double.valueOf(points)/Double.valueOf(maxPoints)) * 100;
+//            if(percentage >= 80.0) {
+//                awardImageView.setImageResource( R.drawable.awardgold );
+//            } else if(percentage >= 50.0) {
+//                awardImageView.setImageResource( R.drawable.awardsilver );
+//            } else if(percentage >= 30.0) {
+//                awardImageView.setImageResource( R.drawable.awardbronze );
+//            } else {
+//                awardImageView.setImageResource( R.drawable.award );
+//            }
 
             updateScoreList();
         }
@@ -96,7 +99,7 @@ public class QuizSummaryFragment extends Fragment {
     }
 
     public void openMainActivity(){
-        Intent intent = new Intent(getActivity(), MenuActivity.class);
+        Intent intent = new Intent(getActivity(), MainActivity.class);
         startActivity(intent);
     }
 }

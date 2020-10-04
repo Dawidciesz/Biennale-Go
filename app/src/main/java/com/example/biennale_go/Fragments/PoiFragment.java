@@ -63,12 +63,27 @@ public class PoiFragment extends Fragment {
 
         b = getArguments();
 
-        if (b != null) {
+        if (b != null && b.getString("name") == null)  {
             generatePoiButtons();
             switchLoadingPanel();
-        } else {
+        } else if (b != null && b.getString("infoWindowClicked").equals("true")) {
+
+                    Bundle b = new Bundle();
+                    b.putString("name", b.getString("name"));
+                    b.putString("image", b.getString("poiImage"));
+                    b.putString("address",b.getString("poiAddress"));
+                    b.putString("description", b.getString("poiDescription"));
+                    b.putBoolean("checked", true); //TODO FIX, NOW ALWAYS TRUE
+
+                    Fragment testFragment = new PoiDetailsFragment();
+                    testFragment.setArguments(b);
+                    FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_container, testFragment);
+                    fragmentTransaction.commit();
+                }
+            else
             fetchPOIScores();
-        }
+
         return view;
     }
 
@@ -82,7 +97,7 @@ public class PoiFragment extends Fragment {
     private void fetchPOI() {
         poiList = new ArrayList();
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+           FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference docRef = db.collection("POI");
         docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override

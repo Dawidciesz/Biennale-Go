@@ -8,6 +8,7 @@ public class PoiInfoWindow {
     private String description;
     private String Image;
     private Bitmap bitMapImage;
+    private String address;
 
     public String getName() {
         return name;
@@ -40,5 +41,13 @@ public class PoiInfoWindow {
 
     public void setBitMapImage(Bitmap bitMapImage) {
         this.bitMapImage = bitMapImage;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

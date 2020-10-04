@@ -314,6 +314,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
     public void openPoiActivity(){
+
+
+
+
+
+
         Intent intent = new Intent(this, MainActivity.class);
         Bundle b = new Bundle();
         b.putSerializable("names", poiNames);
@@ -321,9 +327,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         b.putSerializable("images", poiImages);
         b.putSerializable("addresses", poiAddresses);
         b.putSerializable("descriptions", poiDescriptions);
-        intent.putExtras(b);
         intent.putExtra("fragment","pois");
         startActivity(intent);
+
     }
 
     public void openRoutesListActivity(){
@@ -424,7 +430,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 LatLng POI = new LatLng(POI_latitude, POI_longtitude);
                 BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.checkedmarker);
                 Bitmap b = bitmapdraw.getBitmap();
-                final Bitmap checkedMarker = Bitmap.createScaledBitmap(b, 200, 200, false);
+                final Bitmap checkedMarker = Bitmap.createScaledBitmap(b, 120, 120, false);
 
                 mMap.addMarker(new MarkerOptions().position(POI).title(poiNames.get(i)).icon(BitmapDescriptorFactory.fromBitmap(checkedMarker)));
 
@@ -441,18 +447,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //                } catch (InterruptedException e) {
 //                    e.printStackTrace();
 //                }
-                RetrieveFeedTask asyncTask =new RetrieveFeedTask(new AsyncResponse() {
-
-                    @Override
-                    public void processFinish(Bitmap output) {
-//                            Log.d("Response From Asynchronous task:", (String) output);
-                        Bitmap bmp = null;
-                        poiDialogImage.setImageBitmap(bmp);
-
-                    }
-                });
-                asyncTask.execute(poiImages.get(i));
-
+                poiDialogImage.setImageBitmap(poiBitmapImages.get(i));
             }
                 updatePoiScores(poiNames.get(i));
             }
@@ -566,18 +561,21 @@ mMap.setOnInfoWindowCloseListener(new GoogleMap.OnInfoWindowCloseListener() {
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-
+                if ( marker.getTag() !=null) {
 //                PoiInfoWindow event = (PoiInfoWindow) marker.getTag();
 //                title.setText(event.getName());
 //                handleMarkerClicked(marker, event);
 
-                mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                    mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
 
-                    @Override
-                    public View getInfoWindow(Marker marker) {
+                        @Override
+                        public View getInfoWindow(Marker marker) {
 
 
-                        PoiInfoWindow event = (PoiInfoWindow) marker.getTag();
+                            PoiInfoWindow event = (PoiInfoWindow) marker.getTag();
+                            if (event == null) {
+                            return null;
+                            }
 //                        title.setText(event.getName());
 //                        handleMarkerClicked(marker, event);
 //                    View v = getLayoutInflater().inflate(R.layout.infowindow_map, null);
@@ -603,8 +601,8 @@ mMap.setOnInfoWindowCloseListener(new GoogleMap.OnInfoWindowCloseListener() {
 //                    } catch (InterruptedException e) {
 //                        e.printStackTrace();
 //                    }
-                        title.setText(event.getName());
-                        iconImage.setImageBitmap(event.getBitMapImage());
+                            title.setText(event.getName());
+                            iconImage.setImageBitmap(event.getBitMapImage());
 //                        handleMarkerClicked(marker, event);
 //                    RetrieveFeedTask asyncTask =new RetrieveFeedTask(new AsyncResponse() {
 //
@@ -623,16 +621,17 @@ mMap.setOnInfoWindowCloseListener(new GoogleMap.OnInfoWindowCloseListener() {
 //                    });
 //                    asyncTask.execute(event.getImage());
 //                    description.setText("iam, quis nosin reprehenderit tlit anim id est laborum.");
-                        return v;
-                    }
+                            return v;
+                        }
 
-                    @Override
-                    public View getInfoContents(Marker marker) {
+                        @Override
+                        public View getInfoContents(Marker marker) {
 
-                        return null;
-                    }
-                });
-                return false;
+                            return null;
+                        }
+                    });}
+                    return false;
+
             }
         });
 
@@ -644,12 +643,17 @@ mMap.setOnInfoWindowCloseListener(new GoogleMap.OnInfoWindowCloseListener() {
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.putExtra("fragment","RoutesList");
+                PoiInfoWindow event = (PoiInfoWindow) marker.getTag();
+                Intent intent = new Intent(MapsActivity.this, MainActivity.class);
+                intent.putExtra("infoWindowClick","true");
+                intent.putExtra("poiName",event.getName());
+                intent.putExtra("poiImage",event.getImage());
+                intent.putExtra("poiAddress",event.getAddress());
+                intent.putExtra("poiDescription",event.getDescription());
                 startActivity(intent);
-                String title = marker.getTitle();
-                intent.putExtra("markertitle", title);
-                startActivity(intent);
+//                String title = marker.getTitle();
+//                intent.putExtra("markertitle", title);
+//                startActivity(intent);
             }
         });
     }
@@ -739,6 +743,7 @@ mMap.setOnInfoWindowCloseListener(new GoogleMap.OnInfoWindowCloseListener() {
                         poiInfoWindow.setName(name);
                         poiInfoWindow.setDescription(description);
                         poiInfoWindow.setImage(image);
+                        poiInfoWindow.setAddress(address);
 
 
                         if(poiScores.contains(name)) {
@@ -847,20 +852,20 @@ mMap.setOnInfoWindowCloseListener(new GoogleMap.OnInfoWindowCloseListener() {
     @Override
     public View getInfoContents(Marker marker) {
         // and here we got EventEntity back so we can get all required data
-        LayoutInflater inflater = getLayoutInflater();
-        View v = inflater.inflate(R.layout.infowindow_map, null);
-        TextView title = (TextView) v.findViewById(R.id.window_title);
-        ImageView iconImage = (ImageView) v.findViewById(R.id.window_image);
-//        TextView description = (TextView) v.findViewById(R.id.window_description);
-//        TextView navigate = (TextView) v.findViewById(R.id.window_navigate);
-
-
-        title.setText(poiNames.get(Integer.parseInt("HENRYK MICKIEWICZ")));
+//        LayoutInflater inflater = getLayoutInflater();
+//        View v = inflater.inflate(R.layout.infowindow_map, null);
+//        TextView title = (TextView) v.findViewById(R.id.window_title);
+//        ImageView iconImage = (ImageView) v.findViewById(R.id.window_image);
+////        TextView description = (TextView) v.findViewById(R.id.window_description);
+////        TextView navigate = (TextView) v.findViewById(R.id.window_navigate);
+//
+//
+//        title.setText(poiNames.get(Integer.parseInt("HENRYK MICKIEWICZ")));
 //        title.setText(poiNames.get(Integer.parseInt(event.getPosition())));
 //        iconImage.setText(event.getType() + " event");
 //        description.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
 //        description.setText(event.getDescription());
 
-        return v;
+        return null;
     }
 }

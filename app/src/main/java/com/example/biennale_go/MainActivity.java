@@ -31,7 +31,9 @@ import android.widget.TextView;
 
 import com.example.biennale_go.Adapters.MenuListAdapter;
 import com.example.biennale_go.Adapters.RankingListAdapter;
+import com.example.biennale_go.Fragments.AddQuestionFragment;
 import com.example.biennale_go.Fragments.AdminPanelFragment;
+import com.example.biennale_go.Fragments.PoiDetailsFragment;
 import com.example.biennale_go.Fragments.PoiFragment;
 import com.example.biennale_go.Fragments.ProfilFragment;
 import com.example.biennale_go.Fragments.QuizListFragment;
@@ -83,11 +85,37 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         PackageInfo info;
         Resources res = getResources();
-
+        Intent intent = getIntent();
 //
+        if( intent.getStringExtra("fragment") !=null && intent.getStringExtra("fragment").equals("pois")) {
+            openPoi();
+        }
+        if( intent.getStringExtra("fragment") !=null && intent.getStringExtra("fragment").equals("routes")) {
+            openRoutesList();
+        }
+        if( intent.getStringExtra("infoWindowClick") !=null && intent.getStringExtra("infoWindowClick").equals("true")) {
+            Fragment poiFragment = new PoiDetailsFragment();
+
+            Bundle bundle = new Bundle();
+            bundle.putString("name", intent.getStringExtra("poiName"));
+            bundle.putString("infoWindowClicked", "true");
+
+            bundle.putString("image",intent.getStringExtra("poiImage"));
+            bundle.putString("address",intent.getStringExtra("poiAddress"));
+            bundle.putString("description",intent.getStringExtra("poiDescription"));
+
+
+            poiFragment.setArguments(bundle);
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, poiFragment);
+            fragmentTransaction.commit();
+
+
+
+
+        }
         items.add(new MenuListItem("MAPA", res.getDrawable(R.drawable.ic_formy, getTheme()), 3, 3));
         items.add(new MenuListItem("QUIZ", res.getDrawable(R.drawable.ic_formy, getTheme()), 3, 3));
         items.add(new MenuListItem("FORMY", res.getDrawable(R.drawable.ic_formy, getTheme()), 3, 3));
