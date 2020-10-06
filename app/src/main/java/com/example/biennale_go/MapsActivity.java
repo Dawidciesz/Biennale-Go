@@ -100,6 +100,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<Polyline> polylineList = new ArrayList<>();
     private ArrayList<LatLng> endOfPolyline = new ArrayList<>();
     private ArrayList<Bitmap> poiBitmapImages = new ArrayList<>();
+    private ArrayList<Marker> markers= new ArrayList<>();
     private int polyNumber = 0;
     private CircleImageView poiDialogImage;
     private RelativeLayout loadingPanel, mapPanel;
@@ -430,9 +431,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 LatLng POI = new LatLng(POI_latitude, POI_longtitude);
                 BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.checkedmarker);
                 Bitmap b = bitmapdraw.getBitmap();
-                final Bitmap checkedMarker = Bitmap.createScaledBitmap(b, 120, 120, false);
-
-                mMap.addMarker(new MarkerOptions().position(POI).title(poiNames.get(i)).icon(BitmapDescriptorFactory.fromBitmap(checkedMarker)));
+                final Bitmap checkedMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
+                markers.get(i).setIcon(BitmapDescriptorFactory.fromBitmap(checkedMarker));
 
 //                RetrieveFeedTask task = new RetrieveFeedTask();
 //                task.execute(poiImages.get(i));
@@ -749,9 +749,11 @@ mMap.setOnInfoWindowCloseListener(new GoogleMap.OnInfoWindowCloseListener() {
                         if(poiScores.contains(name)) {
                             Marker poMark = mMap.addMarker(new MarkerOptions().position(POI).title(name).icon(BitmapDescriptorFactory.fromBitmap(checkedMarker)));
                             poMark.setTag(poiInfoWindow);
+                            markers.add(poMark);
                         } else {
                             Marker poMark = mMap.addMarker(new MarkerOptions().position(POI).title(name).icon(BitmapDescriptorFactory.fromBitmap(questionMarker)));
                             poMark.setTag(poiInfoWindow);
+                            markers.add(poMark);
                         }
 
                         if(searchPoiName != null && searchPoiName.equals(name)) {
@@ -764,6 +766,7 @@ mMap.setOnInfoWindowCloseListener(new GoogleMap.OnInfoWindowCloseListener() {
                         poiDescriptions.add(description);
                         poiLatitude.add(latitude);
                         poiLongitude.add(longitude);
+
 
 
                         int SDK_INT = android.os.Build.VERSION.SDK_INT;

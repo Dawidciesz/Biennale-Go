@@ -46,6 +46,7 @@ public class CurrentUser {
             setCurrentUserInfo(email);
             visitedPOIList.clear();
             getPOICount();
+            fetchPOIScores();
             //            getQuizesCount(email);
         }
     }
@@ -94,6 +95,24 @@ public class CurrentUser {
             }
         });
     }
+
+
+    private static void fetchPOIScores() {
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("POI_scores").document(uId);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists())
+                        poiScores = (ArrayList<String>) document.getData().get("scores");
+                } else {
+                }
+            }
+        });
+    }
+
 //
 //    private static void getQuizesCount(String email) {
 //        FirebaseFirestore db = FirebaseFirestore.getInstance();
