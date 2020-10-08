@@ -11,13 +11,14 @@
         android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="531dp"
+        android:layout_marginBottom="330dp"
         android:layout_weight="2"
         android:background="#FFFFFF"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/loginButton"
+        app:layout_constraintBottom_toTopOf="@+id/choosen_image"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -81,49 +82,115 @@
 
     <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/profilPicturesRecycler"
-        android:layout_width="match_parent"
-        android:layout_height="206dp"
-        android:layout_marginTop="300dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="75dp"
         android:orientation="vertical"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/list_view"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/list_view" />
 
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="342dp"
+        android:layout_height="81dp"
+        android:layout_marginBottom="29dp"
+        app:layout_constraintBottom_toTopOf="@+id/choosen_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profilPicturesRecycler">
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+            android:id="@+id/red"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@drawable/color_button_red"
+            tools:layout_editor_absoluteX="192dp"
+            tools:layout_editor_absoluteY="334dp">
+
+        </FrameLayout>
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+            android:id="@+id/blue"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@drawable/color_button_blue"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="333dp">
+
+        </FrameLayout>
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+            android:id="@+id/green"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@drawable/color_button_green"
+            tools:layout_editor_absoluteX="128dp"
+            tools:layout_editor_absoluteY="333dp">
+
+        </FrameLayout>
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+            android:id="@+id/yellow"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@drawable/color_button_yellow"
+            tools:layout_editor_absoluteX="64dp"
+            tools:layout_editor_absoluteY="333dp">
+
+        </FrameLayout>
+    </LinearLayout>
 
     <Button
-        android:id="@+id/loginButton"
-        android:layout_width="0dp"
+        android:id="@+id/cancel"
+        android:layout_width="wrap_content"
 
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="45dp"
-        android:layout_marginBottom="62dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="16dp"
         android:layout_weight="1"
         android:background="@drawable/emptybutton"
         android:text="wstecz"
         android:textColor="#314F2B"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/registrationButton"
+        app:layout_constraintEnd_toStartOf="@+id/next"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/list_view" />
+        app:layout_constraintTop_toBottomOf="@+id/choosen_image" />
 
     <Button
-        android:id="@+id/registrationButton"
-        android:layout_width="0dp"
+        android:id="@+id/next"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="46dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="16dp"
         android:layout_weight="1"
         android:background="@drawable/emptybutton"
         android:text="dalej"
         android:textColor="#314F2B"
-        app:layout_constraintBaseline_toBaselineOf="@+id/loginButton"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/loginButton" />
+        app:layout_constraintStart_toEndOf="@+id/cancel" />
 
+    <ImageView
+        android:id="@+id/choosen_image"
+        android:layout_width="158dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center_vertical|right"
+
+        android:layout_marginBottom="21dp"
+        android:src="@drawable/menu"
+        android:transitionName="ic_android"
+
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/list_view"
+        app:srcCompat="@drawable/ic_android" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

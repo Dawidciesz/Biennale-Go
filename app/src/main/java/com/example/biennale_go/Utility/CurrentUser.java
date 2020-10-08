@@ -32,6 +32,9 @@ public class CurrentUser {
     public static ArrayList<String> poiScores = new ArrayList<>();
     public static int favoritePOICount;
     public static boolean isLogged;
+    public static String profilPictureColor;
+    public static String profilPictureId;
+
 
     public static void setCurrentUser() {
         FirebaseAuth mAuth;
@@ -64,7 +67,10 @@ public class CurrentUser {
                     if (document.exists()) {
 //                        avatarUrl = document.getData().get("avatar").toString();
                         distance_traveled = Double.parseDouble(document.getData().get("distance_traveled").toString());
-                        name =  document.getData().get("name").toString();
+                        name = document.getData().get("name").toString();
+                        profilPictureColor =  document.getData().get("profile_color").toString();
+                        profilPictureId =  document.getData().get("profile_img").toString();
+
                     }
                 }}});
     }

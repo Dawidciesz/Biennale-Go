@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.biennale_go.R;
 import com.example.biennale_go.Utility.MenuListItem;
+import com.example.biennale_go.Utility.ProfilPictureItem;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -22,8 +23,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 public class profilePictureAdapter extends RecyclerView.Adapter<profilePictureAdapter.ViewHolder> {
-    public List<Drawable> items;
-    private OnMenuItemClick onItemClicklister;
+    public List<ProfilPictureItem> items;
+    private OnProfilePictureItemClick onItemClicklister;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private int i = 0;
     private ArrayList<String> scores = new ArrayList<>();
@@ -31,9 +32,9 @@ public class profilePictureAdapter extends RecyclerView.Adapter<profilePictureAd
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView picture;
         public TextView userName;
-        public OnMenuItemClick onItemClickListener;
+        public OnProfilePictureItemClick onItemClickListener;
 
-        public ViewHolder(final View view, OnMenuItemClick onItemClickListener) {
+        public ViewHolder(final View view, OnProfilePictureItemClick onItemClickListener) {
             super(view);
             picture = view.findViewById(R.id.picutre);
             userName = view.findViewById(R.id.quizName);
@@ -44,11 +45,11 @@ public class profilePictureAdapter extends RecyclerView.Adapter<profilePictureAd
         @Override
         public void onClick(View v) {
 
-            onItemClickListener.onMenuItemClick(getAdapterPosition());
+            onItemClickListener.onProfilePictureItemClick(getAdapterPosition(),"");
         }
     }
 
-    public profilePictureAdapter(List<Drawable> myDataset, OnMenuItemClick onItemClickListener) {
+    public profilePictureAdapter(List<ProfilPictureItem> myDataset, OnProfilePictureItemClick onItemClickListener) {
         items = myDataset;
         this.onItemClicklister = onItemClickListener;
     }
@@ -65,18 +66,19 @@ public class profilePictureAdapter extends RecyclerView.Adapter<profilePictureAd
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         int pos = position + 1;
-        holder.picture.setImageDrawable(items.get(position));
+        holder.picture.setImageDrawable(items.get(position).getImage());
         holder.itemView.setOnClickListener(v -> {
 
             for (int i = 0; i < items.size();i++) {
                 if (i != position) {
-                    items.get(i).setColorFilter(holder.itemView.getResources().getColor(R.color.grayColor), PorterDuff.Mode.SRC_IN);
+                    items.get(i).getImage().setColorFilter(holder.itemView.getResources().getColor(R.color.grayColor), PorterDuff.Mode.SRC_IN);
                 }
                 else
-                    items.get(position).setColorFilter(holder.itemView.getResources().getColor(R.color.com_facebook_blue), PorterDuff.Mode.SRC_IN);
+                    items.get(position).getImage().setColorFilter(holder.itemView.getResources().getColor(R.color.com_facebook_blue), PorterDuff.Mode.SRC_IN);
 
             }
             notifyDataSetChanged();
+            onItemClicklister.onProfilePictureItemClick(position, items.get(position).getImageName());
         });
     }
 
@@ -86,7 +88,7 @@ public class profilePictureAdapter extends RecyclerView.Adapter<profilePictureAd
     }
 
 
-    public interface OnMenuItemClick {
-        void onMenuItemClick(int position);
+    public interface OnProfilePictureItemClick {
+        void onProfilePictureItemClick(int position, String imageName);
     }
 }

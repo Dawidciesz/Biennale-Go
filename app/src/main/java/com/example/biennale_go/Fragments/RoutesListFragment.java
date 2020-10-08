@@ -62,7 +62,7 @@ public class RoutesListFragment extends Fragment implements RoadListAdapter.OnRo
 //        galleryLogo = (ImageView) view.findViewById(R.id.galleryLogo);
 //        galleryLogo.startAnimation(AnimationUtils.loadAnimation(this.getContext(), R.anim.loading_scale));
         recyclerView = (RecyclerView) view.findViewById(R.id.road_recycler);
-        layoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL, false);
+        layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         fetchRoutes();
 

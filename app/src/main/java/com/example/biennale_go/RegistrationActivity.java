@@ -83,6 +83,7 @@ public class RegistrationActivity extends Activity implements View.OnClickListen
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             createUser();
+                            CurrentUser.setCurrentUser();
                             openMenuActivity();
                         } else {
                             emailField.setError("Niepoprawny adres email");
@@ -96,6 +97,8 @@ public class RegistrationActivity extends Activity implements View.OnClickListen
         data.put("name", nameField.getText().toString());
         data.put("distance_traveled", 0);
         data.put("score", 0);
+        data.put("profile_img", "");
+        data.put("profile_color", "");
         db.collection("users").document(emailField.getText().toString()).set(data);
 
 

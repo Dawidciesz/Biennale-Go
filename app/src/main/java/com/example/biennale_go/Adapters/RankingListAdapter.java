@@ -125,13 +125,16 @@ public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.
         holder.bind(movie);
 
         // Set movie data
-        holder.itemView.setOnClickListener(v -> {
-            // Get the current state of the item
-            boolean expanded = movie.isExpanded();
-            // Change the state
-            movie.setExpanded(!expanded);
-            // Notify the adapter that item has changed
-            notifyItemChanged(position);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get the current state of the item
+                boolean expanded = movie.isExpanded();
+                // Change the state
+                movie.setExpanded(!expanded);
+                // Notify the adapter that item has changed
+                RankingListAdapter.this.notifyItemChanged(position);
+            }
         });
 
 

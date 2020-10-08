@@ -10,7 +10,7 @@ public class RoadListItem {
     private String name;
     private Bitmap image;
     private String description;
-
+    private boolean expanded;
     private ArrayList polyline;
     private String color;
     public RoadListItem(String name, String description, ArrayList polyline, String color) {
@@ -66,5 +66,13 @@ public class RoadListItem {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isExpanded() {
+        return expanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        this.expanded = expanded;
     }
 }
