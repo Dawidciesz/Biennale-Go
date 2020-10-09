@@ -85,7 +85,7 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
             @Override
             public void onClick(View v) {
                 chosenPicture.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
-                profileColor = "0xFFFFFF00";
+                profileColor = "0xFF0000FF";
 
             }
         });
@@ -116,7 +116,7 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
 //                docRef.update("profil_img", profilName);
 //                db.collection("users").document(CurrentUser.email).set(user)
 //                db.collection("users").document(CurrentUser.email).set(user)
-                    db.collection("users").document(CurrentUser.email).update("profile_color", profileColor);
+                    db.collection("users").document(CurrentUser.email).update("profile_color", "#" + profileColor.substring(profileColor.lastIndexOf("x") + 1));
                     db.collection("users").document(CurrentUser.email).update("profile_img", profilName);
 
                 CurrentUser.profilPictureColor = profileColor;
@@ -144,8 +144,8 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
         items.add(new ProfilPictureItem(res.getDrawable(2131165358), String.valueOf(R.drawable.ic_heart_circles)));
         items.add(new ProfilPictureItem(res.getDrawable(2131165369), String.valueOf(R.drawable.ic_star)));
         items.add(new ProfilPictureItem(res.getDrawable(2131165370), String.valueOf(R.drawable.ic_tru)));
-
-
+//        chosenPicture.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
+//        res.getDrawable(2131165370)
 
     }
 

@@ -6,10 +6,24 @@ public class RankingItem {
     private int score;
     private double distanceTraveled;
     private boolean expanded;
-    public RankingItem(String name, int score, double distanceTraveled) {
+    private String profilPictureColor;
+     private String profilPictureId;
+
+    public  String getProfilPictureColor() {
+        return profilPictureColor;
+    }
+
+
+    public  String getProfilPictureId() {
+        return profilPictureId;
+
+    }
+    public RankingItem(String name, int score, double distanceTraveled, String profilPictureId, String profilPictureColor) {
         this.name = name;
         this.score = score;
         this.distanceTraveled = distanceTraveled;
+        this.profilPictureId = profilPictureId;
+        this.profilPictureColor = profilPictureColor;
     }
     public String getName() {
         return name;

@@ -1,6 +1,9 @@
 package com.example.biennale_go.Adapters;
 
+import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +38,7 @@ public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.
         public TextView userName;
         public TextView userScore;
         public TextView userDistanceTraveled;
-        public AppCompatImageView pointsImage;
+        public AppCompatImageView pointsImage, userImage;
         public AppCompatImageView kmImage;
         public TextView title;
         public TextView genre;
@@ -50,6 +53,7 @@ public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.
             item = view.findViewById(R.id.item);
             number = view.findViewById(R.id.number);
             userName = view.findViewById(R.id.quizName);
+            userImage = view.findViewById(R.id.picutre);
             userScore = view.findViewById(R.id.points);
             pointsImage = view.findViewById(R.id.picutre_points);
             kmImage = view.findViewById(R.id.picutre_km);
@@ -116,6 +120,10 @@ public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.
         holder.userDistanceTraveled.setAnimation(AnimationUtils.loadAnimation(holder.userName.getContext(),R.anim.item_anim));
         holder.pointsImage.setAnimation(AnimationUtils.loadAnimation(holder.userName.getContext(),R.anim.item_anim));
         holder.kmImage.setAnimation(AnimationUtils.loadAnimation(holder.userName.getContext(),R.anim.item_anim));
+
+        Resources res = holder.item.getResources();
+        holder.userImage.setImageDrawable(res.getDrawable(Integer.parseInt(items.get(position).getProfilPictureId())));
+        holder.userImage.setColorFilter(Color.parseColor(items.get(position).getProfilPictureColor()), PorterDuff.Mode.SRC_IN);
 
         DecimalFormat df = new DecimalFormat("###.###");
         df.setMinimumFractionDigits(2);

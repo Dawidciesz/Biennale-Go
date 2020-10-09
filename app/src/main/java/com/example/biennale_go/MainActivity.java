@@ -1,5 +1,6 @@
 package com.example.biennale_go;
 
+import androidx.annotation.ColorInt;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
@@ -15,6 +16,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -73,6 +77,7 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
     private List<MenuListItem> items = new ArrayList<>();
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
+    private ImageView profilePicture;
     private EditText newQuizName;
     private TextView pointsForm, pointsKm, profilName;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -144,8 +149,8 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         if (!CurrentUser.isLogged) {
 
         }
-        CurrentUser.setCurrentUser();
         setContentView(R.layout.activity_main);
+        CurrentUser.setCurrentUser();
 
 
         mapButton = (ImageView) findViewById(R.id.map);
@@ -156,6 +161,8 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
             }
         });
         profilBar = (ConstraintLayout) findViewById(R.id.imageView4);
+        profilePicture = (ImageView) findViewById(R.id.profilPicture);
+
         listView = (RelativeLayout) findViewById(R.id.list_view);
         buttons = (LinearLayout) findViewById(R.id.emailPasswordButtons);
         topBar = (LinearLayout) findViewById(R.id.topBar);
@@ -241,6 +248,8 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         view.setVisibility(View.VISIBLE);
 //        CurrentUser.getPOICount();
 
+            profilePicture.setImageDrawable(getResources().getDrawable(Integer.parseInt(CurrentUser.profilPictureId)));
+            profilePicture.setColorFilter(Color.parseColor(CurrentUser.profilPictureColor), PorterDuff.Mode.SRC_IN);
         pointsForm.setText(String.valueOf(CurrentUser.visitedPOIList.size()));
 
 

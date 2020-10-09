@@ -66,12 +66,14 @@ public class RankingFragment extends Fragment implements RankingListAdapter.OnIt
 
                             items.add(new RankingItem(document.get("name").toString(),
                                     Integer.parseInt(document.get("score").toString()) + (scores.size() * 3),
-                                    Double.parseDouble(document.get("distance_traveled").toString())));
+                                    Double.parseDouble(document.get("distance_traveled").toString()),
+                                    document.get("profile_img").toString(), document.get("profile_color").toString()));
                             adapter.notifyDataSetChanged();
                         } else {
                             items.add(new RankingItem(document.get("name").toString(),
                                     Integer.parseInt(document.get("score").toString()),
-                                    Double.parseDouble(document.get("distance_traveled").toString())));
+                                    Double.parseDouble(document.get("distance_traveled").toString()),
+                                    document.get("profile_img").toString(), document.get("profile_color").toString()));
                             adapter.notifyDataSetChanged();
                         }
                     }
