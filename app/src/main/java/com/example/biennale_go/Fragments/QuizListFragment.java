@@ -11,12 +11,17 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import com.example.biennale_go.R;
 import com.example.biennale_go.Utility.CurrentUser;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -39,11 +44,14 @@ public class QuizListFragment extends Fragment {
     private ArrayList questions = new ArrayList(), quizzesNames = new ArrayList(), scoresList = new ArrayList();
     private Map<String, Integer> scores = new HashMap<String, Integer>();
     private Map<String, Object> quizData = new HashMap<>();
+    private ImageView galleryLogo;
     private static final String TAG = "QuizListActicity";
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.activity_quiz_list, container, false);
+        galleryLogo = (ImageView) view.findViewById(R.id.galleryLogo);
+        galleryLogo.startAnimation(AnimationUtils.loadAnimation(this.getContext(), R.anim.loading_scale));
         super.onCreate(savedInstanceState);
         quizListPanel = (LinearLayout) view.findViewById(R.id.quizListPanel);
         fetchQuizzesNames();
@@ -156,7 +164,7 @@ public class QuizListFragment extends Fragment {
                     ArrayList scoresList = new ArrayList();
                     scoresList.add(scores);
                     b.putSerializable("scoresList", scoresList);
-                    Fragment testFragment = new QuizFragment();
+                    Fragment testFragment = new QuizLevelFragment();
                     testFragment.setArguments(b);
                     FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.fragment_container, testFragment);
@@ -166,34 +174,37 @@ public class QuizListFragment extends Fragment {
             newButton.setText(quizzesNames.get(j).toString());
             newButton.setClickable(true);
             newButton.setGravity(Gravity.CENTER);
-            newButton.setBackgroundColor(Color.parseColor("#ffffff"));
-            newButton.setTextColor(Color.parseColor("#00574b"));
+            newButton.setBackgroundResource(R.drawable.list_button_selector);
+            newButton.setTextColor(Color.parseColor("#000000"));
+            newButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, 35);
             newButton.setPadding(10,0,10,0);
-            Drawable img = ContextCompat.getDrawable(getContext(), R.drawable.award);
-            Double questionsCount = 0.0;
-            if(quizData.get(quizzesNames.get(j).toString()) != null) {
-                    ArrayList tempArray = (ArrayList) quizData.get(quizzesNames.get(j).toString());
-                    questionsCount = Double.valueOf(tempArray.size());
-            }
-            if(scores.get(quizzesNames.get(j).toString()) != null) {
-                Double score = Double.valueOf(scores.get(quizzesNames.get(j).toString()));
-                if(score != 0 && questionsCount != 0) {
-                    Double percentage = (score/questionsCount) * 100;
-                    if(percentage >= 80.0) {
-                        img =   ContextCompat.getDrawable(getContext(), R.drawable.awardgold );
-                    } else if(percentage >= 50.0) {
-                        img =   ContextCompat.getDrawable(getContext(), R.drawable.awardsilver );
-                    } else if(percentage >= 30.0) {
-                        img =  ContextCompat.getDrawable(getContext(), R.drawable.awardbronze );
-                    }
-                }
-            }
-            img.setBounds( 0, 0, 60, 60 );
-            newButton.setCompoundDrawables( img, null, img, null );
+//            Drawable img = ContextCompat.getDrawable(getContext(), R.drawable.award);
+//            Double questionsCount = 0.0;
+//            if(quizData.get(quizzesNames.get(j).toString()) != null) {
+//                    ArrayList tempArray = (ArrayList) quizData.get(quizzesNames.get(j).toString());
+//                    questionsCount = Double.valueOf(tempArray.size());
+//            }
+//            if(scores.get(quizzesNames.get(j).toString()) != null) {
+//                Double score = Double.valueOf(scores.get(quizzesNames.get(j).toString()));
+//                if(score != 0 && questionsCount != 0) {
+//                    Double percentage = (score/questionsCount) * 100;
+//                    if(percentage >= 80.0) {
+//                        img =   ContextCompat.getDrawable(getContext(), R.drawable.awardgold );
+//                    } else if(percentage >= 50.0) {
+//                        img =   ContextCompat.getDrawable(getContext(), R.drawable.awardsilver );
+//                    } else if(percentage >= 30.0) {
+//                        img =  ContextCompat.getDrawable(getContext(), R.drawable.awardbronze );
+//                    }
+//                }
+//            }
+//            img.setBounds( 0, 0, 60, 60 );
+//            newButton.setCompoundDrawables( img, null, img, null );
             quizListPanel.addView(newButton);
-            newButton = new Button(getContext());
-            newButton.setVisibility(View.INVISIBLE);
-            quizListPanel.addView(newButton);
+            TextView spaceView = new TextView(getContext());
+            spaceView.setVisibility(View.INVISIBLE);
+            spaceView.setHeight(20);
+            spaceView.setPadding(0,0,0,0);
+            quizListPanel.addView(spaceView);
         }
         view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
         view.findViewById(R.id.quizListPanel).setVisibility(View.VISIBLE);

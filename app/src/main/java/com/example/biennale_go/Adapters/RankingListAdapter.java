@@ -1,6 +1,9 @@
 package com.example.biennale_go.Adapters;
 
+import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +16,11 @@ import com.example.biennale_go.Utility.CurrentUser;
 import com.example.biennale_go.Utility.RankingItem;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -28,10 +33,19 @@ public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public LinearLayout item;
+        public LinearLayout subItem;
         public TextView number;
         public TextView userName;
         public TextView userScore;
         public TextView userDistanceTraveled;
+        public AppCompatImageView pointsImage, userImage;
+        public AppCompatImageView kmImage;
+        public TextView title;
+        public TextView genre;
+        public TextView year;
+
+
+
         public OnItemClick onItemClickListener;
 
         public ViewHolder(final View view, OnItemClick onItemClick) {
@@ -39,8 +53,17 @@ public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.
             item = view.findViewById(R.id.item);
             number = view.findViewById(R.id.number);
             userName = view.findViewById(R.id.quizName);
-            userScore = view.findViewById(R.id.userScore);
-            userDistanceTraveled = view.findViewById(R.id.userDistanceTraveled);
+            userImage = view.findViewById(R.id.picutre);
+            userScore = view.findViewById(R.id.points);
+            pointsImage = view.findViewById(R.id.picutre_points);
+            kmImage = view.findViewById(R.id.picutre_km);
+
+            subItem = view.findViewById(R.id.sub_item);
+
+            genre = view.findViewById(R.id.points);
+            year = view.findViewById(R.id.km);
+
+            userDistanceTraveled = view.findViewById(R.id.km);
             this.onItemClickListener = onItemClick;
             view.setOnClickListener(this);
         }
@@ -48,7 +71,20 @@ public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.
         @Override
         public void onClick(View v) {
             onItemClickListener.onItemClick(getAdapterPosition());
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(getAdapterPosition());
+            }
         }
+
+        private void bind(RankingItem item) {
+            // Get the state
+            boolean expanded = item.isExpanded();
+            // Set the visibility based on state
+            subItem.setVisibility(expanded ? View.VISIBLE : View.GONE);
+
+
+        }
+
     }
 
     public RankingListAdapter(List<RankingItem> myDataset, OnItemClick onItemClick) {
@@ -71,17 +107,46 @@ public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.
         holder.userName.setText(items.get(position).getName());
         holder.userScore.setAnimation(AnimationUtils.loadAnimation(holder.userName.getContext(),R.anim.item_anim));
         if (CurrentUser.name.equals((holder.userName.getText().toString()))) {
-            holder.item.setBackgroundColor(Color.rgb(153, 153, 0));
+            holder.item.setBackgroundColor(Color.rgb(153, 153, 153));
+            holder.userName.setTextColor(Color.BLACK);
         }
         else {
-            holder.item.setBackgroundColor(Color.rgb(60, 117, 90));
+            holder.item.setBackgroundColor(Color.rgb(255,255,255));
+            holder.userName.setTextColor(Color.BLACK);
         }
         holder.number.setText(pos + "");
-        holder.number.setAnimation(AnimationUtils.loadAnimation(holder.userName.getContext(),R.anim.item_anim));
         holder.userScore.setAnimation(AnimationUtils.loadAnimation(holder.userName.getContext(),R.anim.item_anim));
         holder.userScore.setText(String.valueOf(items.get(position).getScore()));
         holder.userDistanceTraveled.setAnimation(AnimationUtils.loadAnimation(holder.userName.getContext(),R.anim.item_anim));
-        holder.userDistanceTraveled.setText(String.valueOf(items.get(position).getDistanceTraveled()) + "km");
+        holder.pointsImage.setAnimation(AnimationUtils.loadAnimation(holder.userName.getContext(),R.anim.item_anim));
+        holder.kmImage.setAnimation(AnimationUtils.loadAnimation(holder.userName.getContext(),R.anim.item_anim));
+
+        Resources res = holder.item.getResources();
+        holder.userImage.setImageDrawable(res.getDrawable(Integer.parseInt(items.get(position).getProfilPictureId())));
+        holder.userImage.setColorFilter(Color.parseColor(items.get(position).getProfilPictureColor()), PorterDuff.Mode.SRC_IN);
+
+        DecimalFormat df = new DecimalFormat("###.###");
+        df.setMinimumFractionDigits(2);
+        holder.userDistanceTraveled.setText(String.valueOf(df.format(items.get(position).getDistanceTraveled()/1000) + "km"));
+        RankingItem movie = items.get(position);
+        // Set movie data
+        holder.bind(movie);
+
+        // Set movie data
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get the current state of the item
+                boolean expanded = movie.isExpanded();
+                // Change the state
+                movie.setExpanded(!expanded);
+                // Notify the adapter that item has changed
+                RankingListAdapter.this.notifyItemChanged(position);
+            }
+        });
+
+
+
     }
 
     @Override

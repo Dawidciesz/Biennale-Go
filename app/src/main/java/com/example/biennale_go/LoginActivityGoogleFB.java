@@ -1,11 +1,16 @@
 package com.example.biennale_go;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
+import com.example.biennale_go.Utility.CurrentUser;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -28,6 +33,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -36,18 +42,21 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class LoginActivityGoogleFB extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivityGoogleFB extends Activity implements View.OnClickListener {
     FirebaseAuth mAuth;
 
     private Button emailLogin;
     private Button googleLogin;
     private LoginButton facebookLogin;
+    private RelativeLayout facebookCustomButton;
     private CallbackManager callbackManager;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private GoogleSignInClient mGoogleSignInClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
         AppEventsLogger.activateApp(getApplication());
@@ -61,6 +70,13 @@ public class LoginActivityGoogleFB extends AppCompatActivity implements View.OnC
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         googleLogin = findViewById(R.id.googleSignIn);
+        facebookCustomButton = findViewById(R.id.facebook_custom_buttom);
+        facebookCustomButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                facebookLogin.performClick();
+            }
+        });
         googleLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,8 +131,13 @@ public class LoginActivityGoogleFB extends AppCompatActivity implements View.OnC
         startActivity(intent);
     }
     public void openMenuActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
+      public void opeAccountSettingsActivity() {
+            Intent intent = new Intent(this, AccountSettingsActivity.class);
+            startActivity(intent);
     }
 
     public void onClick(View v) {
@@ -133,6 +154,8 @@ public class LoginActivityGoogleFB extends AppCompatActivity implements View.OnC
         data.put("name", name);
         data.put("distance_traveled", 0);
         data.put("score", 0);
+        data.put("profile_img", "");
+        data.put("profile_color", "");
         db.collection("users").document(email).set(data);
 
 
@@ -169,8 +192,25 @@ public class LoginActivityGoogleFB extends AppCompatActivity implements View.OnC
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("", "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            createUser(0, user.getDisplayName(), user.getEmail());
-                            openMenuActivity();
+
+
+
+                            DocumentReference docRef = db.collection("users").document(user.getEmail());
+
+                            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot document = task.getResult();
+                                        if (document.exists()) {
+                                            openMenuActivity();
+                                        }
+                                        else {
+                                            createUser(0, user.getDisplayName(), user.getEmail());
+                                            opeAccountSettingsActivity();
+                                        }
+                                    }}});
+
                         } else {
                             Log.w("", "signInWithCredential:failure", task.getException());
                         }
@@ -187,8 +227,24 @@ public class LoginActivityGoogleFB extends AppCompatActivity implements View.OnC
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-                        createUser(0, account.getDisplayName(), account.getEmail());
-                        openMenuActivity();
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+                        DocumentReference docRef = db.collection("users").document(account.getEmail());
+
+                        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
+                                        openMenuActivity();
+                                    }
+                                    else {
+                                        createUser(0, account.getDisplayName(), account.getEmail());
+                                        opeAccountSettingsActivity();
+                                    }
+                                }}});
+
                     } else {
                         Log.w("TAG", "signInWithCredential:failure", task.getException());
                     }

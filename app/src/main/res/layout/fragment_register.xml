@@ -1,106 +1,261 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="4">
+    android:background="#FFFFFF">
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/list_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF"
         android:gravity="center_horizontal"
         android:orientation="vertical">
-        <TextView
-            android:id="@+id/successText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""/>
-    </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/topBar"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:background="#231f20"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/upButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical|right"
+                android:layout_marginLeft="30dp"
+
+                android:src="@drawable/menu"
+                android:transitionName="transision_menu"
+                android:visibility="visible"
+                app:srcCompat="@drawable/menu" />
+
+
+            <TextView
+                android:id="@+id/quizName"
+                android:layout_width="215dp"
+                android:layout_height="36dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_vertical|center"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="10dp"
+                android:text="BIENNALE GO"
+                android:textColor="#fbfbfb"
+                android:textSize="30dp"
+                android:textStyle="bold" />
+
+
+            <ImageView
+                android:id="@+id/topRightButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical|end"
+
+                android:layout_marginRight="30dp"
+                android:src="@drawable/poi"
+                android:transitionName="transision_menu"
+                android:visibility="visible"
+                app:srcCompat="@drawable/marker" />
+        </LinearLayout>
+
+
+        <!--<View-->
+        <!--android:id="@+id/black_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="10dp"-->
+        <!--android:layout_alignBottom="@id/ranking_list_recycler"-->
+        <!--android:background="#000000"-->
+        <!--android:gravity="bottom" />-->
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
+        android:layout_height="400dp"
+        android:layout_marginTop="64dp"
         android:gravity="center_vertical">
 
         <LinearLayout
             android:id="@+id/emailPasswordFields"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingBottom="16dp">
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/fieldEmail"
-                android:textAlignment="center"
+            <RelativeLayout
+                android:id="@+id/emailLinear"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:hint="email"
-                android:background="@drawable/input"
-                android:inputType="textEmailAddress"
-                android:layout_marginBottom="10dp"/>
-
-            <EditText
-                android:id="@+id/fieldPassword"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/input"
-                android:hint="hasło"
-                android:inputType="textPassword"
-                android:textAlignment="center" />
-
-            <EditText
-                android:id="@+id/fieldAge"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/input"
-                android:ems="10"
-                android:hint="wiek"
-                android:inputType="number"
-                android:textAlignment="center" />
-
-            <EditText
-                android:id="@+id/fieldName"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:background="@drawable/input"
-                android:ems="30"
-                android:hint="nazwa"
-                android:inputType="textPersonName"
-                android:textAlignment="center" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/emailPasswordButtons"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/emailPasswordFields"
-            android:orientation="horizontal"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp">
-
-            <Button
-                android:textColor="#FFFF"
-                android:id="@+id/emailCreateAccountButton"
-                android:background="@drawable/filledbutton"
-                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="16dp"
-                android:text=" Załóż konto" />
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/emailImage"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_gravity="center_vertical|right"
+                    android:layout_alignParentLeft="true"
+                    android:src="@drawable/menu"
+                    android:transitionName="transision_menu"
+                    android:visibility="visible"
+                    app:srcCompat="@drawable/menu" />
+
+                <TextView
+                    android:id="@+id/emailText"
+                    android:layout_width="60dp"
+                    android:layout_height="36dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginLeft="48dp"
+                    android:fontFamily="sans-serif-light"
+                    android:layout_toRightOf="@id/emailImage"
+                    android:gravity="bottom|left"
+                    android:text="E-MAIL"
+                    android:textColor="#000000"
+                    android:textSize="17sp" />
+
+                <EditText
+                    android:id="@+id/fieldEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_gravity="clip_vertical"
+                    android:layout_marginBottom="16dp"
+                    android:layout_toRightOf="@id/emailText"
+                    android:background="@drawable/input"
+                    android:inputType="textEmailAddress"
+                    android:textAlignment="center"
+                    />
+            </RelativeLayout>
+
+            <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="16dp"
+            android:background="#000000" />
+
+            <RelativeLayout
+                android:id="@+id/passwordLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/passwordImage"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_gravity="center_vertical"
+
+                    android:src="@drawable/menu"
+                    android:transitionName="transision_menu"
+                    android:visibility="visible"
+                    app:srcCompat="@drawable/menu" />
+
+                <TextView
+                    android:id="@+id/passwordText"
+                    android:layout_width="60dp"
+                    android:layout_height="36dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginLeft="46dp"
+                    android:fontFamily="sans-serif-light"
+                    android:layout_toRightOf="@id/passwordImage"
+                    android:gravity="bottom|left"
+                    android:text="HASŁO"
+                    android:textColor="#000000"
+                    android:textSize="17sp" />
+
+                <EditText
+                    android:id="@+id/fieldPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="16dp"
+                    android:layout_toRightOf="@id/passwordText"
+                    android:background="@drawable/input"
+                    android:inputType="textPassword"
+                    android:textAlignment="center" />
+            </RelativeLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="16dp"
+                android:background="#000000" />
+
+            <RelativeLayout
+                android:id="@+id/nameLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/nameImage"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_gravity="center_vertical"
+
+                    android:src="@drawable/menu"
+                    android:transitionName="transision_menu"
+                    android:visibility="visible"
+                    app:srcCompat="@drawable/menu" />
+
+                <TextView
+                    android:id="@+id/nameText"
+                    android:layout_width="60dp"
+                    android:layout_height="36dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginLeft="48dp"
+                    android:layout_toRightOf="@id/nameImage"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="bottom|left"
+                    android:text="NAZWA"
+                    android:textColor="#000000"
+                    android:textSize="17sp" />
+
+                <EditText
+                    android:id="@+id/fieldName"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="16dp"
+                    android:layout_toRightOf="@id/nameText"
+                    android:background="@drawable/input"
+                    android:inputType="textPassword"
+                    android:textAlignment="center" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+
+                android:background="#000000" />
         </LinearLayout>
-
-
     </RelativeLayout>
 
-</LinearLayout>
+    <RelativeLayout
+        android:id="@+id/emailPasswordButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+
+        <Button
+            android:id="@+id/emailCreateAccountButton"
+            android:layout_width="160dp"
+            android:layout_marginBottom="24dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/emptybutton"
+            android:layout_centerHorizontal="true"
+            android:text=" ZAŁÓŻ KONTO"
+            android:textColor="#A8A8A8"
+            android:textSize="16dp" />
+    </RelativeLayout>
+
+
+
+
+
+</RelativeLayout>

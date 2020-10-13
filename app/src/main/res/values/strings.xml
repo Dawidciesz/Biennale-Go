@@ -9,4 +9,6 @@
     <string name="distance_traveled">%.2f pokonanych kilometrów</string>
     <string name="facebook_app_id">522658445309367</string>
     <string name="fb_login_protocol_scheme">fb522658445309367</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

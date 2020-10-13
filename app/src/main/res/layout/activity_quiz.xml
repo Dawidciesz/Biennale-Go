@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
+    android:background="#fff"
     tools:context=".Fragments.QuizFragment"
     tools:layout_editor_absoluteY="81dp">
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="330dp"
+        android:layout_marginTop="100dp"
         android:layout_marginBottom="8dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/answerA"
@@ -29,8 +30,9 @@
             android:paddingRight="15dp"
             android:paddingBottom="15dp"
             android:text="Pytane nr 1"
-            android:textColor="@color/design_default_color_surface"
+            android:textColor="#000"
             android:textSize="20sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/questionDescriptionTextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -56,7 +58,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="15dp"
                     android:text="Donec non sollicitudin metus. Donec rutrum, nunc ut blandit pulvinar, dolor mi efficitur turpis, ac tristique magna erat vulputate nulla. Maecenas cursus, tellus non mattis vestibulum, nisi sem lacinia nisl, ac pharetra est magna eget enim. Phasellus congue hendrerit nisi, vitae iaculis neque sollicitudin vel. Proin nec maximus metus. Morbi bibendum eget ligula vitae ultrices. Donec non turpis velit. Integer at ante sapien."
-                    android:textColor="@android:color/white"
+                    android:textColor="#000"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -125,5 +127,16 @@
         app:layout_constraintBottom_toTopOf="@+id/answerD"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:src="@drawable/quiznum1"
+        android:layout_width="match_parent"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="wrap_content" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

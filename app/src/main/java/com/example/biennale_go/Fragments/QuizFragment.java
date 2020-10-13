@@ -3,12 +3,16 @@ package com.example.biennale_go.Fragments;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.biennale_go.R;
 import java.util.ArrayList;
@@ -20,6 +24,7 @@ public class QuizFragment extends Fragment {
     private ArrayList scoresList = new ArrayList(), questions;
     private Integer questionNumber = 0, maxQuestionNumber;
     private Bundle b;
+    private ImageView questionNumberImage;
     private String name;
     private Integer points = 0;
     private View view;
@@ -35,6 +40,7 @@ public class QuizFragment extends Fragment {
         questionAnswerB = (Button) view.findViewById(R.id.answerB);
         questionAnswerC = (Button) view.findViewById(R.id.answerC);
         questionAnswerD = (Button) view.findViewById(R.id.answerD);
+        questionNumberImage = (ImageView) view.findViewById(R.id.imageView4);
 
         b = getArguments();
 
@@ -79,6 +85,7 @@ public class QuizFragment extends Fragment {
 
 
     private void fillQuestion() {
+        Resources res = getResources();
         HashMap<String, String> question = new HashMap<>((HashMap<String, String>) questions.get(questionNumber));
         questionNumberTextView.setText("Pytanie nr " + (questionNumber + 1));
         questionDescriptionTextView.setText(question.get("description"));
@@ -86,6 +93,11 @@ public class QuizFragment extends Fragment {
         questionAnswerB.setText(question.get("answerB"));
         questionAnswerC.setText(question.get("answerC"));
         questionAnswerD.setText(question.get("answerD"));
+
+
+
+        int resId = getResources().getIdentifier("quiznum" + (questionNumber + 1),"drawable",getActivity().getPackageName());
+        questionNumberImage.setImageDrawable(res.getDrawable(resId));
     }
 
     private void checkAnswer(String answer) {

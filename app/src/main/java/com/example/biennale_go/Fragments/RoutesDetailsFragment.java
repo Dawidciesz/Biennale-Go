@@ -39,13 +39,11 @@ public class RoutesDetailsFragment extends Fragment {
             color = (String) b.getString("color");
             description = (String) b.getString("description");
             polyline = (ArrayList) b.getSerializable("polyline");
-            final ArrayList streets = (ArrayList) b.getSerializable("streets");
             nameTextView = (TextView) view.findViewById(R.id.nameTextView);
             nameTextView.setText(name);
             descriptionTextView = (TextView) view.findViewById(R.id.descriptionTextView);
             descriptionTextView.setText(description);
             streetsTextView = (TextView) view.findViewById(R.id.streetsTextView);
-            streetsTextView.setText(streets.toString());
 
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
@@ -71,7 +69,6 @@ public class RoutesDetailsFragment extends Fragment {
                     Intent intent = new Intent(getContext(), MapsActivity.class);
                     Bundle b = new Bundle();
                     b.putSerializable("polyline", polyline);
-                    b.putString("polylineColor", color);
                     intent.putExtras(b);
                     startActivity(intent);
                 }

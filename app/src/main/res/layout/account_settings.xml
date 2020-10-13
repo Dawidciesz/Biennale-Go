@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:visibility="visible">
+
+
+    <RelativeLayout
+        android:id="@+id/list_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="330dp"
+        android:layout_weight="2"
+        android:background="#FFFFFF"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/choosen_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/topBar"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:background="#231f20"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/upButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical|right"
+                android:layout_marginLeft="30dp"
+
+                android:src="@drawable/menu"
+                android:transitionName="transision_menu"
+                android:visibility="visible"
+                app:srcCompat="@drawable/menu" />
+
+
+            <TextView
+                android:id="@+id/quizName"
+                android:layout_width="215dp"
+                android:layout_height="36dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_vertical|center"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="10dp"
+                android:text="BIENNALE GO"
+                android:textColor="#fbfbfb"
+                android:textSize="30dp"
+                android:textStyle="bold" />
+
+
+            <ImageView
+                android:id="@+id/topRightButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical|end"
+
+                android:layout_marginRight="30dp"
+                android:src="@drawable/poi"
+                android:transitionName="transision_menu"
+                android:visibility="visible"
+                app:srcCompat="@drawable/marker" />
+
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/profilPicturesRecycler"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="75dp"
+        android:orientation="vertical"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/list_view" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="342dp"
+        android:layout_height="81dp"
+        android:layout_marginBottom="29dp"
+        app:layout_constraintBottom_toTopOf="@+id/choosen_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profilPicturesRecycler">
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+            android:id="@+id/red"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@drawable/color_button_red"
+            tools:layout_editor_absoluteX="192dp"
+            tools:layout_editor_absoluteY="334dp">
+
+        </FrameLayout>
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+            android:id="@+id/blue"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@drawable/color_button_blue"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="333dp">
+
+        </FrameLayout>
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+            android:id="@+id/green"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@drawable/color_button_green"
+            tools:layout_editor_absoluteX="128dp"
+            tools:layout_editor_absoluteY="333dp">
+
+        </FrameLayout>
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+            android:id="@+id/yellow"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@drawable/color_button_yellow"
+            tools:layout_editor_absoluteX="64dp"
+            tools:layout_editor_absoluteY="333dp">
+
+        </FrameLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="16dp"
+        android:layout_weight="1"
+        android:background="@drawable/emptybutton"
+        android:text="wstecz"
+        android:textColor="#314F2B"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/next"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/choosen_image" />
+
+    <Button
+        android:id="@+id/next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="16dp"
+        android:layout_weight="1"
+        android:background="@drawable/emptybutton"
+        android:text="dalej"
+        android:textColor="#314F2B"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cancel" />
+
+    <ImageView
+        android:id="@+id/choosen_image"
+        android:layout_width="158dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center_vertical|right"
+
+        android:layout_marginBottom="21dp"
+        android:src="@drawable/menu"
+        android:transitionName="ic_android"
+
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/list_view"
+        app:srcCompat="@drawable/ic_android" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
