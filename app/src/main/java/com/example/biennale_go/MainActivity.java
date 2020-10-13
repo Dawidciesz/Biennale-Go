@@ -93,7 +93,9 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         PackageInfo info;
         Resources res = getResources();
         Intent intent = getIntent();
-//
+        setContentView(R.layout.activity_main);
+        CurrentUser.setCurrentUser();
+
         if( intent.getStringExtra("fragment") !=null && intent.getStringExtra("fragment").equals("pois")) {
             openPoi();
         }
@@ -149,8 +151,7 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         if (!CurrentUser.isLogged) {
 
         }
-        setContentView(R.layout.activity_main);
-        CurrentUser.setCurrentUser();
+
 
 
         mapButton = (ImageView) findViewById(R.id.map);

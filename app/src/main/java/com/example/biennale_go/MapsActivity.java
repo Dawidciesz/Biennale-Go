@@ -113,7 +113,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private double userLong = 0;
     private CameraPosition cameraPosition;
     private Button followButton, closePoiDialogButton;
-    private String polylineColor, searchPoiName;
+    private String searchPoiName;
     private Boolean playerMarkFlag = false, followPlayerFlag = true;
     private Marker playerMarker;
     final LatLngBounds elblagBorder = new LatLngBounds(new LatLng(54.146831,19.386889  ), new LatLng(54.189640, 19.437335));
@@ -181,7 +181,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         b = getIntent().getExtras();
         if (b != null) {
             polyline = (ArrayList) b.getSerializable("polyline");
-            polylineColor = (String) b.getString("polylineColor");
             searchPoiName = (String) b.getString("searchPoiName");
         }
 

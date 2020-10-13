@@ -29,11 +29,14 @@ import com.example.biennale_go.Utility.ProfilPictureItem;
 import com.facebook.login.LoginManager;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -52,11 +55,13 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
     private FrameLayout red, green, blue, yellow;
     private Button cancel, next;
     private String profileColor = "", profilName = "";
+    private FirebaseFirestore db;
 
 
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+         db = FirebaseFirestore.getInstance();
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
@@ -86,7 +91,6 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
             public void onClick(View v) {
                 chosenPicture.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
                 profileColor = "0xFF0000FF";
-
             }
         });
         yellow = (FrameLayout) findViewById(R.id.yellow);
@@ -110,17 +114,23 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final FirebaseFirestore db = FirebaseFirestore.getInstance();
+                FirebaseAuth mAuth;
+                mAuth = FirebaseAuth.getInstance();
+                FirebaseUser currentUser = mAuth.getCurrentUser();
+                CurrentUser.profilPictureColor =  "#" +  profileColor.substring(profileColor.lastIndexOf("x") + 1);
+                CurrentUser.profilPictureId = profilName;
+                CurrentUser.name = getIntent().getStringExtra("name");
+                CurrentUser.email = getIntent().getStringExtra("email");
+                CurrentUser.uId = currentUser.getUid();
+                CurrentUser.getPOICount();
+                CurrentUser.fetchPOIScores();
 //                DocumentReference docRef = db.collection("users").document(CurrentUser.email);
 //                docRef.update("profil_color", profileColor);
 //                docRef.update("profil_img", profilName);
 //                db.collection("users").document(CurrentUser.email).set(user)
 //                db.collection("users").document(CurrentUser.email).set(user)
-                    db.collection("users").document(CurrentUser.email).update("profile_color", "#" + profileColor.substring(profileColor.lastIndexOf("x") + 1));
-                    db.collection("users").document(CurrentUser.email).update("profile_img", profilName);
+                createUser();
 
-                CurrentUser.profilPictureColor = profileColor;
-                CurrentUser.profilPictureId = profilName;
                 Intent intent = new Intent(AccountSettingsActivity.this, MainActivity.class);
                 intent.putExtra("from","new_account");
                 startActivity(intent);
@@ -147,6 +157,28 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
 //        chosenPicture.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
 //        res.getDrawable(2131165370)
 
+    }
+    public  void createUser() {
+
+
+        Intent intent = getIntent();
+
+        Map<String, Object> data = new HashMap<>();
+        data.put( "age", 0);
+        data.put("name", intent.getStringExtra("name"));
+        data.put("distance_traveled", 0);
+        data.put("score", 0);
+        data.put("profile_img", profilName);
+        data.put("profile_color", "#" + profileColor.substring(profileColor.lastIndexOf("x") + 1));
+        db.collection("users").document(intent.getStringExtra("email")).set(data);
+
+
+
+        DocumentReference docRef =   db.collection("users").document(intent.getStringExtra("email"));
+        Map<String, Object> info = new HashMap<>();
+        info.put("name", intent.getStringExtra("name"));
+        info.put("visited_count", 0);
+        docRef.collection("POI_visited").document(intent.getStringExtra("name")).set(info);
     }
 
 

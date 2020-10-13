@@ -67,6 +67,8 @@ public class RegistrationActivity extends Activity implements View.OnClickListen
 
     public void openMenuActivity() {
         Intent intent = new Intent(this, AccountSettingsActivity.class);
+        intent.putExtra("name",nameField.getText().toString());
+        intent.putExtra("email",emailField.getText().toString());
         startActivity(intent);
     }
 
@@ -82,8 +84,8 @@ public class RegistrationActivity extends Activity implements View.OnClickListen
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            createUser();
-                            CurrentUser.setCurrentUser();
+//                            createUser();
+//                            CurrentUser.setCurrentUser();
                             openMenuActivity();
                         } else {
                             emailField.setError("Niepoprawny adres email");
@@ -91,24 +93,24 @@ public class RegistrationActivity extends Activity implements View.OnClickListen
                     }
                 });
     }
-    public  void createUser() {
-        Map<String, Object> data = new HashMap<>();
-        data.put( "age", 0);
-        data.put("name", nameField.getText().toString());
-        data.put("distance_traveled", 0);
-        data.put("score", 0);
-        data.put("profile_img", "");
-        data.put("profile_color", "");
-        db.collection("users").document(emailField.getText().toString()).set(data);
-
-
-
-        DocumentReference docRef =   db.collection("users").document(emailField.getText().toString());
-        Map<String, Object> info = new HashMap<>();
-        info.put("name", nameField.getText().toString());
-        info.put("visited_count", 0);
-        docRef.collection("POI_visited").document(nameField.getText().toString()).set(info);
-    }
+//    public  void createUser() {
+//        Map<String, Object> data = new HashMap<>();
+//        data.put( "age", 0);
+//        data.put("name", nameField.getText().toString());
+//        data.put("distance_traveled", 0);
+//        data.put("score", 0);
+//        data.put("profile_img", "");
+//        data.put("profile_color", "");
+//        db.collection("users").document(emailField.getText().toString()).set(data);
+//
+//
+//
+//        DocumentReference docRef =   db.collection("users").document(emailField.getText().toString());
+//        Map<String, Object> info = new HashMap<>();
+//        info.put("name", nameField.getText().toString());
+//        info.put("visited_count", 0);
+//        docRef.collection("POI_visited").document(nameField.getText().toString()).set(info);
+//    }
 
     public boolean validate() {
         boolean isAllcorrect = true;

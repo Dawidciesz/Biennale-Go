@@ -46,10 +46,12 @@ public class CurrentUser {
             isLogged = true;
             email = currentUser.getEmail();
             uId = currentUser.getUid();
-            setCurrentUserInfo(email);
-            visitedPOIList.clear();
-            getPOICount();
-            fetchPOIScores();
+            if(profilPictureColor == null) {
+                setCurrentUserInfo(email);
+                visitedPOIList.clear();
+                getPOICount();
+                fetchPOIScores();
+            }
             //            getQuizesCount(email);
         }
     }
@@ -68,9 +70,8 @@ public class CurrentUser {
 //                        avatarUrl = document.getData().get("avatar").toString();
                         distance_traveled = Double.parseDouble(document.getData().get("distance_traveled").toString());
                         name = document.getData().get("name").toString();
-                        profilPictureColor =  document.getData().get("profile_color").toString();
-                        profilPictureId =  document.getData().get("profile_img").toString();
-
+                            profilPictureColor = document.getData().get("profile_color").toString();
+                            profilPictureId = document.getData().get("profile_img").toString();
                     }
                 }}});
     }
@@ -103,7 +104,7 @@ public class CurrentUser {
     }
 
 
-    private static void fetchPOIScores() {
+    public static void fetchPOIScores() {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("POI_scores").document(uId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

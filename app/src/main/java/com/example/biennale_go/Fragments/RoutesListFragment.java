@@ -94,11 +94,9 @@ public class RoutesListFragment extends Fragment implements RoadListAdapter.OnRo
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (final QueryDocumentSnapshot document : task.getResult()) {
-                        final ArrayList streets = (ArrayList) document.getData().get("streets");
                         final String name = (String) document.getData().get("name");
                         final String description = (String) document.getData().get("description");
                         final ArrayList polyline = polylineSerialize((ArrayList) document.getData().get("polyline"));
-                        final String color = (String) document.getData().get("color");
                         final String image = (String) document.getData().get("image");
 
 //                        RetrieveFeedTask retrieve = new RetrieveFeedTask();
@@ -113,7 +111,7 @@ public class RoutesListFragment extends Fragment implements RoadListAdapter.OnRo
 //                        } catch (InterruptedException e) {
 //                            e.printStackTrace();
 //                        }
-                        items.add(new RoadListItem(name, description, polyline, color));
+                        items.add(new RoadListItem(name, description, polyline));
                         RetrieveFeedTask asyncTask =new RetrieveFeedTask(new AsyncResponse() {
 
                             @Override

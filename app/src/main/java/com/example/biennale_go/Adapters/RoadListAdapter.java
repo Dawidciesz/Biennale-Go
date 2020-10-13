@@ -94,7 +94,6 @@ public class RoadListAdapter extends RecyclerView.Adapter<RoadListAdapter.ViewHo
                 Intent intent = new Intent(holder.name.getContext(), MapsActivity.class);
                 Bundle b = new Bundle();
                 b.putSerializable("polyline", items.get(position).getPolyline());
-                b.putString("polylineColor", items.get(position).getColor());
                 intent.putExtras(b);
                 holder.name.getContext().startActivity(intent);
             }

@@ -12,20 +12,17 @@ public class RoadListItem {
     private String description;
     private boolean expanded;
     private ArrayList polyline;
-    private String color;
-    public RoadListItem(String name, String description, ArrayList polyline, String color) {
+    public RoadListItem(String name, String description, ArrayList polyline) {
         this.name = name;
         this.image = image;
         this.description = description;
         this.polyline = polyline;
-        this.color = color;
     }
-    public RoadListItem(String name, Bitmap image, String description, ArrayList polyline, String color) {
+    public RoadListItem(String name, Bitmap image, String description, ArrayList polyline) {
         this.name = name;
         this.image = image;
         this.description = description;
         this.polyline = polyline;
-        this.color = color;
     }
 
     public ArrayList getPolyline() {
@@ -34,14 +31,6 @@ public class RoadListItem {
 
     public void setPolyline(ArrayList polyline) {
         this.polyline = polyline;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
     }
 
     public String getName() {
