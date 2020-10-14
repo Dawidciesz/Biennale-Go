@@ -9,16 +9,14 @@
     tools:layout_editor_absoluteY="81dp">
 
     <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="0dp"
-        android:layout_height="330dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
-        android:layout_marginBottom="8dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/answerA"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.00999999">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/questionNumberTextView"
@@ -40,14 +38,14 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:scrollbarSize="15dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <TextView
@@ -57,7 +55,7 @@
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="15dp"
-                    android:text="Donec non sollicitudin metus. Donec rutrum, nunc ut blandit pulvinar, dolor mi efficitur turpis, ac tristique magna erat vulputate nulla. Maecenas cursus, tellus non mattis vestibulum, nisi sem lacinia nisl, ac pharetra est magna eget enim. Phasellus congue hendrerit nisi, vitae iaculis neque sollicitudin vel. Proin nec maximus metus. Morbi bibendum eget ligula vitae ultrices. Donec non turpis velit. Integer at ante sapien."
+                    android:text="Donec non vitae iaculis neque sollicitudin vel. Proin nec maximus metus. Morbi bibendum eget ligula vitae ultrices. Donec non turpis velit. Integer at ante sapien."
                     android:textColor="#000"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -68,75 +66,147 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/answerD"
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginBottom="8dp"
-        android:background="@color/design_default_color_background"
-        android:text="Button"
+        android:layout_height="464dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center"
+        app:layout_constraintVertical_bias="1.0">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/imageView"
 
-    <Button
-        android:id="@+id/answerB"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginBottom="10dp"
-        android:background="@color/design_default_color_background"
-        android:text="Button"
-        app:layout_constraintBottom_toTopOf="@+id/answerC"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+            >
 
-    <Button
-        android:id="@+id/answerA"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginBottom="10dp"
-        android:background="@color/design_default_color_background"
-        android:text="Odpowiedz 1"
-        app:layout_constraintBottom_toTopOf="@+id/answerB"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+            <ImageView
+                android:id="@+id/imageA"
+                android:layout_width="128dp"
+                android:layout_height="192dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginBottom="10dp"
+                android:text="Odpowiedz 1" />
 
-    <Button
-        android:id="@+id/answerC"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginBottom="10dp"
-        android:background="@color/design_default_color_background"
-        android:text="Button"
-        app:layout_constraintBottom_toTopOf="@+id/answerD"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageB"
+                android:layout_width="128dp"
+                android:layout_height="192dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_toRightOf="@id/imageA"
+                android:layout_marginRight="12dp"
+                android:layout_marginBottom="10dp"
+                android:text="Button" />
+
+
+            <ImageView
+                android:id="@+id/imageC"
+                android:layout_width="128dp"
+                android:layout_height="192dp"
+                android:layout_below="@id/imageB"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginBottom="10dp"
+
+                android:text="Button" />
+
+            <ImageView
+                android:id="@+id/imageD"
+                android:layout_width="128dp"
+                android:layout_height="192dp"
+                android:layout_below="@id/imageB"
+                android:layout_toRightOf="@id/imageC"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginBottom="8dp"
+
+                android:text="Button" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="464dp"
+            android:id="@+id/buttonsView"
+>
+            <Button
+                android:id="@+id/answerA"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/design_default_color_background"
+                android:text="Odpowiedz 1" />
+
+
+            <Button
+                android:id="@+id/answerB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/answerA"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/design_default_color_background"
+                android:text="Button" />
+
+
+            <Button
+                android:id="@+id/answerC"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/answerB"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/design_default_color_background"
+
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/answerD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/answerC"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginBottom="8dp"
+                android:background="@color/design_default_color_background"
+
+                android:text="Button" />
+        </RelativeLayout>
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/imageView4"
-        android:src="@drawable/quiznum1"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
+        android:src="@drawable/quiznum1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_height="wrap_content" />
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
