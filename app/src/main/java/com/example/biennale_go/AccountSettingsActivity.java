@@ -6,40 +6,25 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.ContextThemeWrapper;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-
-import com.example.biennale_go.Adapters.MenuListAdapter;
 import com.example.biennale_go.Adapters.profilePictureAdapter;
 import com.example.biennale_go.Utility.CurrentUser;
-import com.example.biennale_go.Utility.MenuListItem;
 import com.example.biennale_go.Utility.ProfilPictureItem;
-import com.facebook.login.LoginManager;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -99,15 +84,12 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
             public void onClick(View v) {
                 chosenPicture.setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_IN);
                 profileColor = "0xFFFFFF00";
-
             }
         });
         cancel = (Button) findViewById(R.id.cancel);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
             }
         });
         next = (Button) findViewById(R.id.next);
@@ -124,23 +106,13 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
                 CurrentUser.uId = currentUser.getUid();
                 CurrentUser.getPOICount();
                 CurrentUser.fetchPOIScores();
-//                DocumentReference docRef = db.collection("users").document(CurrentUser.email);
-//                docRef.update("profil_color", profileColor);
-//                docRef.update("profil_img", profilName);
-//                db.collection("users").document(CurrentUser.email).set(user)
-//                db.collection("users").document(CurrentUser.email).set(user)
                 createUser();
 
                 Intent intent = new Intent(AccountSettingsActivity.this, MainActivity.class);
                 intent.putExtra("from","new_account");
                 startActivity(intent);
-
             }
         });
-
-
-
-
         recyclerView = (RecyclerView) findViewById(R.id.profilPicturesRecycler);
         layoutManager = new LinearLayoutManager(this);
         ((LinearLayoutManager) layoutManager).setOrientation(RecyclerView.HORIZONTAL);
@@ -154,15 +126,10 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
         items.add(new ProfilPictureItem(res.getDrawable(2131165358), String.valueOf(R.drawable.ic_heart_circles)));
         items.add(new ProfilPictureItem(res.getDrawable(2131165369), String.valueOf(R.drawable.ic_star)));
         items.add(new ProfilPictureItem(res.getDrawable(2131165370), String.valueOf(R.drawable.ic_tru)));
-//        chosenPicture.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
-//        res.getDrawable(2131165370)
 
     }
     public  void createUser() {
-
-
         Intent intent = getIntent();
-
         Map<String, Object> data = new HashMap<>();
         data.put( "age", 0);
         data.put("name", intent.getStringExtra("name"));
@@ -172,8 +139,6 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
         data.put("profile_color", "#" + profileColor.substring(profileColor.lastIndexOf("x") + 1));
         db.collection("users").document(intent.getStringExtra("email")).set(data);
 
-
-
         DocumentReference docRef =   db.collection("users").document(intent.getStringExtra("email"));
         Map<String, Object> info = new HashMap<>();
         info.put("name", intent.getStringExtra("name"));
@@ -181,13 +146,9 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
         docRef.collection("POI_visited").document(intent.getStringExtra("name")).set(info);
     }
 
-
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
-
     }
-
-
 
     @Override
     public void onProfilePictureItemClick(int position, String imageName) {

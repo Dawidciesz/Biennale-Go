@@ -41,7 +41,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 int idView = v.getId();
                 if (idView == R.id.emailSignInButton) {
                     if (validate()) {
-                        signIn(emailField.getText().toString(), passwordField.getText().toString());
+                        signIn(emailField.getText().toString().toLowerCase(), passwordField.getText().toString());
                     }
                 }
             }

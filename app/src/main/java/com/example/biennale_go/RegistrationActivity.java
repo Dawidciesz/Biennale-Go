@@ -68,7 +68,7 @@ public class RegistrationActivity extends Activity implements View.OnClickListen
     public void openMenuActivity() {
         Intent intent = new Intent(this, AccountSettingsActivity.class);
         intent.putExtra("name",nameField.getText().toString());
-        intent.putExtra("email",emailField.getText().toString());
+        intent.putExtra("email",emailField.getText().toString().toLowerCase());
         startActivity(intent);
     }
 
