@@ -6,7 +6,6 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,12 +20,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.biennale_go.Classes.QuizPicture;
 import com.example.biennale_go.R;
 import com.example.biennale_go.Utility.CurrentUser;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -34,10 +30,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,14 +41,11 @@ public class QuizListFragment extends Fragment {
     private String id = CurrentUser.uId;
     private ArrayList questions = new ArrayList(), quizzesNames = new ArrayList(), scoresList = new ArrayList();
     private Map<String, Integer> scores = new HashMap<String, Integer>();
-    private ArrayList<String> quizStringPictures = new ArrayList<>();
-    private ArrayList<QuizPicture> quizPictures = new ArrayList<>();
-    private ArrayList<Drawable> quizDrawablePictures = new ArrayList<>();
+
     private Map<String, Object> quizData = new HashMap<>();
     private ImageView galleryLogo;
     private static final String TAG = "QuizListActicity";
-    private FirebaseStorage storage = FirebaseStorage.getInstance();
-    private StorageReference storageRef = storage.getReference();
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.activity_quiz_list, container, false);
@@ -145,42 +134,7 @@ public class QuizListFragment extends Fragment {
                     if (task.isSuccessful()) {
                         ArrayList questionsArray = new ArrayList();
                         for (final QueryDocumentSnapshot document : task.getResult()) {
-                            if (document.getData().get("questionType").equals("picture")) {
-                                quizStringPictures.clear();
-                                quizDrawablePictures.clear();
-                                quizStringPictures.add(document.getData().get("answerA").toString());
-                                quizStringPictures.add(document.getData().get("answerB").toString());
-                                quizStringPictures.add(document.getData().get("answerC").toString());
-                                quizStringPictures.add(document.getData().get("answerD").toString());
-                                for (int i = 0; i < quizStringPictures.size(); i++) {
-                                    StorageReference islandRef = storageRef.child(quizStringPictures.get(i));
-                                    final long ONE_MEGABYTE = 1024 * 1024 *10;
-                                    islandRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                                        @Override
-                                        public void onSuccess(byte[] bytes) {
 
-                                            quizDrawablePictures.add(Drawable.createFromStream(new ByteArrayInputStream(bytes), null));
-                                            if (quizDrawablePictures.size() == 4) {
-                                                    quizPictures.add(new QuizPicture(
-                                                            quizDrawablePictures.get(0),
-                                                            quizDrawablePictures.get(1),
-                                                            quizDrawablePictures.get(2),
-                                                            quizDrawablePictures.get(3),
-                                                            document.getId()
-                                                            ));
-                                                quizStringPictures.clear();
-                                                quizDrawablePictures.clear();
-                                            }
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception exception) {
-                                            // Handle any errors
-                                            Log.i(TAG, "onFailurexxx: " + exception);
-                                        }
-                                    });
-                                }
-                            }
                             questionsArray.add(document.getData());
                         }
                         quizData.put(name.toString(), questionsArray);
@@ -191,6 +145,7 @@ public class QuizListFragment extends Fragment {
                     } else {
                         Log.d(TAG, "Error getting documents: ", task.getException());
                     }
+                    view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
                 }
             });
@@ -210,7 +165,6 @@ public class QuizListFragment extends Fragment {
                     Bundle b = new Bundle();
                     b.putString("name", quizzesNames.get(j).toString());
                     if(quizData.get(quizzesNames.get(j).toString()) != null) {
-                        b.putSerializable("images", quizPictures);
                         b.putSerializable("questions", (ArrayList) quizData.get(quizzesNames.get(j).toString()));
                     }
                     ArrayList scoresList = new ArrayList();
@@ -230,27 +184,7 @@ public class QuizListFragment extends Fragment {
             newButton.setTextColor(Color.parseColor("#000000"));
             newButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, 35);
             newButton.setPadding(10,0,10,0);
-//            Drawable img = ContextCompat.getDrawable(getContext(), R.drawable.award);
-//            Double questionsCount = 0.0;
-//            if(quizData.get(quizzesNames.get(j).toString()) != null) {
-//                    ArrayList tempArray = (ArrayList) quizData.get(quizzesNames.get(j).toString());
-//                    questionsCount = Double.valueOf(tempArray.size());
-//            }
-//            if(scores.get(quizzesNames.get(j).toString()) != null) {
-//                Double score = Double.valueOf(scores.get(quizzesNames.get(j).toString()));
-//                if(score != 0 && questionsCount != 0) {
-//                    Double percentage = (score/questionsCount) * 100;
-//                    if(percentage >= 80.0) {
-//                        img =   ContextCompat.getDrawable(getContext(), R.drawable.awardgold );
-//                    } else if(percentage >= 50.0) {
-//                        img =   ContextCompat.getDrawable(getContext(), R.drawable.awardsilver );
-//                    } else if(percentage >= 30.0) {
-//                        img =  ContextCompat.getDrawable(getContext(), R.drawable.awardbronze );
-//                    }
-//                }
-//            }
-//            img.setBounds( 0, 0, 60, 60 );
-//            newButton.setCompoundDrawables( img, null, img, null );
+
             quizListPanel.addView(newButton);
             TextView spaceView = new TextView(getContext());
             spaceView.setVisibility(View.INVISIBLE);
@@ -258,7 +192,6 @@ public class QuizListFragment extends Fragment {
             spaceView.setPadding(0,0,0,0);
             quizListPanel.addView(spaceView);
         }
-//        view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
         view.findViewById(R.id.quizListPanel).setVisibility(View.VISIBLE);
         view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
