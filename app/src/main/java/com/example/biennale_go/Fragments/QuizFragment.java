@@ -32,7 +32,6 @@ public class QuizFragment extends Fragment {
     private Button questionAnswerA, questionAnswerB, questionAnswerC, questionAnswerD;
     private ImageView imageAnswerA, imageAnswerB, imageAnswerC, imageAnswerD;
     private ArrayList scoresList = new ArrayList(), questions;
-    private ArrayList<QuizPicture> quizPictures = new ArrayList<>();
 
     private Integer questionNumber = 0, maxQuestionNumber;
     private Bundle b;
@@ -41,6 +40,7 @@ public class QuizFragment extends Fragment {
     private Integer points = 0;
     private RelativeLayout buttonsView, imageView;
     private View view;
+    private ArrayList<QuizPicture> quizPictures = new ArrayList<>();
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private StorageReference storageRef = storage.getReference();
 
