@@ -8,21 +8,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-
-import com.example.biennale_go.Utility.CurrentUser;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 public class RegistrationActivity extends Activity implements View.OnClickListener {
     private EditText emailField;
@@ -72,8 +64,6 @@ public class RegistrationActivity extends Activity implements View.OnClickListen
         startActivity(intent);
     }
 
-
-
     public void onClick(View v) {
         openMenuActivity();
     }
@@ -84,8 +74,6 @@ public class RegistrationActivity extends Activity implements View.OnClickListen
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-//                            createUser();
-//                            CurrentUser.setCurrentUser();
                             openMenuActivity();
                         } else {
                             emailField.setError("Niepoprawny adres email");
@@ -93,24 +81,6 @@ public class RegistrationActivity extends Activity implements View.OnClickListen
                     }
                 });
     }
-//    public  void createUser() {
-//        Map<String, Object> data = new HashMap<>();
-//        data.put( "age", 0);
-//        data.put("name", nameField.getText().toString());
-//        data.put("distance_traveled", 0);
-//        data.put("score", 0);
-//        data.put("profile_img", "");
-//        data.put("profile_color", "");
-//        db.collection("users").document(emailField.getText().toString()).set(data);
-//
-//
-//
-//        DocumentReference docRef =   db.collection("users").document(emailField.getText().toString());
-//        Map<String, Object> info = new HashMap<>();
-//        info.put("name", nameField.getText().toString());
-//        info.put("visited_count", 0);
-//        docRef.collection("POI_visited").document(nameField.getText().toString()).set(info);
-//    }
 
     public boolean validate() {
         boolean isAllcorrect = true;

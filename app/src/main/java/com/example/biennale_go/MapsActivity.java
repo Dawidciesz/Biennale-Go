@@ -1,13 +1,8 @@
 package com.example.biennale_go;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -15,18 +10,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.StrictMode;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -39,19 +30,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.biennale_go.Classes.PoiInfoWindow;
-import com.example.biennale_go.Classes.RetrieveFeedTask;
 import com.example.biennale_go.Utility.CurrentUser;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.ButtCap;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.Cap;
 import com.google.android.gms.maps.model.Dot;
-import com.google.android.gms.maps.model.Gap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -60,7 +46,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RoundCap;
-import com.google.android.gms.maps.model.SquareCap;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -78,16 +63,12 @@ import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.TravelMode;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ExecutionException;
-import java.util.zip.Inflater;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener, GoogleMap.InfoWindowAdapter{
     private GoogleMap mMap;
@@ -101,7 +82,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<LatLng> endOfPolyline = new ArrayList<>();
     private ArrayList<Bitmap> poiBitmapImages = new ArrayList<>();
     private ArrayList<Marker> markers= new ArrayList<>();
-    private int polyNumber = 0;
     private CircleImageView poiDialogImage;
     private RelativeLayout loadingPanel, mapPanel;
     private FrameLayout dialogFrameLayout;
@@ -123,15 +103,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private View v;
     private TextView title;
     private ImageView iconImage;
-    private Drawable infoImageDrawable;
-    InputStream is;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-//Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_maps);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -141,17 +117,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         title = (TextView) v.findViewById(R.id.window_title);
         iconImage = (ImageView) v.findViewById(R.id.window_image);
         loadingPanel = (RelativeLayout) findViewById(R.id.loadingPanel);
-
         dialogPoiText = (TextView) findViewById(R.id.dialogPoiText);
         mapPanel = (RelativeLayout) findViewById(R.id.mapPanel);
-//        dialog = (View) findViewById(R.id.poiDialog);
-//        dialog.setBackgroundColor(Color.TRANSPARENT);
-
         galleryLogo = (ImageView) findViewById(R.id.galleryLogo);
         galleryLogo.startAnimation(AnimationUtils.loadAnimation(this, R.anim.loading_scale));
         dialogFrameLayout = (FrameLayout) findViewById(R.id.dialogLayout);
         poiDialogImage = (CircleImageView) findViewById(R.id.poiDialogImage);
-
         followButton = (Button) findViewById(R.id.followButton);
         followButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,31 +130,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 followPlayerFlag = !followPlayerFlag;
                 if (followPlayerFlag) {
                     followButton.setBackgroundColor(Color.parseColor("#018786"));
-
-
                 } else {
                     followButton.setBackgroundColor(Color.GRAY);
                     dialogFrameLayout.setZ(1);
                     dialogPoiText.setText("Gratulacje!  Odkryłeś Formę Biennale: " + "textFiugra");
-
                 }
-
             }
         });
-
         closePoiDialogButton = (Button) findViewById(R.id.closePoi);
         closePoiDialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                     dialogFrameLayout.setZ(0);
                 }});
-
         b = getIntent().getExtras();
         if (b != null) {
             polyline = (ArrayList) b.getSerializable("polyline");
             searchPoiName = (String) b.getString("searchPoiName");
         }
-
         poiNames = new ArrayList<String>();
         poiScores = new ArrayList<String>();
         poiImages = new ArrayList<String>();
@@ -211,26 +175,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (followPlayerFlag) followButton.setBackgroundColor(Color.parseColor("#018786"));
             else followButton.setBackgroundColor(Color.GRAY);
         }
-
         if(mGeoApiContext == null){
             mGeoApiContext = new GeoApiContext.Builder()
                     .apiKey(getString(R.string.google_maps_key2))
                     .build();
         }
-
-//        int SDK_INT = android.os.Build.VERSION.SDK_INT;
-//        if (SDK_INT > 8) {
-//            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-//                    .permitAll().build();
-//            StrictMode.setThreadPolicy(policy);
-
-
-//        }
-
-
-
     }
-
 
     private void calculateDirections(LatLng from, LatLng to){
         Log.d(TAG, "calculateDirections: calculating directions.");
@@ -266,16 +216,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         });
-
-
-
-
-
-//
-
-
-//
-
     }
 
     private void addPolylinesToMap(final DirectionsResult result){
@@ -287,39 +227,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 for(DirectionsRoute route: result.routes){
                     Log.d(TAG, "run: leg: " + route.legs[0].toString());
                     List<com.google.maps.model.LatLng> decodedPath = PolylineEncoding.decode(route.overviewPolyline.getEncodedPath());
-
                     List<LatLng> newDecodedPath = new ArrayList<>();
-
-                    // This loops through all the LatLng coordinates of ONE polyline.
                     for(com.google.maps.model.LatLng latLng: decodedPath){
-
-//                        Log.d(TAG, "run: latlng: " + latLng.toString());
                         newDecodedPath.add(new LatLng(
                                 latLng.lat,
                                 latLng.lng
                         ));
                     }
-                    Dot dot = new Dot();
                     polylineList.add(mMap.addPolyline(new PolylineOptions().addAll(newDecodedPath)));
                     polylineList.get(polylineList.size()-1).setColor(Color.BLUE);
                     polylineList.get(polylineList.size()-1).setClickable(true);
                     polylineList.get(polylineList.size()-1).setWidth(10);
                     polylineList.get(polylineList.size()-1).setStartCap(new RoundCap());
                     polylineList.get(polylineList.size()-1).setStartCap(new RoundCap());
-                //dodalem polyline do arraylist teraz mozna je usunac jak uzytkownik pokona dystans od poi pocz do poi koncowego
-
-// zadeklarowac kilka polyline w arraylist jak sie doda to dodać +1 o pozycje wtedy mozna usuwac od 0 d x
                 }
             }
         });
     }
     public void openPoiActivity(){
-
-
-
-
-
-
         Intent intent = new Intent(this, MainActivity.class);
         Bundle b = new Bundle();
         b.putSerializable("names", poiNames);
@@ -329,7 +254,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         b.putSerializable("descriptions", poiDescriptions);
         intent.putExtra("fragment","pois");
         startActivity(intent);
-
     }
 
     public void openRoutesListActivity(){
@@ -340,13 +264,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     void getLocation() {
         try {
-
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 50,
                     3, this);
-//            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-//            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000,
-//                    10, this);
         }
         catch(SecurityException e) {
             e.printStackTrace();
@@ -364,10 +284,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Location locationA = new Location("A");
             locationA.setLatitude(userLat);
             locationA.setLongitude(userLong);
-//            locationA.setLatitude(userLat);
-//            locationA.setLongitude(userLong);
-//            locationA.setLatitude(playerMarker.getPosition().latitude);
-//            locationA.setLongitude(playerMarker.getPosition().longitude);
             Location locationB = new Location("B");
             locationB.setLatitude(userCurrentLocation.latitude);
             locationB.setLongitude(userCurrentLocation.longitude);
@@ -410,42 +326,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         for (Integer i = 0; i < poiNames.size(); i++) {
             final Double POI_latitude = poiLatitude.get(i);
             final Double POI_longtitude = poiLongitude.get(i);
-
-
-
-
-
-
             if (player_latitude < POI_latitude + POICollisionRange &&
                     player_latitude + POICollisionRange > POI_latitude &&
                     player_longtitude < POI_longtitude + POICollisionRange &&
                     player_longtitude + POICollisionRange > POI_longtitude) {
-
-
-
-
             if (!poiScores.contains(poiNames.get(i))) {
                 dialogFrameLayout.setZ(1);
                 dialogPoiText.setText("Gratulacje!  Odkryłeś Formę Biennale: " + poiNames.get(i));
-                LatLng POI = new LatLng(POI_latitude, POI_longtitude);
                 BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.checkedmarker);
                 Bitmap b = bitmapdraw.getBitmap();
                 final Bitmap checkedMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
                 markers.get(i).setIcon(BitmapDescriptorFactory.fromBitmap(checkedMarker));
-
-//                RetrieveFeedTask task = new RetrieveFeedTask();
-//                task.execute(poiImages.get(i));
-//
-//                Bitmap bmp = null;
-//                try {
-//                    bmp = task.get();
-//                    poiDialogImage.setImageBitmap(bmp);
-//
-//                } catch (ExecutionException e) {
-//                    e.printStackTrace();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
                 poiDialogImage.setImageBitmap(poiBitmapImages.get(i));
             }
                 updatePoiScores(poiNames.get(i));
@@ -470,12 +361,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         for(Integer i = 1; i<polyline.size();i++) {
             ArrayList firstEl = (ArrayList) polyline.get(i-1);
             ArrayList secondEl = (ArrayList) polyline.get(i);
-//            Polyline polyline1 = mMap.addPolyline(new PolylineOptions()
-//                    .clickable(true)
-//                    .add(new LatLng((Double) firstEl.get(0), (Double) firstEl.get(1)),
-//                           new  LatLng((Double) secondEl.get(0), (Double) secondEl.get(1))));
-//            polyline1.setColor(Color.parseColor(polylineColor));
-
             calculateDirections(new LatLng((Double) firstEl.get(0), (Double) firstEl.get(1)),new  LatLng((Double) secondEl.get(0), (Double) secondEl.get(1)));
         }
         ArrayList firstEl = (ArrayList) polyline.get(0);
@@ -488,57 +373,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         mMap.setLatLngBoundsForCameraTarget(elblagBorder);
         mMap.setMinZoomPreference(13.8f);
-//Marker marker = new Marker();
-//marker.
         fetchPOIScores();
-//        mMap.setBuildingsEnabled(true);
-//        CameraPosition cameraPosition = new CameraPosition.Builder()
-//                .target(elblagBorder.getCenter())
-//                .zoom(12)
-//                .bearing(300)
-//                .tilt(45)
-//                .build();
-//        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),
-//                30000, null);
-
-//        mMap.setOnMapLoadedCallback(() -> {
-//            LatLngBounds.Builder b = new LatLngBounds.Builder();
-//            b.include(new LatLng(54.146831,19.386889));
-//            b.include( new LatLng(54.189640, 19.437335));
-//            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(b.build(),  20);
-////            if(loadingPanel.getVisibility() != View.GONE) {
-////                loadingPanel.setVisibility(View.GONE);
-////                mapPanel.setVisibility(View.VISIBLE);
-////            }
-//            mMap.animateCamera(cu, 10, new GoogleMap.CancelableCallback() {
-//                @Override
-//                public void onFinish() {
-//
-//                    Log.e(TAG, "Start animate onFinish");
-//                    CameraPosition cp = new CameraPosition.Builder()
-////                            .zoom(17.0f)
-//                            .target(playerMarker.getPosition())
-//                            .tilt(45.0f)
-//                            .bearing(35.0f)
-//                            .build();
-//                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cp));
-////                mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cp));
-//                }
-//
-//                @Override
-//                public void onCancel() {
-//                    Log.e(TAG, "Start animate onCancel");
-//                }
-//            });
-//        });
-
-
-
         try {
             boolean success = mMap.setMapStyle(
                     MapStyleOptions.loadRawResourceStyle(
                             this, R.raw.style_json));
-
             if (!success) {
                 Log.e("MapsActivityRaw", "Style parsing failed.");
             }
@@ -547,98 +386,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         if(polyline != null) drawRoutes();
-
-//        View window = getLayoutInflater().inflate(
-//                R.layout.ballonoverlly, null);
 mMap.setOnInfoWindowCloseListener(new GoogleMap.OnInfoWindowCloseListener() {
     @Override
     public void onInfoWindowClose(Marker marker) {
         iconImage.setImageDrawable(null);
     }
 });
-
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 if ( marker.getTag() !=null) {
-//                PoiInfoWindow event = (PoiInfoWindow) marker.getTag();
-//                title.setText(event.getName());
-//                handleMarkerClicked(marker, event);
-
                     mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-
                         @Override
                         public View getInfoWindow(Marker marker) {
-
-
                             PoiInfoWindow event = (PoiInfoWindow) marker.getTag();
                             if (event == null) {
                             return null;
-                            }
-//                        title.setText(event.getName());
-//                        handleMarkerClicked(marker, event);
-//                    View v = getLayoutInflater().inflate(R.layout.infowindow_map, null);
-////                        LayoutInflater inflater = getLayoutInflater();
-////                        View v = inflater.inflate(R.layout.infowindow_map, null);
-//                    TextView title = (TextView) v.findViewById(R.id.window_title);
-//                    ImageView iconImage = (ImageView) v.findViewById(R.id.window_image);
-//                    TextView description = (TextView) v.findViewById(R.id.window_description);
-
-//                    title.setText("HENRYK MICKIEWICZ");
-//                    iconImage.setImageDrawable(getResources().getDrawable(R.drawable.checkedmarker));
-//                    description.setText(event.getDescription());
-//                    RetrieveFeedTask task = new RetrieveFeedTask();
-//                    task.execute(event.getImage());
-//
-//                    Bitmap bmp = null;
-//                    try {
-//                        bmp = task.get();
-//                        iconImage.setImageBitmap(bmp);
-//
-//                    } catch (ExecutionException e) {
-//                        e.printStackTrace();
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-                            title.setText(event.getName());
+                            } title.setText(event.getName());
                             iconImage.setImageBitmap(event.getBitMapImage());
-//                        handleMarkerClicked(marker, event);
-//                    RetrieveFeedTask asyncTask =new RetrieveFeedTask(new AsyncResponse() {
-//
-//                        @Override
-//                        public void processFinish(Bitmap output) {
-////                            Log.d("Response From Asynchronous task:", (String) output);
-////                            Bitmap bmp = null;
-////                            bmp = (Bitmap) output;
-////                            if(title!= null)
-//
-//
-//                            if(output!= null)
-//                                    iconImage.setImageBitmap(output);
-//
-//                        }
-//                    });
-//                    asyncTask.execute(event.getImage());
-//                    description.setText("iam, quis nosin reprehenderit tlit anim id est laborum.");
                             return v;
                         }
-
                         @Override
                         public View getInfoContents(Marker marker) {
-
                             return null;
                         }
                     });}
                     return false;
-
             }
         });
-
-
-
         mMap.setInfoWindowAdapter(this);
-
-
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
@@ -650,50 +426,9 @@ mMap.setOnInfoWindowCloseListener(new GoogleMap.OnInfoWindowCloseListener() {
                 intent.putExtra("poiAddress",event.getAddress());
                 intent.putExtra("poiDescription",event.getDescription());
                 startActivity(intent);
-//                String title = marker.getTitle();
-//                intent.putExtra("markertitle", title);
-//                startActivity(intent);
             }
         });
     }
-//    @SuppressLint("StaticFieldLeak")
-//    protected void handleMarkerClicked(final Marker marker, PoiInfoWindow event) {
-//        new AsyncTask<String,Void, Bitmap>()
-//        {
-//            @Override
-//            protected void onPreExecute()
-//            {
-//                super.onPreExecute();
-////                _infoImageDrawable = null;
-//            }
-//
-//            @Override
-//            protected Bitmap doInBackground(String... params)
-//            {
-//                URL url = null;
-//                try { url = new URL(params[0]); }
-//                catch (MalformedURLException e) { e.printStackTrace(); }
-//                Bitmap result = null;
-//                try { result = BitmapFactory.decodeStream(url.openConnection().getInputStream()); }
-//                catch (IOException e) { e.printStackTrace(); }
-//                // Open URL connection read bitmaps and return form here
-//                return result;
-//
-//
-//            }
-//
-//            @Override
-//            protected void onPostExecute(Bitmap result)
-//            {
-//                super.onPostExecute(result);
-////                marker.showInfoWindow();
-//                iconImage.setImageBitmap(result);
-////                iconImage.setVisibility(View.VISIBLE);
-//
-//                marker.showInfoWindow();
-//            }
-//        }.execute(event.getImage());
-//    }
 
     @Override
     public void onLocationChanged(Location location) {
@@ -722,7 +457,6 @@ mMap.setOnInfoWindowCloseListener(new GoogleMap.OnInfoWindowCloseListener() {
         bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.questionmarker);
         b=bitmapdraw.getBitmap();
         final Bitmap questionMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference docRef = db.collection("POI");
         docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -737,14 +471,11 @@ mMap.setOnInfoWindowCloseListener(new GoogleMap.OnInfoWindowCloseListener() {
                         Double latitude = (Double) document.getData().get("latitude");
                         Double longitude = (Double) document.getData().get("longitude");
                         LatLng POI = new LatLng(latitude, longitude);
-
                         PoiInfoWindow poiInfoWindow = new PoiInfoWindow();
                         poiInfoWindow.setName(name);
                         poiInfoWindow.setDescription(description);
                         poiInfoWindow.setImage(image);
                         poiInfoWindow.setAddress(address);
-
-
                         if(poiScores.contains(name)) {
                             Marker poMark = mMap.addMarker(new MarkerOptions().position(POI).title(name).icon(BitmapDescriptorFactory.fromBitmap(checkedMarker)));
                             poMark.setTag(poiInfoWindow);
@@ -754,7 +485,6 @@ mMap.setOnInfoWindowCloseListener(new GoogleMap.OnInfoWindowCloseListener() {
                             poMark.setTag(poiInfoWindow);
                             markers.add(poMark);
                         }
-
                         if(searchPoiName != null && searchPoiName.equals(name)) {
                             float zoomLevel = 17.0f;
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(POI, zoomLevel));
@@ -765,16 +495,11 @@ mMap.setOnInfoWindowCloseListener(new GoogleMap.OnInfoWindowCloseListener() {
                         poiDescriptions.add(description);
                         poiLatitude.add(latitude);
                         poiLongitude.add(longitude);
-
-
-
                         int SDK_INT = android.os.Build.VERSION.SDK_INT;
                         if (SDK_INT > 8) {
                             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
                                     .permitAll().build();
                             StrictMode.setThreadPolicy(policy);
-
-
                             URL url = null;
                             try {
                                 url = new URL(image);
@@ -787,8 +512,6 @@ mMap.setOnInfoWindowCloseListener(new GoogleMap.OnInfoWindowCloseListener() {
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            // Open URL connection read bitmaps and return form here
-
                             poiBitmapImages.add(result);
                             poiInfoWindow.setBitMapImage(result);
                         }
@@ -853,21 +576,6 @@ mMap.setOnInfoWindowCloseListener(new GoogleMap.OnInfoWindowCloseListener() {
 
     @Override
     public View getInfoContents(Marker marker) {
-        // and here we got EventEntity back so we can get all required data
-//        LayoutInflater inflater = getLayoutInflater();
-//        View v = inflater.inflate(R.layout.infowindow_map, null);
-//        TextView title = (TextView) v.findViewById(R.id.window_title);
-//        ImageView iconImage = (ImageView) v.findViewById(R.id.window_image);
-////        TextView description = (TextView) v.findViewById(R.id.window_description);
-////        TextView navigate = (TextView) v.findViewById(R.id.window_navigate);
-//
-//
-//        title.setText(poiNames.get(Integer.parseInt("HENRYK MICKIEWICZ")));
-//        title.setText(poiNames.get(Integer.parseInt(event.getPosition())));
-//        iconImage.setText(event.getType() + " event");
-//        description.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
-//        description.setText(event.getDescription());
-
         return null;
     }
 }

@@ -73,8 +73,6 @@ public class QuizLevelFragment extends Fragment {
             quizNameTextView.setText(name);
             addButtons();
             headerContainer.setVisibility(View.VISIBLE);
-//            loadingPanel.setVisibility(View.GONE);
-
             startQuizButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -166,7 +164,6 @@ public class QuizLevelFragment extends Fragment {
                     preLayout.setVisibility(View.VISIBLE);
                 }
             });
-//            newButton.setText(quizzesNames.get(j).toString());
             newButton.setText("QUIZ POZIOM " + j.toString());
             newButton.setClickable(true);
             newButton.setGravity(Gravity.LEFT);

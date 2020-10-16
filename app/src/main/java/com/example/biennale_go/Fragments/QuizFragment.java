@@ -1,12 +1,10 @@
 package com.example.biennale_go.Fragments;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,12 +16,8 @@ import android.widget.TextView;
 
 import com.example.biennale_go.Classes.QuizPicture;
 import com.example.biennale_go.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -61,15 +55,12 @@ public class QuizFragment extends Fragment {
        imageAnswerC = (ImageView) view.findViewById(R.id.imageC);
        imageAnswerD = (ImageView) view.findViewById(R.id.imageD);
         questionNumberImage = (ImageView) view.findViewById(R.id.imageView4);
-
         buttonsView = (RelativeLayout) view.findViewById(R.id.buttonsView);
         imageView = (RelativeLayout) view.findViewById(R.id.imageView);
 
         b = getArguments();
-
         if (b != null) {
             if(b.getSerializable("questions") != null) {
-
             }
             name = b.getString("name");
             questions = new ArrayList((ArrayList) b.getSerializable("questions"));
@@ -131,24 +122,6 @@ public class QuizFragment extends Fragment {
         return view;
     }
 
-//    private Drawable getImage(String path) {
-//                StorageReference islandRef = storageRef.child(path);
-//                Drawable x;
-//                final long ONE_MEGABYTE = 1024 * 1024;
-//                islandRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-//                    @Override
-//                    public void onSuccess(byte[] bytes) {
-//
-//                        Drawable d = Drawable.createFromStream(new ByteArrayInputStream(bytes), null);
-//                    }
-//                }).addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception exception) {
-//                        // Handle any errors
-//                    }
-//        });
-//        return x;
-//    }
     private void fillQuestion() {
         Resources res = getResources();
         HashMap<String, String> question = new HashMap<>((HashMap<String, String>) questions.get(questionNumber));

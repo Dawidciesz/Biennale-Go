@@ -12,7 +12,6 @@ public class RegistrationLoginPageFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         return (ViewGroup) inflater.inflate(R.layout.fragment_log_reg_slider, container, false);
     }
 }
