@@ -132,7 +132,6 @@ public class PoiFragment extends Fragment {
                 return o1.getName().compareTo(o2.getName());
             }
         };
-
         Collections.sort(poiList, compareByName);
     }
 
@@ -162,7 +161,6 @@ public class PoiFragment extends Fragment {
 
     private void generatePoiButtons() {
         String categorySign = "";
-
         for (Integer i = 0; i<poiList.size(); i++) {
             final String name = poiList.get(i).getName();
             final String image = poiList.get(i).getImage();
@@ -173,7 +171,6 @@ public class PoiFragment extends Fragment {
                 categorySign = name.substring(0, 1);
                 generateCategorySign(categorySign);
             }
-
             newButton = new Button(getContext());
             newButton.setText(name);
             newButton.setClickable(true);
@@ -199,11 +196,6 @@ public class PoiFragment extends Fragment {
                     fragmentTransaction.commit();
                 }
             });
-//            if(scores.contains(name)) {
-//                Drawable img = ContextCompat.getDrawable(getContext(), R.drawable.checked );
-//                img.setBounds( 0, 0, 60, 60 );
-//                newButton.setCompoundDrawables( img, null, img, null );
-//            }
             poiPanel.addView(newButton);
         }
     }
@@ -219,7 +211,6 @@ public class PoiFragment extends Fragment {
         newButton.setTextColor(Color.parseColor("#000000"));
         poiPanel.addView(newButton);
     }
-
         newButton = new Button(getContext());
         newButton.setText(categorySign.toUpperCase());
         newButton.setClickable(false);
@@ -227,7 +218,6 @@ public class PoiFragment extends Fragment {
         newButton.setBackgroundColor(Color.parseColor("#ffffff"));
         newButton.setTextColor(Color.parseColor("#000000"));
         newButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, 35);
-
         poiPanel.addView(newButton);
     }
 }

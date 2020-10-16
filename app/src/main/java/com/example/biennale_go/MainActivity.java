@@ -1,6 +1,5 @@
 package com.example.biennale_go;
 
-import androidx.annotation.ColorInt;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
@@ -8,7 +7,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
@@ -18,7 +16,6 @@ import android.content.pm.Signature;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -34,8 +31,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.biennale_go.Adapters.MenuListAdapter;
-import com.example.biennale_go.Adapters.RankingListAdapter;
-import com.example.biennale_go.Fragments.AddQuestionFragment;
 import com.example.biennale_go.Fragments.AdminPanelFragment;
 import com.example.biennale_go.Fragments.PoiDetailsFragment;
 import com.example.biennale_go.Fragments.PoiFragment;
@@ -45,7 +40,6 @@ import com.example.biennale_go.Fragments.RankingFragment;
 import com.example.biennale_go.Fragments.RoutesListFragment;
 import com.example.biennale_go.Utility.CurrentUser;
 import com.example.biennale_go.Utility.MenuListItem;
-import com.example.biennale_go.Utility.RankingItem;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -60,16 +54,9 @@ import java.util.List;
 public class MainActivity extends FragmentActivity implements MenuListAdapter.OnMenuItemClick {
     private ImageView mapButton, upButton, mainMenuButton;
     private static final String TAG = "MainActivity";
-    private String startFragment;
-    private ArrayList scoresList;
-    private ArrayList<String> poiScores;
-    private TranslateAnimation animate;
     private int y;
-    Button myButton;
     boolean isUp;
     boolean isProfilUp;
-    //    boolean isFinished;
-    private int yDelta;
     private RecyclerView recyclerView;
     private RelativeLayout listView;
     private ConstraintLayout profilBar;
@@ -78,10 +65,8 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private ImageView profilePicture;
-    private EditText newQuizName;
     private TextView pointsForm, pointsKm, profilName;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private ArrayList<String> scores = new ArrayList<>();
     ObjectAnimator oax;
     ObjectAnimator oay;
 
@@ -95,7 +80,6 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         Intent intent = getIntent();
         setContentView(R.layout.activity_main);
         CurrentUser.setCurrentUser();
-
         if( intent.getStringExtra("fragment") !=null && intent.getStringExtra("fragment").equals("pois")) {
             openPoi();
         }
@@ -104,24 +88,16 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         }
         if( intent.getStringExtra("infoWindowClick") !=null && intent.getStringExtra("infoWindowClick").equals("true")) {
             Fragment poiFragment = new PoiDetailsFragment();
-
             Bundle bundle = new Bundle();
             bundle.putString("name", intent.getStringExtra("poiName"));
             bundle.putString("infoWindowClicked", "true");
-
             bundle.putString("image",intent.getStringExtra("poiImage"));
             bundle.putString("address",intent.getStringExtra("poiAddress"));
             bundle.putString("description",intent.getStringExtra("poiDescription"));
-
-
             poiFragment.setArguments(bundle);
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, poiFragment);
             fragmentTransaction.commit();
-
-
-
-
         }
         items.add(new MenuListItem("MAPA", res.getDrawable(R.drawable.ic_formy, getTheme()), 3, 3));
         items.add(new MenuListItem("QUIZ", res.getDrawable(R.drawable.ic_formy, getTheme()), 3, 3));
@@ -130,7 +106,6 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         items.add(new MenuListItem("PROFIL", res.getDrawable(R.drawable.ic_formy, getTheme()), 3, 3));
         items.add(new MenuListItem("RANKING", res.getDrawable(R.drawable.ic_formy, getTheme()), 3, 3));
         items.add(new MenuListItem("WYLOGUJ", res.getDrawable(R.drawable.ic_formy, getTheme()), 3, 3));
-//
         try {
             info = getPackageManager().getPackageInfo("com.example.biennale_go", PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
@@ -138,7 +113,6 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
                 md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
                 String something = new String(Base64.encode(md.digest(), 0));
-                //String something = new String(Base64.encodeBytes(md.digest()));
                 Log.e("hash key", something);
             }
         } catch (PackageManager.NameNotFoundException e1) {
@@ -149,11 +123,7 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
             Log.e("exception", e.toString());
         }
         if (!CurrentUser.isLogged) {
-
         }
-
-
-
         mapButton = (ImageView) findViewById(R.id.map);
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,7 +133,6 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         });
         profilBar = (ConstraintLayout) findViewById(R.id.imageView4);
         profilePicture = (ImageView) findViewById(R.id.profilPicture);
-
         listView = (RelativeLayout) findViewById(R.id.list_view);
         buttons = (LinearLayout) findViewById(R.id.emailPasswordButtons);
         topBar = (LinearLayout) findViewById(R.id.topBar);
@@ -184,11 +153,8 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
                 onSlideViewButtonClick();
             }
         });
-
         isUp = false;
         isProfilUp = false;
-//        isFinished = true;
-
     }
 
     public void openMapActivity() {
@@ -243,34 +209,20 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         startActivity(intent);
     }
 
-
-    // slide the view from top of itself to the current position
     public void slideDown(View view, int yHight) {
         view.setVisibility(View.VISIBLE);
-//        CurrentUser.getPOICount();
-
-            profilePicture.setImageDrawable(getResources().getDrawable(Integer.parseInt(CurrentUser.profilPictureId)));
-            profilePicture.setColorFilter(Color.parseColor(CurrentUser.profilPictureColor), PorterDuff.Mode.SRC_IN);
+        profilePicture.setImageDrawable(getResources().getDrawable(Integer.parseInt(CurrentUser.profilPictureId)));
+        profilePicture.setColorFilter(Color.parseColor(CurrentUser.profilPictureColor), PorterDuff.Mode.SRC_IN);
         pointsForm.setText(String.valueOf(CurrentUser.visitedPOIList.size()));
-
-
         DecimalFormat df = new DecimalFormat("###.###");
         df.setMinimumFractionDigits(2);
         pointsKm.setText(String.valueOf( df.format(CurrentUser.distance_traveled/1000)));
         profilName.setText(String.valueOf(CurrentUser.name));
-
         int hightOfY = yHight;
-//
         if (yHight > 1)
             hightOfY = yHight - view.getHeight();
-
-
-        // Create animators for x and y axes
         oax = ObjectAnimator.ofInt(view, "translationX", 0, 0);
         oay = ObjectAnimator.ofFloat(view, "translationY", hightOfY, 0);
-
-
-// Combine Animators and start them together
         AnimatorSet set = new AnimatorSet();
         set.setDuration(800);
         set.playTogether(oax, oay);
@@ -278,48 +230,33 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         buttons.setZ(0);
         view.setZ(1);
         view.setZ(1);
-
-
-
-
-
     }
 
     public void slideUp(View view, int yHight) {
         oax = ObjectAnimator.ofInt(view, "translationX", 0, 0);
         oay = ObjectAnimator.ofFloat(view, "translationY", yHight, -view.getHeight());
-
         AnimatorSet set = new AnimatorSet();
         set.setDuration(800);
         set.playTogether(oax, oay);
         set.start();
     }
 
-
-
-
     public void onSlideViewButtonClick() {
-
         recyclerView = (RecyclerView) findViewById(R.id.ranking_list_recycler);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new MenuListAdapter(items, this);
         recyclerView.setAdapter(adapter);
         int[] location = new int[2];
-
         listView.getLocationOnScreen(location);
-
-
         if (oax != null)
             y = Math.round((Float) oay.getAnimatedValue());
         else
             y = -2000;
         if (isUp
-//                && isFinished
         ) {
             slideUp(listView, y);
         } else if (isUp == false
-//                && isFinished
         ) {
             slideDown(listView, y);
         }
@@ -331,28 +268,18 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
 
         if (yHight > 1)
             hightOfY = yHight - view.getHeight();
-
-
-        // Create animators for x and y axes
         oax = ObjectAnimator.ofInt(view, "translationX", -3000, view.getWidth());
         oay = ObjectAnimator.ofFloat(view, "translationY", -100,  topBar.getHeight());
-//        oay = ObjectAnimator.ofFloat(view, "translationY", 0,  view.getHeight());
-
-
-// Combine Animators and start them together
         AnimatorSet set = new AnimatorSet();
         set.setDuration(800);
         set.playTogether(oax, oay);
         set.start();
         view.setZ(0);
-     ;
     }
 
     public void slideProfilUp(View view, int yHight) {
         oax = ObjectAnimator.ofInt(view, "translationX", view.getWidth(), 0);
         oay = ObjectAnimator.ofFloat(view, "translationY", topBar.getHeight(),-100);
-//        oay = ObjectAnimator.ofFloat(view, "translationY", yHight, view.getHeight());
-
         AnimatorSet set = new AnimatorSet();
         set.setDuration(800);
         set.playTogether(oax, oay);
@@ -361,7 +288,6 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
     }
     @Override
     public void onMenuItemClick(int position) {
-
         if (items.get(position).getName() != null) {
             String fragmentName = items.get(position).getName();
             if (fragmentName.equals("QUIZ")) {
@@ -371,31 +297,6 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
             } else if (fragmentName.equals("FORMY")) {
                 openPoi();
             } else if (fragmentName.equals("PROFIL")) {
-
-
-//                int[] location = new int[2];
-//
-//                profilBar.getLocationOnScreen(location);
-//
-//
-//                if (oax != null)
-//                    y = Math.round((Float) oay.getAnimatedValue());
-//                else
-//                    y = 0;
-//                if (isProfilUp
-////                && isFinished
-//                ) {
-//                    slideProfilUp(profilBar, y);
-//                } else if (isProfilUp == false
-////                && isFinished
-//                ) {
-//                    slideProfilDown(profilBar, y);
-//                }
-//
-//
-//                    isProfilUp = !isProfilUp;
-
-
                 } else if (fragmentName.equals("RANKING")) {
                     openRanking();
                 } else if (fragmentName.equals("ADMIN")) {
@@ -405,6 +306,7 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
                 } else if (fragmentName.equals("WYLOGUJ")) {
                     FirebaseAuth.getInstance().signOut();
                     LoginManager.getInstance().logOut();
+                    CurrentUser.logout();
                     Intent i = new Intent(MainActivity.this, LoginRegisterActivity.class);
                     startActivity(i);
                 }

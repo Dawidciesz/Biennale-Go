@@ -35,7 +35,23 @@ public class CurrentUser {
     public static String profilPictureColor;
     public static String profilPictureId;
 
-
+    public static void logout() {
+         uId = null;
+         name = null;
+         email = null;
+         score = 0;
+         distance_traveled = 0;
+         distance = 0;
+         visitedPOIList.clear();
+       completedQuizes.clear();
+       visitedPOIMap.clear();
+        favoritePOI = null;
+        poiScores.clear();
+         favoritePOICount = 0;
+         isLogged = false;
+         profilPictureColor = null;
+         profilPictureId = null;
+    }
     public static void setCurrentUser() {
         FirebaseAuth mAuth;
         mAuth = FirebaseAuth.getInstance();
@@ -52,22 +68,17 @@ public class CurrentUser {
                 getPOICount();
                 fetchPOIScores();
             }
-            //            getQuizesCount(email);
         }
     }
     private static void setCurrentUserInfo(String email) {
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
         DocumentReference docRef = db.collection("users").document(email);
-
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-//                        avatarUrl = document.getData().get("avatar").toString();
                         distance_traveled = Double.parseDouble(document.getData().get("distance_traveled").toString());
                         name = document.getData().get("name").toString();
                             profilPictureColor = document.getData().get("profile_color").toString();
@@ -80,14 +91,11 @@ public class CurrentUser {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users").document(email).collection("POI_visited").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             int visitedNumber = 0;
-
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 favoritePOICount = 0;
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot document : task.getResult()) {
-//                        visitedNumber = Integer.parseInt(document.get("visited_count").toString());
-
                         visitedPOIList.add(document.getId());
                         visitedPOIMap.put(document.getId(), visitedNumber);
                         if (visitedNumber > favoritePOICount) {
@@ -95,14 +103,12 @@ public class CurrentUser {
                             favoritePOI = document.getId();
                         }
                     }
-
                 } else {
                     Log.d("POI","get POICount failed");
                 }
             }
         });
     }
-
 
     public static void fetchPOIScores() {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -119,22 +125,4 @@ public class CurrentUser {
             }
         });
     }
-
-//
-//    private static void getQuizesCount(String email) {
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        db.collection("users").document(email).collection("quizes_scores").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    for (DocumentSnapshot document : task.getResult()) {
-//                        completedQuizes.add(document.getId());
-//                        score = score + Integer.parseInt(document.get("points").toString());
-//                    }
-//                } else {
-//                    Log.d("QUIZ","get getQuizesCount failed");
-//                }
-//            }
-//        });
-
 }

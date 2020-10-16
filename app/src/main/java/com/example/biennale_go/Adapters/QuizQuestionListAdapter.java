@@ -58,7 +58,6 @@ public class QuizQuestionListAdapter extends RecyclerView.Adapter<QuizQuestionLi
         holder.textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
             }
         });
 
@@ -67,8 +66,6 @@ public class QuizQuestionListAdapter extends RecyclerView.Adapter<QuizQuestionLi
             public void onClick(View v) {
                 db.collection("quizes").document(quizName).collection("questions").document(items.get(position)).delete();
                 removeItem(position);
-
-
             }
         });
     }

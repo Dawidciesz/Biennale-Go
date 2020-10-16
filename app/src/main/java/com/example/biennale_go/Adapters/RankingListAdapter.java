@@ -1,6 +1,5 @@
 package com.example.biennale_go.Adapters;
 
-import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -57,12 +56,9 @@ public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.
             userScore = view.findViewById(R.id.points);
             pointsImage = view.findViewById(R.id.picutre_points);
             kmImage = view.findViewById(R.id.picutre_km);
-
             subItem = view.findViewById(R.id.sub_item);
-
             genre = view.findViewById(R.id.points);
             year = view.findViewById(R.id.km);
-
             userDistanceTraveled = view.findViewById(R.id.km);
             this.onItemClickListener = onItemClick;
             view.setOnClickListener(this);
@@ -77,12 +73,8 @@ public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.
         }
 
         private void bind(RankingItem item) {
-            // Get the state
             boolean expanded = item.isExpanded();
-            // Set the visibility based on state
             subItem.setVisibility(expanded ? View.VISIBLE : View.GONE);
-
-
         }
 
     }
@@ -96,7 +88,6 @@ public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.
     public RankingListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.ranking_item, parent, false);
-
         ViewHolder viewHolder = new ViewHolder(v, monItemClicklister);
         return viewHolder;
     }
@@ -120,33 +111,22 @@ public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.
         holder.userDistanceTraveled.setAnimation(AnimationUtils.loadAnimation(holder.userName.getContext(),R.anim.item_anim));
         holder.pointsImage.setAnimation(AnimationUtils.loadAnimation(holder.userName.getContext(),R.anim.item_anim));
         holder.kmImage.setAnimation(AnimationUtils.loadAnimation(holder.userName.getContext(),R.anim.item_anim));
-
         Resources res = holder.item.getResources();
         holder.userImage.setImageDrawable(res.getDrawable(Integer.parseInt(items.get(position).getProfilPictureId())));
         holder.userImage.setColorFilter(Color.parseColor(items.get(position).getProfilPictureColor()), PorterDuff.Mode.SRC_IN);
-
         DecimalFormat df = new DecimalFormat("###.###");
         df.setMinimumFractionDigits(2);
         holder.userDistanceTraveled.setText(String.valueOf(df.format(items.get(position).getDistanceTraveled()/1000) + "km"));
         RankingItem movie = items.get(position);
-        // Set movie data
         holder.bind(movie);
-
-        // Set movie data
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Get the current state of the item
                 boolean expanded = movie.isExpanded();
-                // Change the state
                 movie.setExpanded(!expanded);
-                // Notify the adapter that item has changed
                 RankingListAdapter.this.notifyItemChanged(position);
             }
         });
-
-
-
     }
 
     @Override

@@ -4,7 +4,6 @@ package com.example.biennale_go.Classes;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-
 import com.example.biennale_go.AsyncResponse;
 
 import java.io.IOException;
@@ -20,13 +19,11 @@ public class RetrieveFeedTask extends AsyncTask<String,Void, Bitmap> {
     }
     @Override
     protected void onPreExecute() {
-        // Show progress dialog
         super.onPreExecute();
     }
 
     @Override
     protected void onPostExecute(Bitmap bitmap) {
-        //Populate Ui
         delegate.processFinish(bitmap);
         super.onPostExecute(bitmap);
     }
@@ -39,15 +36,11 @@ public class RetrieveFeedTask extends AsyncTask<String,Void, Bitmap> {
         Bitmap result = null;
         try { result = BitmapFactory.decodeStream(url.openConnection().getInputStream()); }
         catch (IOException e) { e.printStackTrace(); }
-        // Open URL connection read bitmaps and return form here
         return result;
     }
 
     @Override
     protected void onProgressUpdate(Void... values) {
-        // Show progress update
         super.onProgressUpdate(values);
     }
-
-
 }

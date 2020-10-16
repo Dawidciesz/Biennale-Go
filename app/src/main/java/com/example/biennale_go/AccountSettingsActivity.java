@@ -29,10 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class AccountSettingsActivity  extends Activity implements profilePictureAdapter.OnProfilePictureItemClick {
-
-
     private RecyclerView recyclerView;
-
     private List<ProfilPictureItem> items = new ArrayList<>();
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -41,7 +38,6 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
     private Button cancel, next;
     private String profileColor = "", profilName = "";
     private FirebaseFirestore db;
-
 
     @SuppressLint("ResourceType")
     @Override
@@ -67,7 +63,6 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
             public void onClick(View v) {
                 chosenPicture.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
                 profileColor = "0xFF00FF00";
-
             }
         });
         blue = (FrameLayout) findViewById(R.id.blue);
@@ -107,7 +102,6 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
                 CurrentUser.getPOICount();
                 CurrentUser.fetchPOIScores();
                 createUser();
-
                 Intent intent = new Intent(AccountSettingsActivity.this, MainActivity.class);
                 intent.putExtra("from","new_account");
                 startActivity(intent);
@@ -138,7 +132,6 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
         data.put("profile_img", profilName);
         data.put("profile_color", "#" + profileColor.substring(profileColor.lastIndexOf("x") + 1));
         db.collection("users").document(intent.getStringExtra("email")).set(data);
-
         DocumentReference docRef =   db.collection("users").document(intent.getStringExtra("email"));
         Map<String, Object> info = new HashMap<>();
         info.put("name", intent.getStringExtra("name"));
@@ -155,8 +148,6 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
         profilName = imageName;
         chosenPicture.setImageDrawable(items.get(position).getImage());
     }
-    //            slideUp(listView, 0);
-        //            isUp = !isUp;
     }
 
 

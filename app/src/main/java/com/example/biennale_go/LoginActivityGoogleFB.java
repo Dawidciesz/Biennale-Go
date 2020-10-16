@@ -9,8 +9,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
-
-import com.example.biennale_go.Utility.CurrentUser;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -40,18 +38,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivityGoogleFB extends Activity implements View.OnClickListener {
     FirebaseAuth mAuth;
-
     private Button emailLogin;
     private Button googleLogin;
     private LoginButton facebookLogin;
     private RelativeLayout facebookCustomButton;
     private CallbackManager callbackManager;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-
     private GoogleSignInClient mGoogleSignInClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +58,6 @@ public class LoginActivityGoogleFB extends Activity implements View.OnClickListe
         setContentView(R.layout.fragment_login);
         callbackManager = CallbackManager.Factory.create();
         FirebaseApp.initializeApp(this);
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("1098753502328-2u950vhhekqvjolpkan0398npii5n1v7.apps.googleusercontent.com")
                 .requestEmail()
@@ -108,7 +102,6 @@ public class LoginActivityGoogleFB extends Activity implements View.OnClickListe
             @Override
             public void onCancel() {
                 Log.d("", "facebook:onCancel");
-                // ...
             }
 
             @Override
@@ -123,31 +116,31 @@ public class LoginActivityGoogleFB extends Activity implements View.OnClickListe
     @Override
     public void onStart() {
         super.onStart();
-
-
     }
+
     public void openLoginActivity() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
-    public void openMenuActivity() {
 
+    public void openMenuActivity() {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
+
       public void opeAccountSettingsActivity() {
             Intent intent = new Intent(this, AccountSettingsActivity.class);
             startActivity(intent);
     }
 
     public void onClick(View v) {
-
     }
 
     public void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, 1);
     }
+
     public  void createUser(int age, String name, String email) {
         Map<String, Object> data = new HashMap<>();
         data.put("age", age);
@@ -157,8 +150,6 @@ public class LoginActivityGoogleFB extends Activity implements View.OnClickListe
         data.put("profile_img", "");
         data.put("profile_color", "");
         db.collection("users").document(email).set(data);
-
-
 
         DocumentReference docRef =   db.collection("users").document(email);
         Map<String, Object> info = new HashMap<>();
@@ -170,7 +161,6 @@ public class LoginActivityGoogleFB extends Activity implements View.OnClickListe
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == 1) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
@@ -182,21 +172,15 @@ public class LoginActivityGoogleFB extends Activity implements View.OnClickListe
 
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d("", "handleFacebookAccessToken:" + token);
-
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
                             Log.d("", "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-
-
-
                             DocumentReference docRef = db.collection("users").document(user.getEmail());
-
                             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -214,7 +198,6 @@ public class LoginActivityGoogleFB extends Activity implements View.OnClickListe
                         } else {
                             Log.w("", "signInWithCredential:failure", task.getException());
                         }
-
                     }
                 });
     }
@@ -228,9 +211,7 @@ public class LoginActivityGoogleFB extends Activity implements View.OnClickListe
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
                         DocumentReference docRef = db.collection("users").document(account.getEmail());
-
                         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -244,13 +225,11 @@ public class LoginActivityGoogleFB extends Activity implements View.OnClickListe
                                         opeAccountSettingsActivity();
                                     }
                                 }}});
-
                     } else {
                         Log.w("TAG", "signInWithCredential:failure", task.getException());
                     }
                 }
             });
-
         } catch (ApiException e) {
         }
     }

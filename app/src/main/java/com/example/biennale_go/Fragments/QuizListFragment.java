@@ -138,10 +138,6 @@ public class QuizListFragment extends Fragment {
                             questionsArray.add(document.getData());
                         }
                         quizData.put(name.toString(), questionsArray);
-
-
-
-
                     } else {
                         Log.d(TAG, "Error getting documents: ", task.getException());
                     }
@@ -156,7 +152,6 @@ public class QuizListFragment extends Fragment {
     public void addButtons() {
         for(Integer i  = 0; i<quizzesNames.size(); i++) {
             newButton = new Button(getContext());
-
             final Integer j = i;
             newButton.setOnClickListener(new View.OnClickListener()
             {
