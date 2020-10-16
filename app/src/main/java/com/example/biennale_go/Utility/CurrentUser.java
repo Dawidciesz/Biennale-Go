@@ -35,7 +35,23 @@ public class CurrentUser {
     public static String profilPictureColor;
     public static String profilPictureId;
 
-
+    public static void logout() {
+         uId = null;
+         name = null;
+         email = null;
+         score = 0;
+         distance_traveled = 0;
+         distance = 0;
+         visitedPOIList.clear();
+       completedQuizes.clear();
+       visitedPOIMap.clear();
+        favoritePOI = null;
+        poiScores.clear();
+         favoritePOICount = 0;
+         isLogged = false;
+         profilPictureColor = null;
+         profilPictureId = null;
+    }
     public static void setCurrentUser() {
         FirebaseAuth mAuth;
         mAuth = FirebaseAuth.getInstance();

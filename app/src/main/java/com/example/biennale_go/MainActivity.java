@@ -405,6 +405,7 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
                 } else if (fragmentName.equals("WYLOGUJ")) {
                     FirebaseAuth.getInstance().signOut();
                     LoginManager.getInstance().logOut();
+                    CurrentUser.logout();
                     Intent i = new Intent(MainActivity.this, LoginRegisterActivity.class);
                     startActivity(i);
                 }

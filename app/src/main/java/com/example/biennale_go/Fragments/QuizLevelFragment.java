@@ -75,8 +75,7 @@ public class QuizLevelFragment extends Fragment {
             headerContainer.setVisibility(View.VISIBLE);
 //            loadingPanel.setVisibility(View.GONE);
 
-            startQuizButton.setOnClickListener(new View.OnClickListener()
-            {
+            startQuizButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Fragment testFragment = new QuizFragment();
@@ -91,97 +90,99 @@ public class QuizLevelFragment extends Fragment {
 
         return view;
     }
+
     public void fetchQuizData() {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
-            CollectionReference docRef = db.collection("quizes").document(name).collection("questions");
-            docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        for (final QueryDocumentSnapshot document : task.getResult()) {
-                            if (document.getData().get("questionType").equals("picture")) {
-                                quizStringPictures.add(document.getData().get("answerA").toString());
-                                quizStringPictures.add(document.getData().get("answerB").toString());
-                                quizStringPictures.add(document.getData().get("answerC").toString());
-                                quizStringPictures.add(document.getData().get("answerD").toString());
-                                quizIds.add(document.getId());
-                            }
+        CollectionReference docRef = db.collection("quizes").document(name).collection("questions");
+        docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (final QueryDocumentSnapshot document : task.getResult()) {
+                        if (document.getData().get("questionType").equals("picture")) {
+                            quizStringPictures.add(document.getData().get("answerA").toString());
+                            quizStringPictures.add(document.getData().get("answerB").toString());
+                            quizStringPictures.add(document.getData().get("answerC").toString());
+                            quizStringPictures.add(document.getData().get("answerD").toString());
+                            quizIds.add(document.getId());
                         }
-                        getTheImages();
-                    } else {
                     }
+                    getTheImages();
+                } else {
                 }
-            });
+            }
+        });
 
     }
-    public void getTheImages(){
-            StorageReference islandRef = storageRef.child(quizStringPictures.get(index));
-            final long ONE_MEGABYTE = 1024 * 1024 *10;
 
-            islandRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                @Override
-                public void onSuccess(byte[] bytes) {
+    public void getTheImages() {
+        StorageReference islandRef = storageRef.child(quizStringPictures.get(index));
+        final long ONE_MEGABYTE = 1024 * 1024 * 10;
 
-                    quizDrawablePictures.add(Drawable.createFromStream(new ByteArrayInputStream(bytes), null));
-                    index++;
-                    if (quizDrawablePictures.size() >= 4) {
-                        quizPictures.add(new QuizPicture(
-                                quizDrawablePictures.get(0),
-                                quizDrawablePictures.get(1),
-                                quizDrawablePictures.get(2),
-                                quizDrawablePictures.get(3),
-                                quizIds.get(0)));
-                                for (int i=0; i<4 ; i++)
-                                {
-                                 quizDrawablePictures.remove(0);
-                                 quizStringPictures.remove(0);
-                                }
-                        quizIds.remove(0);
-                        index=0;
+        islandRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+
+                quizDrawablePictures.add(Drawable.createFromStream(new ByteArrayInputStream(bytes), null));
+                index++;
+                if (quizDrawablePictures.size() >= 4) {
+                    quizPictures.add(new QuizPicture(
+                            quizDrawablePictures.get(0),
+                            quizDrawablePictures.get(1),
+                            quizDrawablePictures.get(2),
+                            quizDrawablePictures.get(3),
+                            quizIds.get(0)));
+                    for (int i = 0; i < 4; i++) {
+                        quizDrawablePictures.remove(0);
+                        quizStringPictures.remove(0);
                     }
-                    if (quizStringPictures.size() == 0) {
-                        view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-                        view.findViewById(R.id.quizLevelPanel).setVisibility(View.VISIBLE);
+                    quizIds.remove(0);
+                    index = 0;
+                }
+                if (quizStringPictures.size() == 0) {
+                    view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                    view.findViewById(R.id.quizLevelPanel).setVisibility(View.VISIBLE);
 
-                    }
-                    if(quizStringPictures.size() == 0)return;
-                    else getTheImages();
                 }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                }
-            });
+                if (quizStringPictures.size() == 0) return;
+                else getTheImages();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+            }
+        });
     }
+
     public void addButtons() {
-        for(Integer i  = 1; i<6; i++) {
+        for (Integer i = 1; i < 6; i++) {
             newButton = new Button(getContext());
             final Integer j = i;
-            newButton.setOnClickListener(new View.OnClickListener()
-            {
+            newButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     quizLevel = j;
-                    preLayout.setVisibility(View.VISIBLE); }
+                    preLayout.setVisibility(View.VISIBLE);
+                }
             });
 //            newButton.setText(quizzesNames.get(j).toString());
-            newButton.setText("QUIZ POZIOM "+j.toString());
+            newButton.setText("QUIZ POZIOM " + j.toString());
             newButton.setClickable(true);
             newButton.setGravity(Gravity.LEFT);
             newButton.setBackgroundResource(R.drawable.list_button_selector);
             newButton.setTextColor(Color.parseColor("#000000"));
             newButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, 35);
-            newButton.setPadding(10,30,10,0);
+            newButton.setPadding(10, 30, 10, 0);
             Drawable img = ContextCompat.getDrawable(getContext(), R.drawable.award);
-            img =   ContextCompat.getDrawable(getContext(), R.drawable.lockopen );
-            img.setBounds( 0, -10, 40, 40 );
-            newButton.setCompoundDrawables( null, null, img, null );
+            img = ContextCompat.getDrawable(getContext(), R.drawable.lockopen);
+            img.setBounds(0, -10, 40, 40);
+            newButton.setCompoundDrawables(null, null, img, null);
             quizLevelPanel.addView(newButton);
             TextView spaceView = new TextView(getContext());
             spaceView.setVisibility(View.INVISIBLE);
             spaceView.setHeight(20);
-            spaceView.setPadding(0,0,0,0);
+            spaceView.setPadding(0, 0, 0, 0);
             quizLevelPanel.addView(spaceView);
         }
     }
