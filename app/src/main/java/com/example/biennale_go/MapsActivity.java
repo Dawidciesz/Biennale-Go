@@ -1,6 +1,7 @@
 package com.example.biennale_go;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -72,7 +74,7 @@ import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener, GoogleMap.InfoWindowAdapter{
     private GoogleMap mMap;
-    private ImageView poiButton, routesButton;
+    private ImageView poiButton, routesButton, followButton;
     LocationManager locationManager;
     private TextView  dialogPoiText;
     private static final String TAG = "QuizMapActicity";
@@ -92,7 +94,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private double userLat = 0;
     private double userLong = 0;
     private CameraPosition cameraPosition;
-    private Button followButton, closePoiDialogButton;
+    private Button closePoiDialogButton;
     private String searchPoiName;
     private Boolean playerMarkFlag = false, followPlayerFlag = true;
     private Marker playerMarker;
@@ -123,17 +125,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         galleryLogo.startAnimation(AnimationUtils.loadAnimation(this, R.anim.loading_scale));
         dialogFrameLayout = (FrameLayout) findViewById(R.id.dialogLayout);
         poiDialogImage = (CircleImageView) findViewById(R.id.poiDialogImage);
-        followButton = (Button) findViewById(R.id.followButton);
+        followButton = (ImageView) findViewById(R.id.followButton);
         followButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 followPlayerFlag = !followPlayerFlag;
                 if (followPlayerFlag) {
-                    followButton.setBackgroundColor(Color.parseColor("#018786"));
+                    followButton.setImageDrawable(ContextCompat.getDrawable(getBaseContext(),R.drawable.lockclosed));
                 } else {
-                    followButton.setBackgroundColor(Color.GRAY);
-                    dialogFrameLayout.setZ(1);
-                    dialogPoiText.setText("Gratulacje!  Odkryłeś Formę Biennale: " + "textFiugra");
+                    followButton.setImageDrawable(ContextCompat.getDrawable(getBaseContext(),R.drawable.lockopen));
                 }
             }
         });
