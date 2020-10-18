@@ -41,7 +41,6 @@ public class QuizListFragment extends Fragment {
     private String id = CurrentUser.uId;
     private ArrayList questions = new ArrayList(), quizzesNames = new ArrayList(), scoresList = new ArrayList();
     private Map<String, Integer> scores = new HashMap<String, Integer>();
-
     private Map<String, Object> quizData = new HashMap<>();
     private ImageView galleryLogo;
     private static final String TAG = "QuizListActicity";
@@ -142,7 +141,6 @@ public class QuizListFragment extends Fragment {
                         Log.d(TAG, "Error getting documents: ", task.getException());
                     }
                     view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-
                 }
             });
         }
