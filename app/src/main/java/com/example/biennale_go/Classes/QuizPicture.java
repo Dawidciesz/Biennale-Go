@@ -1,11 +1,11 @@
 package com.example.biennale_go.Classes;
 
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
 
 public class QuizPicture {
-    Drawable a, b, c, d;
+    Bitmap a, b, c, d;
 
-    public QuizPicture(Drawable a, Drawable b, Drawable c, Drawable d, String questionNumber) {
+    public QuizPicture(Bitmap a, Bitmap b, Bitmap c, Bitmap d, String questionNumber) {
         this.a = a;
         this.b = b;
         this.c = c;
@@ -13,35 +13,35 @@ public class QuizPicture {
         QuestionNumber = questionNumber;
     }
 
-    public Drawable getA() {
+    public Bitmap getA() {
         return a;
     }
 
-    public void setA(Drawable a) {
+    public void setA(Bitmap a) {
         this.a = a;
     }
 
-    public Drawable getB() {
+    public Bitmap getB() {
         return b;
     }
 
-    public void setB(Drawable b) {
+    public void setB(Bitmap b) {
         this.b = b;
     }
 
-    public Drawable getC() {
+    public Bitmap getC() {
         return c;
     }
 
-    public void setC(Drawable c) {
+    public void setC(Bitmap c) {
         this.c = c;
     }
 
-    public Drawable getD() {
+    public Bitmap getD() {
         return d;
     }
 
-    public void setD(Drawable d) {
+    public void setD(Bitmap d) {
         this.d = d;
     }
 

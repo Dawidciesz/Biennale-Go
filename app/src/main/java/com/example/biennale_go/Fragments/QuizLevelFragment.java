@@ -1,9 +1,12 @@
 package com.example.biennale_go.Fragments;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -35,6 +38,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class QuizLevelFragment extends Fragment {
@@ -52,7 +58,7 @@ public class QuizLevelFragment extends Fragment {
     private ArrayList<String> quizIds = new ArrayList<>();
     private ArrayList<QuizPicture> quizPictures = new ArrayList<>();
     private Integer quizLevel;
-    private ArrayList<Drawable> quizDrawablePictures = new ArrayList<>();
+    private ArrayList<Bitmap> quizBitmaps = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -85,7 +91,6 @@ public class QuizLevelFragment extends Fragment {
                 }
             });
         }
-
         return view;
     }
 
@@ -106,7 +111,7 @@ public class QuizLevelFragment extends Fragment {
                             quizIds.add(document.getId());
                         }
                     }
-                    getTheImages();
+                    getUrlImages();
                 } else {
                 }
             }
@@ -114,43 +119,44 @@ public class QuizLevelFragment extends Fragment {
 
     }
 
-    public void getTheImages() {
-        StorageReference islandRef = storageRef.child(quizStringPictures.get(index));
-        final long ONE_MEGABYTE = 1024 * 1024 * 10;
-
-        islandRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-
-                quizDrawablePictures.add(Drawable.createFromStream(new ByteArrayInputStream(bytes), null));
-                index++;
-                if (quizDrawablePictures.size() >= 4) {
-                    quizPictures.add(new QuizPicture(
-                            quizDrawablePictures.get(0),
-                            quizDrawablePictures.get(1),
-                            quizDrawablePictures.get(2),
-                            quizDrawablePictures.get(3),
-                            quizIds.get(0)));
-                    for (int i = 0; i < 4; i++) {
-                        quizDrawablePictures.remove(0);
-                        quizStringPictures.remove(0);
-                    }
-                    quizIds.remove(0);
-                    index = 0;
-                }
-                if (quizStringPictures.size() == 0) {
-                    view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-                    view.findViewById(R.id.quizLevelPanel).setVisibility(View.VISIBLE);
-
-                }
-                if (quizStringPictures.size() == 0) return;
-                else getTheImages();
+    private void getUrlImages() {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        URL url = null;
+        try {
+            url = new URL(quizStringPictures.get(index));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        Bitmap bmp = null;
+        try {
+            bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        quizBitmaps.add(bmp);
+        index++;
+        if (quizBitmaps.size() >= 4) {
+            quizPictures.add(new QuizPicture(
+                    quizBitmaps.get(0),
+                    quizBitmaps.get(1),
+                    quizBitmaps.get(2),
+                    quizBitmaps.get(3),
+                    quizIds.get(0)));
+            for (int i = 0; i < 4; i++) {
+                quizBitmaps.remove(0);
+                quizStringPictures.remove(0);
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-            }
-        });
+            quizIds.remove(0);
+            index = 0;
+        }
+        if (quizStringPictures.size() == 0) {
+            view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+            view.findViewById(R.id.quizLevelPanel).setVisibility(View.VISIBLE);
+
+        }
+        if (quizStringPictures.size() == 0) return;
+        else getUrlImages();
     }
 
     public void addButtons() {
