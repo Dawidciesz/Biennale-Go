@@ -26,7 +26,6 @@ public class QuizFragment extends Fragment {
     private Button questionAnswerA, questionAnswerB, questionAnswerC, questionAnswerD;
     private ImageView imageAnswerA, imageAnswerB, imageAnswerC, imageAnswerD;
     private ArrayList scoresList = new ArrayList(), questions;
-
     private Integer questionNumber = 0, maxQuestionNumber;
     private Bundle b;
     private ImageView questionNumberImage;
@@ -127,16 +126,15 @@ public class QuizFragment extends Fragment {
         HashMap<String, String> question = new HashMap<>((HashMap<String, String>) questions.get(questionNumber));
         questionNumberTextView.setText("Pytanie nr " + (questionNumber + 1));
         questionDescriptionTextView.setText(question.get("description"));
-        if (question.get("answerA").contains("quizzes")) {
+        if (question.get("answerA").contains("firebasestorage")) {
             for (int i = 0; i < quizPictures.size(); i++) {
                 if (Integer.parseInt(quizPictures.get(i).getQuestionNumber()) == (questionNumber+1)) {
-                    imageAnswerA.setImageDrawable(quizPictures.get(i).getA());
-                    imageAnswerB.setImageDrawable(quizPictures.get(i).getB());
-                    imageAnswerC.setImageDrawable(quizPictures.get(i).getC());
-                    imageAnswerD.setImageDrawable(quizPictures.get(i).getD());
+                    imageAnswerA.setImageBitmap(quizPictures.get(i).getA());
+                    imageAnswerB.setImageBitmap(quizPictures.get(i).getB());
+                    imageAnswerC.setImageBitmap(quizPictures.get(i).getC());
+                    imageAnswerD.setImageBitmap(quizPictures.get(i).getD());
                     buttonsView.setVisibility(View.GONE);
                     imageView.setVisibility(View.VISIBLE);
-
                 }
             }
         }
