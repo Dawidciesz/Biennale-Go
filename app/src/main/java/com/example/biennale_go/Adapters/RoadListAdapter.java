@@ -15,6 +15,7 @@ import com.example.biennale_go.R;
 import com.example.biennale_go.Utility.RoadListItem;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class RoadListAdapter extends RecyclerView.Adapter<RoadListAdapter.ViewHo
     private OnRoadItemClick onItemClicklister;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ArrayList<String> scores = new ArrayList<>();
-
+    public UpdateView updateView;
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView name;
         public ImageView picture;
@@ -59,9 +60,10 @@ public class RoadListAdapter extends RecyclerView.Adapter<RoadListAdapter.ViewHo
         }
     }
 
-    public RoadListAdapter(List<RoadListItem> myDataset, OnRoadItemClick onItemClickListener) {
+    public RoadListAdapter(List<RoadListItem> myDataset, OnRoadItemClick onItemClickListener,UpdateView updateView) {
         items = myDataset;
         this.onItemClicklister = onItemClickListener;
+        this.updateView = updateView;
     }
 
     @Override
@@ -77,6 +79,7 @@ public class RoadListAdapter extends RecyclerView.Adapter<RoadListAdapter.ViewHo
         holder.picture.setImageBitmap(items.get(position).getImage());
         holder.name.setText(items.get(position).getName());
         holder.description.setText(items.get(position).getDescription());
+
         holder.mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,6 +100,9 @@ public class RoadListAdapter extends RecyclerView.Adapter<RoadListAdapter.ViewHo
                 RoadListAdapter.this.notifyItemChanged(position);
             }
         });
+        if((position == (items.size()-1)) && (items.get(items.size()-1).getImage()!= null)) {
+            updateView.closeLoadingScreen();
+        }
     }
 
     @Override
@@ -107,5 +113,8 @@ public class RoadListAdapter extends RecyclerView.Adapter<RoadListAdapter.ViewHo
 
     public interface OnRoadItemClick {
         void onRoadItemClick(int position);
+    }
+    public interface UpdateView extends Serializable {
+        public void closeLoadingScreen();
     }
 }

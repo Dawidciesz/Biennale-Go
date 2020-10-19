@@ -34,7 +34,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoutesListFragment extends Fragment implements RoadListAdapter.OnRoadItemClick {
+public class RoutesListFragment extends Fragment implements RoadListAdapter.OnRoadItemClick, RoadListAdapter.UpdateView {
     private LinearLayout routesListPanel;
     private Button newButton;
     private View view;
@@ -94,7 +94,7 @@ public class RoutesListFragment extends Fragment implements RoadListAdapter.OnRo
                         asyncTask.execute(image);
                     }
                     }
-                adapter = new RoadListAdapter(items, RoutesListFragment.this);
+                adapter = new RoadListAdapter(items, RoutesListFragment.this,RoutesListFragment.this);
                 recyclerView.setAdapter(adapter);
             }
         });
@@ -108,5 +108,11 @@ public class RoutesListFragment extends Fragment implements RoadListAdapter.OnRo
 
     @Override
     public void onRoadItemClick(int position) {
+    }
+
+    @Override
+    public void closeLoadingScreen() {
+        view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+        view.findViewById(R.id.road_recycler).setVisibility(View.VISIBLE);
     }
 }
