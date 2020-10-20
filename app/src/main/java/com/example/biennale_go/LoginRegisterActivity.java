@@ -31,11 +31,18 @@ public class LoginRegisterActivity extends FragmentActivity  implements View.OnC
     LinearLayout sliderDotspanel;
     FirebaseFirestore db ;
     FirebaseUser user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         FirebaseApp.initializeApp(this);
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null
+        ) {
+            Intent i = new Intent(LoginRegisterActivity.this, MainActivity.class);
+            startActivity(i);
+        }
+
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
@@ -82,17 +89,6 @@ public class LoginRegisterActivity extends FragmentActivity  implements View.OnC
             }
         });
 
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if (user != null
-        ) {
-            Intent i = new Intent(LoginRegisterActivity.this, MainActivity.class);
-            startActivity(i);
-        }
     }
 
     public void openMenuActivity() {

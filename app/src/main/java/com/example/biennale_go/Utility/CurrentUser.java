@@ -34,6 +34,8 @@ public class CurrentUser {
     public static boolean isLogged;
     public static String profilPictureColor;
     public static String profilPictureId;
+    private static HideLoadingPanel hide = null;
+    private static int count = 0;
 
     public static void logout() {
          uId = null;
@@ -52,7 +54,8 @@ public class CurrentUser {
          profilPictureColor = null;
          profilPictureId = null;
     }
-    public static void setCurrentUser() {
+    public static void setCurrentUser(HideLoadingPanel hideLoadingPanel) {
+        hide = hideLoadingPanel;
         FirebaseAuth mAuth;
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -70,6 +73,7 @@ public class CurrentUser {
             }
         }
     }
+
     private static void setCurrentUserInfo(String email) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("users").document(email);
@@ -83,6 +87,10 @@ public class CurrentUser {
                         name = document.getData().get("name").toString();
                             profilPictureColor = document.getData().get("profile_color").toString();
                             profilPictureId = document.getData().get("profile_img").toString();
+                        if (count == 1)
+                            hide.hidePanel();
+                        else
+                            count++;
                     }
                 }}});
     }
@@ -106,6 +114,10 @@ public class CurrentUser {
                 } else {
                     Log.d("POI","get POICount failed");
                 }
+                if (count == 1)
+                    hide.hidePanel();
+                else
+                    count++;
             }
         });
     }
