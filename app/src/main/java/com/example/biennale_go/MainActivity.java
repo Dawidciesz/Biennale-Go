@@ -22,9 +22,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.TranslateAnimation;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -39,6 +36,7 @@ import com.example.biennale_go.Fragments.QuizListFragment;
 import com.example.biennale_go.Fragments.RankingFragment;
 import com.example.biennale_go.Fragments.RoutesListFragment;
 import com.example.biennale_go.Utility.CurrentUser;
+import com.example.biennale_go.Utility.HideLoadingPanel;
 import com.example.biennale_go.Utility.MenuListItem;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
@@ -51,7 +49,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends FragmentActivity implements MenuListAdapter.OnMenuItemClick {
+public class MainActivity extends FragmentActivity implements MenuListAdapter.OnMenuItemClick, HideLoadingPanel {
     private ImageView mapButton, upButton, mainMenuButton;
     private static final String TAG = "MainActivity";
     private int y;
@@ -69,7 +67,6 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     ObjectAnimator oax;
     ObjectAnimator oay;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,8 +75,8 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         PackageInfo info;
         Resources res = getResources();
         Intent intent = getIntent();
+        CurrentUser.setCurrentUser(this);
         setContentView(R.layout.activity_main);
-        CurrentUser.setCurrentUser();
         if( intent.getStringExtra("fragment") !=null && intent.getStringExtra("fragment").equals("pois")) {
             openPoi();
         }
@@ -155,6 +152,7 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         });
         isUp = false;
         isProfilUp = false;
+
     }
 
     public void openMapActivity() {
@@ -211,8 +209,10 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
 
     public void slideDown(View view, int yHight) {
         view.setVisibility(View.VISIBLE);
-        profilePicture.setImageDrawable(getResources().getDrawable(Integer.parseInt(CurrentUser.profilPictureId)));
-        profilePicture.setColorFilter(Color.parseColor(CurrentUser.profilPictureColor), PorterDuff.Mode.SRC_IN);
+        if (CurrentUser.profilPictureId != null) {
+            profilePicture.setImageDrawable(getResources().getDrawable(Integer.parseInt(CurrentUser.profilPictureId)));
+            profilePicture.setColorFilter(Color.parseColor(CurrentUser.profilPictureColor), PorterDuff.Mode.SRC_IN);
+        }
         pointsForm.setText(String.valueOf(CurrentUser.visitedPOIList.size()));
         DecimalFormat df = new DecimalFormat("###.###");
         df.setMinimumFractionDigits(2);
@@ -241,7 +241,7 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         set.start();
     }
 
-    public void onSlideViewButtonClick() {
+        public void onSlideViewButtonClick() {
         recyclerView = (RecyclerView) findViewById(R.id.ranking_list_recycler);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -256,11 +256,13 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         if (isUp
         ) {
             slideUp(listView, y);
+
         } else if (isUp == false
         ) {
             slideDown(listView, y);
         }
-        isUp = !isUp;
+            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+            isUp = !isUp;
     }
     public void slideProfilDown(View view, int yHight) {
         view.setVisibility(View.VISIBLE);
@@ -314,5 +316,11 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
                 slideUp(listView, 0);
                 isUp = !isUp;
         }
+
+    @Override
+    public void hidePanel() {
+        onSlideViewButtonClick();
+
     }
+}
 

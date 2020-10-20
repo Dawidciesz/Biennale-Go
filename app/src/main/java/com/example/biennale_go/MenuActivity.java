@@ -62,7 +62,7 @@ public class MenuActivity extends Activity {
         } catch (Exception e) {
             Log.e("exception", e.toString());
         }
-        CurrentUser.setCurrentUser();
+//        CurrentUser.setCurrentUser();
         setContentView(R.layout.activity_main_menu);
 
         mapCard = (LinearLayout) findViewById(R.id.mapCard);
