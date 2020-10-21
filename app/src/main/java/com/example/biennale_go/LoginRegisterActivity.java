@@ -34,19 +34,21 @@ public class LoginRegisterActivity extends FragmentActivity  implements View.OnC
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
+        setContentView(R.layout.activity_email_password);
         if (user != null
         ) {
             Intent i = new Intent(LoginRegisterActivity.this, MainActivity.class);
             startActivity(i);
+        } else {
+            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
         }
 
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_email_password);
         viewPager = (ViewPager2) findViewById(R.id.pagerr);
         ArrayList<Fragment> arrayList = new ArrayList<>();
         sliderDotspanel = (LinearLayout) findViewById(R.id.SliderDots);
@@ -88,7 +90,6 @@ public class LoginRegisterActivity extends FragmentActivity  implements View.OnC
                 dots[position].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.active_dot));
             }
         });
-
     }
 
     public void openMenuActivity() {

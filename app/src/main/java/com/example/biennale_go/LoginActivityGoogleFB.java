@@ -53,9 +53,10 @@ public class LoginActivityGoogleFB extends Activity implements View.OnClickListe
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
-        mAuth = FirebaseAuth.getInstance();
-        AppEventsLogger.activateApp(getApplication());
         setContentView(R.layout.fragment_login);
+        mAuth = FirebaseAuth.getInstance();
+        findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+        AppEventsLogger.activateApp(getApplication());
         callbackManager = CallbackManager.Factory.create();
         FirebaseApp.initializeApp(this);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -69,6 +70,7 @@ public class LoginActivityGoogleFB extends Activity implements View.OnClickListe
             @Override
             public void onClick(View v) {
                 facebookLogin.performClick();
+                findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
             }
         });
         googleLogin.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +79,7 @@ public class LoginActivityGoogleFB extends Activity implements View.OnClickListe
                 int idView = v.getId();
                 if (idView == R.id.googleSignIn) {
                         signIn();
+                    findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
                 }
             }
         });

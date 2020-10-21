@@ -112,5 +112,21 @@
 
 
     </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:gravity="center"
+        android:visibility="visible"
+        >
 
+        <ImageView
+            android:id="@+id/galleryLogo"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/logo_gallery"
+            android:visibility="visible" />
+
+    </RelativeLayout>
 </LinearLayout>
