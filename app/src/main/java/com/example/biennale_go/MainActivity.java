@@ -1,5 +1,6 @@
 package com.example.biennale_go;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
@@ -67,6 +68,7 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     ObjectAnimator oax;
     ObjectAnimator oay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +77,7 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         PackageInfo info;
         Resources res = getResources();
         Intent intent = getIntent();
+
         CurrentUser.setCurrentUser(this);
         setContentView(R.layout.activity_main);
         if( intent.getStringExtra("fragment") !=null && intent.getStringExtra("fragment").equals("pois")) {
@@ -153,6 +156,14 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         isUp = false;
         isProfilUp = false;
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     public void openMapActivity() {

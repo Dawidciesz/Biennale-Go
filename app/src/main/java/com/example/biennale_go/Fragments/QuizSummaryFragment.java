@@ -1,5 +1,6 @@
 package com.example.biennale_go.Fragments;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import android.content.Intent;
@@ -34,6 +35,14 @@ public class QuizSummaryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         view = inflater.inflate(R.layout.activity_quiz_summary, container, false);
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                ((MainActivity) getActivity()).onSlideViewButtonClick();
+            }                // Handle the back button event
+
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
         pointsTextView = (TextView) view.findViewById(R.id.pointsTextView);
         exitButton = (Button) view.findViewById(R.id.exitButton);
         exitButton.setOnClickListener(new View.OnClickListener() {
