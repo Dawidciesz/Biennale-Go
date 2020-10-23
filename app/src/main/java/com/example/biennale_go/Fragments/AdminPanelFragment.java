@@ -6,8 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.biennale_go.MainActivity;
 import com.example.biennale_go.R;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -19,8 +21,15 @@ public class AdminPanelFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_admin_panel, container, false);
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                ((MainActivity) getActivity()).onSlideViewButtonClick();
+            }                // Handle the back button event
+
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
         addQuiz = (Button) view.findViewById(R.id.addQuizButton);
         addQuiz.setOnClickListener(new View.OnClickListener() {
             @Override

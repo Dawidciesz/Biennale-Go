@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -25,6 +26,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.biennale_go.Classes.QuizPicture;
+import com.example.biennale_go.MainActivity;
 import com.example.biennale_go.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -64,7 +66,14 @@ public class QuizLevelFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         view = inflater.inflate(R.layout.activity_quiz_level, container, false);
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                ((MainActivity) getActivity()).onSlideViewButtonClick();
+            }                // Handle the back button event
 
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
         quizNameTextView = (TextView) view.findViewById(R.id.quizNameTextView);
         quizLevelPanel = (LinearLayout) view.findViewById(R.id.quizLevelPanel);
         headerContainer = (LinearLayout) view.findViewById(R.id.headerContainer);

@@ -109,7 +109,6 @@ public class LoginActivityGoogleFB extends Activity implements View.OnClickListe
 
             @Override
             public void onError(FacebookException error) {
-
                 Log.d("", "facebook:onCancel");
             }
         });

@@ -1,5 +1,6 @@
 package com.example.biennale_go.Fragments;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -15,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.biennale_go.Classes.QuizPicture;
+import com.example.biennale_go.MainActivity;
 import com.example.biennale_go.R;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -41,7 +43,14 @@ public class QuizFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         view = inflater.inflate(R.layout.activity_quiz, container, false);
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                ((MainActivity) getActivity()).onSlideViewButtonClick();
+            }                // Handle the back button event
 
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
         questionNumberTextView = (TextView) view.findViewById(R.id.questionNumberTextView);
         questionDescriptionTextView = (TextView) view.findViewById(R.id.questionDescriptionTextView);
         questionAnswerA = (Button) view.findViewById(R.id.answerA);
