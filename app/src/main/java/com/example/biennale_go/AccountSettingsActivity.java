@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -110,8 +111,8 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
             }
         });
         recyclerView = (RecyclerView) findViewById(R.id.profilPicturesRecycler);
-        layoutManager = new LinearLayoutManager(this);
-        ((LinearLayoutManager) layoutManager).setOrientation(RecyclerView.HORIZONTAL);
+//        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 4));
         recyclerView.setLayoutManager(layoutManager);
         Resources res = getResources();
         adapter = new profilePictureAdapter(items, this);

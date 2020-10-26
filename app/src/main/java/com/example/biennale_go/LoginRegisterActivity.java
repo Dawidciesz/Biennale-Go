@@ -12,8 +12,6 @@ import android.widget.LinearLayout;
 import com.example.biennale_go.Adapters.ViewPagerFragmentAdapter;
 import com.example.biennale_go.Fragments.AdminPOIListFragment;
 import com.example.biennale_go.Fragments.AdminPanelFragment;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

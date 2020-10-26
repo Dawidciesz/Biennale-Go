@@ -164,6 +164,7 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+        startActivity(intent);
     }
 
     public void openMapActivity() {
@@ -310,23 +311,24 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
             } else if (fragmentName.equals("FORMY")) {
                 openPoi();
             } else if (fragmentName.equals("PROFIL")) {
-                } else if (fragmentName.equals("RANKING")) {
-                    openRanking();
-                } else if (fragmentName.equals("ADMIN")) {
-                    openAdminPanelFragment();
-                } else if (fragmentName.equals("MAPA")) {
-                    openMapActivity();
-                } else if (fragmentName.equals("WYLOGUJ")) {
-                    FirebaseAuth.getInstance().signOut();
-                    LoginManager.getInstance().logOut();
-                    CurrentUser.logout();
-                    Intent i = new Intent(MainActivity.this, LoginRegisterActivity.class);
-                    startActivity(i);
-                }
+                openProfil();
+            } else if (fragmentName.equals("RANKING")) {
+                openRanking();
+            } else if (fragmentName.equals("ADMIN")) {
+                openAdminPanelFragment();
+            } else if (fragmentName.equals("MAPA")) {
+                openMapActivity();
+            } else if (fragmentName.equals("WYLOGUJ")) {
+                FirebaseAuth.getInstance().signOut();
+                LoginManager.getInstance().logOut();
+                CurrentUser.logout();
+                Intent i = new Intent(MainActivity.this, LoginRegisterActivity.class);
+                startActivity(i);
             }
-                slideUp(listView, 0);
-                isUp = !isUp;
         }
+        slideUp(listView, 0);
+        isUp = !isUp;
+    }
 
     @Override
     public void hidePanel() {
