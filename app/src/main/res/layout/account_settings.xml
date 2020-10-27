@@ -80,71 +80,96 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/profilPicturesRecycler"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="75dp"
-        android:orientation="vertical"
-        android:scrollbars="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/list_view" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="342dp"
-        android:layout_height="81dp"
-        android:layout_marginBottom="29dp"
-        app:layout_constraintBottom_toTopOf="@+id/choosen_image"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profilPicturesRecycler">
+        <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/profilPicturesRecycler"
+            android:layout_width="310dp"
+            android:layout_height="150dp"
+            android:layout_alignStart="@+id/dialogLayout"
+            android:layout_marginStart="65dp"
+            android:layout_marginTop="233dp"
+            android:layout_marginEnd="65dp"
+            android:layout_marginBottom="39dp"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="422dp"
+            android:layout_marginBottom="69dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.494"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            android:id="@+id/red"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:background="@drawable/color_button_red"
-            tools:layout_editor_absoluteX="192dp"
-            tools:layout_editor_absoluteY="334dp">
+            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
-        </FrameLayout>
+                android:id="@+id/red"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/color_button_red"
+                tools:layout_editor_absoluteX="192dp"
+                tools:layout_editor_absoluteY="334dp" />
 
-        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
-            android:id="@+id/blue"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:background="@drawable/color_button_blue"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="333dp">
+                android:id="@+id/blue"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/color_button_blue"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="333dp" />
 
-        </FrameLayout>
+            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
-        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/green"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/color_button_green"
+                tools:layout_editor_absoluteX="128dp"
+                tools:layout_editor_absoluteY="333dp" />
 
-            android:id="@+id/green"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:background="@drawable/color_button_green"
-            tools:layout_editor_absoluteX="128dp"
-            tools:layout_editor_absoluteY="333dp">
+            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/yellow"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/color_button_yellow"
+                tools:layout_editor_absoluteX="64dp"
+                tools:layout_editor_absoluteY="333dp" />
+        </LinearLayout>
 
-        </FrameLayout>
+        <TextView
+            android:id="@+id/error_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="123dp"
+            android:text="Wybierz awatar i kolor"
+            android:textColor="@color/design_default_color_error"
+            android:textSize="18sp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
-            android:id="@+id/yellow"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:background="@drawable/color_button_yellow"
-            tools:layout_editor_absoluteX="64dp"
-            tools:layout_editor_absoluteY="333dp">
-
-        </FrameLayout>
-    </LinearLayout>
 
     <Button
         android:id="@+id/cancel"
@@ -160,7 +185,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/next"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/choosen_image" />
+        app:layout_constraintTop_toBottomOf="@+id/choosen_image"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/next"
@@ -180,17 +206,16 @@
         android:id="@+id/choosen_image"
         android:layout_width="158dp"
         android:layout_height="0dp"
-        android:layout_gravity="center_vertical|right"
-
-        android:layout_marginBottom="21dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="478dp"
         android:src="@drawable/menu"
         android:transitionName="ic_android"
-
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/cancel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/list_view"
-        app:srcCompat="@drawable/ic_android" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

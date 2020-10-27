@@ -78,7 +78,6 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         Resources res = getResources();
         Intent intent = getIntent();
 
-        CurrentUser.setCurrentUser(this);
         setContentView(R.layout.activity_main);
         if( intent.getStringExtra("fragment") !=null && intent.getStringExtra("fragment").equals("pois")) {
             openPoi();
@@ -155,7 +154,11 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         });
         isUp = false;
         isProfilUp = false;
-
+        if (CurrentUser.profilPictureId == null || CurrentUser.profilPictureId.equals("")) {
+            CurrentUser.setCurrentUser(this);
+        } else {
+            onSlideViewButtonClick();
+        }
     }
 
     @Override

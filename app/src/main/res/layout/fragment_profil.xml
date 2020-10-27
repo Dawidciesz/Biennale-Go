@@ -85,11 +85,14 @@
 
             <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/profilPicturesRecycler"
-                android:layout_width="356dp"
-                android:layout_height="0dp"
+                android:layout_width="281dp"
+                android:layout_height="171dp"
+                android:layout_marginLeft="16dp"
                 android:layout_alignStart="@+id/dialogLayout"
                 android:layout_marginBottom="15dp"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.509"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/choosen_image2" />
 
