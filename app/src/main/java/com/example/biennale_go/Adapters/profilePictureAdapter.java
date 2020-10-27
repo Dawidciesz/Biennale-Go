@@ -44,7 +44,6 @@ public class profilePictureAdapter extends RecyclerView.Adapter<profilePictureAd
 
         @Override
         public void onClick(View v) {
-
             onItemClickListener.onProfilePictureItemClick(getAdapterPosition(),"");
         }
     }
@@ -58,7 +57,6 @@ public class profilePictureAdapter extends RecyclerView.Adapter<profilePictureAd
     public profilePictureAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.profile_picture_item, parent, false);
-
         ViewHolder viewHolder = new ViewHolder(v, onItemClicklister);
         return viewHolder;
     }
@@ -68,14 +66,12 @@ public class profilePictureAdapter extends RecyclerView.Adapter<profilePictureAd
         int pos = position + 1;
         holder.picture.setImageDrawable(items.get(position).getImage());
         holder.itemView.setOnClickListener(v -> {
-
             for (int i = 0; i < items.size();i++) {
                 if (i != position) {
                     items.get(i).getImage().setColorFilter(holder.itemView.getResources().getColor(R.color.grayColor), PorterDuff.Mode.SRC_IN);
                 }
                 else
                     items.get(position).getImage().setColorFilter(holder.itemView.getResources().getColor(R.color.com_facebook_blue), PorterDuff.Mode.SRC_IN);
-
             }
             notifyDataSetChanged();
             onItemClicklister.onProfilePictureItemClick(position, items.get(position).getImageName());

@@ -113,10 +113,23 @@ public class ProfilFragment extends Fragment implements profilePictureAdapter.On
         saveSettingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CurrentUser.profilPictureColor =  "#" +  profileColor.substring(profileColor.lastIndexOf("x") + 1);
-                CurrentUser.profilPictureId = profilName;
+                if (profileColor.contains("x")) {
+                    profileColor = "#" + profileColor.substring(profileColor.lastIndexOf("x") + 1);
+                }
                 DocumentReference docUpdateScores = db.collection("users").document(CurrentUser.email);
-                docUpdateScores.update("profile_color", "#" + profileColor.substring(profileColor.lastIndexOf("x") + 1));
+                if (profileColor == null && profilName == null) {
+                } else if (profileColor != null && profilName == null) {
+                    CurrentUser.profilPictureColor = profileColor;
+                    docUpdateScores.update("profile_color", profileColor);
+                } else if (profileColor == null && profilName != null) {
+                    CurrentUser.profilPictureId = profilName;
+                    docUpdateScores.update("profile_img", profilName);
+                } else {
+                    CurrentUser.profilPictureColor = profileColor;
+                    CurrentUser.profilPictureId = profilName;
+                    docUpdateScores.update("profile_color", profileColor);
+                    docUpdateScores.update("profile_img", profilName);
+                }
                 dialog.setVisibility(View.INVISIBLE);
                 showFrameLayoutButton.setVisibility(View.VISIBLE);
             }

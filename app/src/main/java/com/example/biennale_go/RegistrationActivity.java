@@ -24,14 +24,12 @@ public class RegistrationActivity extends Activity implements View.OnClickListen
     private EditText nameField;
     private Button registerButton;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         FirebaseApp.initializeApp(this);
-        mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.fragment_register);
         emailField = findViewById(R.id.fieldEmail);
         passwordField = findViewById(R.id.fieldPassword);
@@ -43,7 +41,9 @@ public class RegistrationActivity extends Activity implements View.OnClickListen
                 int idView = v.getId();
                 if (idView == R.id.emailCreateAccountButton) {
                     if (validate()) {
-                        createAccount(emailField.getText().toString(), passwordField.getText().toString());
+                        openMenuActivity();
+
+
                     }
                 }
             }
@@ -61,25 +61,12 @@ public class RegistrationActivity extends Activity implements View.OnClickListen
         Intent intent = new Intent(this, AccountSettingsActivity.class);
         intent.putExtra("name",nameField.getText().toString());
         intent.putExtra("email",emailField.getText().toString().toLowerCase());
+        intent.putExtra("pass", passwordField.getText().toString());
         startActivity(intent);
     }
 
     public void onClick(View v) {
         openMenuActivity();
-    }
-
-    public void createAccount(String email, String password) {
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            openMenuActivity();
-                        } else {
-                            emailField.setError("Niepoprawny adres email");
-                        }
-                    }
-                });
     }
 
     public boolean validate() {

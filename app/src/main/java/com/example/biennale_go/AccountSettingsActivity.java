@@ -10,13 +10,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.example.biennale_go.Adapters.profilePictureAdapter;
 import com.example.biennale_go.Utility.CurrentUser;
 import com.example.biennale_go.Utility.ProfilPictureItem;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -27,6 +33,8 @@ import java.util.List;
 import java.util.Map;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,9 +46,11 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
     private RecyclerView.LayoutManager layoutManager;
     private ImageView chosenPicture;
     private FrameLayout red, green, blue, yellow;
+    private TextView errorMessage;
     private Button cancel, next;
     private String profileColor = "", profilName = "";
     private FirebaseFirestore db;
+    FirebaseAuth mAuth;
 
     @SuppressLint("ResourceType")
     @Override
@@ -52,6 +62,10 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
         db = FirebaseFirestore.getInstance();
         FirebaseApp.initializeApp(this);
         chosenPicture = (ImageView) findViewById(R.id.choosen_image);
+        chosenPicture.setImageDrawable(ContextCompat.getDrawable(getBaseContext(), R.drawable.ic_star));
+        profilName = "2131165369";
+        mAuth = FirebaseAuth.getInstance();
+        errorMessage = (TextView) findViewById(R.id.error_message);
         red = (FrameLayout) findViewById(R.id.red);
         red.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,32 +102,24 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                openBeginningScreen();
             }
         });
         next = (Button) findViewById(R.id.next);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseAuth mAuth;
-                mAuth = FirebaseAuth.getInstance();
-                FirebaseUser currentUser = mAuth.getCurrentUser();
-                CurrentUser.profilPictureColor =  "#" +  profileColor.substring(profileColor.lastIndexOf("x") + 1);
-                CurrentUser.profilPictureId = profilName;
-                CurrentUser.name = getIntent().getStringExtra("name");
-                CurrentUser.email = getIntent().getStringExtra("email");
-                CurrentUser.uId = currentUser.getUid();
-                CurrentUser.getPOICount();
-                CurrentUser.fetchPOIScores();
-                createUser();
-                Intent intent = new Intent(AccountSettingsActivity.this, MainActivity.class);
-                intent.putExtra("from","new_account");
-                startActivity(intent);
+                if (profileColor.equals("") || profilName.equals("")) {
+                    errorMessage.setVisibility(View.VISIBLE);
+                    errorMessage.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shake));
+                } else {
+                    createAccount(getIntent().getStringExtra("email"), getIntent().getStringExtra("pass"));
+                }
             }
         });
         recyclerView = (RecyclerView) findViewById(R.id.profilPicturesRecycler);
 //        layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 4));
-        recyclerView.setLayoutManager(layoutManager);
         Resources res = getResources();
         adapter = new profilePictureAdapter(items, this);
         recyclerView.setAdapter(adapter);
@@ -123,7 +129,30 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
         items.add(new ProfilPictureItem(res.getDrawable(2131165358), String.valueOf(R.drawable.ic_heart_circles)));
         items.add(new ProfilPictureItem(res.getDrawable(2131165369), String.valueOf(R.drawable.ic_star)));
         items.add(new ProfilPictureItem(res.getDrawable(2131165370), String.valueOf(R.drawable.ic_tru)));
+    }
 
+    public void createAccount(String email, String password) {
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser currentUser = mAuth.getCurrentUser();
+                            CurrentUser.profilPictureColor = "#" + profileColor.substring(profileColor.lastIndexOf("x") + 1);
+                            CurrentUser.profilPictureId = profilName;
+                            CurrentUser.name = getIntent().getStringExtra("name");
+                            CurrentUser.email = getIntent().getStringExtra("email");
+                            CurrentUser.uId = currentUser.getUid();
+                            CurrentUser.getPOICount();
+                            CurrentUser.fetchPOIScores();
+                            createUser();
+                            Intent intent = new Intent(AccountSettingsActivity.this, MainActivity.class);
+                            intent.putExtra("from", "new_account");
+                            startActivity(intent);
+                        } else {
+                        }
+                    }
+                });
     }
 
     @Override
@@ -133,7 +162,6 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
-
 
     public  void createUser() {
         Intent intent = getIntent();
@@ -150,6 +178,11 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
         info.put("name", intent.getStringExtra("name"));
         info.put("visited_count", 0);
         docRef.collection("POI_visited").document(intent.getStringExtra("name")).set(info);
+    }
+
+    public void openBeginningScreen() {
+        Intent intent = new Intent(this, LoginRegisterActivity.class);
+        startActivity(intent);
     }
 
     @Override
