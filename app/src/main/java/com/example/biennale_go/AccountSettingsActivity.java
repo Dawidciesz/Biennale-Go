@@ -46,7 +46,7 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
     private RecyclerView.LayoutManager layoutManager;
     private ImageView chosenPicture;
     private FrameLayout red, green, blue, yellow;
-    private TextView errorMessage;
+    private TextView errorMessage, errorEmail;
     private Button cancel, next;
     private String profileColor = "", profilName = "";
     private FirebaseFirestore db;
@@ -66,6 +66,7 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
         profilName = "2131165369";
         mAuth = FirebaseAuth.getInstance();
         errorMessage = (TextView) findViewById(R.id.error_message);
+        errorEmail = (TextView) findViewById(R.id.error_email);
         red = (FrameLayout) findViewById(R.id.red);
         red.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,11 +110,22 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FirebaseUser currentUser = mAuth.getCurrentUser();
+                currentUser.reload();
                 if (profileColor.equals("") || profilName.equals("")) {
                     errorMessage.setVisibility(View.VISIBLE);
                     errorMessage.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shake));
                 } else {
-                    createAccount(getIntent().getStringExtra("email"), getIntent().getStringExtra("pass"));
+                    if (currentUser.isEmailVerified())
+                        createUserDetails();
+                }
+                if (currentUser.isEmailVerified()) {
+                    errorEmail.setText("Adres email zweryfikowany");
+                    errorEmail.setTextColor(Color.parseColor("#123dp"));
+                } else {
+                    errorEmail.setText("Potwierdź adres email");
+                    errorEmail.setTextColor(Color.parseColor("#a8323c"));
+                    errorEmail.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shake));
                 }
             }
         });
@@ -129,6 +141,8 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
         items.add(new ProfilPictureItem(res.getDrawable(2131165358), String.valueOf(R.drawable.ic_heart_circles)));
         items.add(new ProfilPictureItem(res.getDrawable(2131165369), String.valueOf(R.drawable.ic_star)));
         items.add(new ProfilPictureItem(res.getDrawable(2131165370), String.valueOf(R.drawable.ic_tru)));
+
+        createAccount(getIntent().getStringExtra("email"), getIntent().getStringExtra("pass"));
     }
 
     public void createAccount(String email, String password) {
@@ -137,32 +151,55 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            FirebaseUser currentUser = mAuth.getCurrentUser();
-                            CurrentUser.profilPictureColor = "#" + profileColor.substring(profileColor.lastIndexOf("x") + 1);
-                            CurrentUser.profilPictureId = profilName;
-                            CurrentUser.name = getIntent().getStringExtra("name");
-                            CurrentUser.email = getIntent().getStringExtra("email");
-                            CurrentUser.uId = currentUser.getUid();
-                            CurrentUser.getPOICount();
-                            CurrentUser.fetchPOIScores();
-                            createUser();
-                            Intent intent = new Intent(AccountSettingsActivity.this, MainActivity.class);
-                            intent.putExtra("from", "new_account");
-                            startActivity(intent);
+                            sendVerificationEmail();
                         } else {
                         }
                     }
                 });
     }
 
+    public void createUserDetails() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        CurrentUser.profilPictureColor = "#" + profileColor.substring(profileColor.lastIndexOf("x") + 1);
+        CurrentUser.profilPictureId = profilName;
+        CurrentUser.name = getIntent().getStringExtra("name");
+        CurrentUser.email = getIntent().getStringExtra("email");
+        CurrentUser.uId = currentUser.getUid();
+        CurrentUser.getPOICount();
+        CurrentUser.fetchPOIScores();
+        createUser();
+        Intent intent = new Intent(AccountSettingsActivity.this, MainActivity.class);
+        intent.putExtra("from", "new_account");
+        startActivity(intent);
+    }
+
     @Override
     public void onBackPressed() {
+        mAuth.getCurrentUser().delete();
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
+    private void sendVerificationEmail() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        currentUser.sendEmailVerification()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            errorEmail.setVisibility(View.VISIBLE);
+                        } else {
+                            overridePendingTransition(0, 0);
+                            finish();
+                            overridePendingTransition(0, 0);
+                            startActivity(getIntent());
+
+                        }
+                    }
+                });
+    }
     public  void createUser() {
         Intent intent = getIntent();
         Map<String, Object> data = new HashMap<>();
