@@ -105,9 +105,10 @@ public class RoutesListFragment extends Fragment implements RoadListAdapter.OnRo
                         });
                         asyncTask.execute(image);
                     }
+                    adapter = new RoadListAdapter(items, RoutesListFragment.this, RoutesListFragment.this);
+                    recyclerView.setAdapter(adapter);
                     }
-                adapter = new RoadListAdapter(items, RoutesListFragment.this,RoutesListFragment.this);
-                recyclerView.setAdapter(adapter);
+
             }
         });
     }
