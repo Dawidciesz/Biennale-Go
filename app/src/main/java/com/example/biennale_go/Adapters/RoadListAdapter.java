@@ -100,7 +100,7 @@ public class RoadListAdapter extends RecyclerView.Adapter<RoadListAdapter.ViewHo
                 RoadListAdapter.this.notifyItemChanged(position);
             }
         });
-        if((position == (items.size()-1)) && (items.get(items.size()-1).getImage()!= null)) {
+        if ((position == 2) && (items.get(items.size() - 1).getImage() != null)) {
             updateView.closeLoadingScreen();
         }
     }

@@ -221,7 +221,6 @@
                     android:layout_marginBottom="16dp"
                     android:layout_toRightOf="@id/nameText"
                     android:background="@drawable/input"
-                    android:inputType="textPassword"
                     android:textAlignment="center" />
             </RelativeLayout>
 
