@@ -32,6 +32,7 @@ public class CurrentUser {
     public static ArrayList<String> poiScores = new ArrayList<>();
     public static int favoritePOICount;
     public static boolean isLogged;
+    public static boolean mLocationPermissionGranted = false;
     public static String profilPictureColor;
     public static String profilPictureId;
     private static HideLoadingPanel hide = null;

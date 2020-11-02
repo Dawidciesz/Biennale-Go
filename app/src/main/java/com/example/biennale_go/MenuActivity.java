@@ -69,7 +69,11 @@ public class MenuActivity extends Activity {
         mapCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openMapActivity();
+                if (mLocationPermissionGranted) {
+                    openMapActivity();
+                } else {
+                    getLocationPermission();
+                }
             }
         });
         profilCard = (LinearLayout) findViewById(R.id.profilCard);
