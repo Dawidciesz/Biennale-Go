@@ -73,7 +73,6 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
     boolean isProfilUp;
     private RecyclerView recyclerView;
     private RelativeLayout listView;
-    private boolean mLocationPermissionGranted = false;
     private ConstraintLayout profilBar;
     private LinearLayout buttons, topBar;
     private List<MenuListItem> items = new ArrayList<>();
@@ -142,7 +141,11 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openMapActivity();
+                if (CurrentUser.mLocationPermissionGranted) {
+                    openMapActivity();
+                } else {
+                    getLocationPermission();
+                }
             }
         });
         profilBar = (ConstraintLayout) findViewById(R.id.imageView4);
@@ -173,6 +176,11 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
             CurrentUser.setCurrentUser(this);
         } else {
             onSlideViewButtonClick();
+        }
+        if (checkMapServices()) {
+            if (!CurrentUser.mLocationPermissionGranted) {
+                getLocationPermission();
+            }
         }
     }
 
@@ -254,7 +262,7 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         oax = ObjectAnimator.ofInt(view, "translationX", 0, 0);
         oay = ObjectAnimator.ofFloat(view, "translationY", hightOfY, 0);
         AnimatorSet set = new AnimatorSet();
-        set.setDuration(800);
+        set.setDuration(600);
         set.playTogether(oax, oay);
         set.start();
         buttons.setZ(0);
@@ -266,7 +274,7 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         oax = ObjectAnimator.ofInt(view, "translationX", 0, 0);
         oay = ObjectAnimator.ofFloat(view, "translationY", yHight, -view.getHeight());
         AnimatorSet set = new AnimatorSet();
-        set.setDuration(800);
+        set.setDuration(600);
         set.playTogether(oax, oay);
         set.start();
     }
@@ -346,7 +354,7 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            mLocationPermissionGranted = true;
+            CurrentUser.mLocationPermissionGranted = true;
         } else {
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
@@ -376,12 +384,12 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[],
                                            @NonNull int[] grantResults) {
-        mLocationPermissionGranted = false;
+        CurrentUser.mLocationPermissionGranted = false;
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mLocationPermissionGranted = true;
+                    CurrentUser.mLocationPermissionGranted = true;
                 }
             }
         }
@@ -394,7 +402,7 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         Log.d(TAG, "onActivityResult: called.");
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ENABLE_GPS: {
-                if (!mLocationPermissionGranted) {
+                if (!CurrentUser.mLocationPermissionGranted) {
                     getLocationPermission();
                 }
             }
@@ -413,11 +421,7 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
     @Override
     protected void onResume() {
         super.onResume();
-        if (checkMapServices()) {
-            if (!mLocationPermissionGranted) {
-                getLocationPermission();
-            }
-        }
+
     }
 
     @Override
@@ -437,7 +441,11 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
             } else if (fragmentName.equals("ADMIN")) {
                 openAdminPanelFragment();
             } else if (fragmentName.equals("MAPA")) {
-                openMapActivity();
+                if (CurrentUser.mLocationPermissionGranted) {
+                    openMapActivity();
+                } else {
+                    getLocationPermission();
+                }
             } else if (fragmentName.equals("WYLOGUJ")) {
                 FirebaseAuth.getInstance().signOut();
                 LoginManager.getInstance().logOut();
@@ -445,9 +453,12 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
                 Intent i = new Intent(MainActivity.this, LoginRegisterActivity.class);
                 startActivity(i);
             }
+            if (!CurrentUser.mLocationPermissionGranted && fragmentName.equals("MAPA")) {
+            } else {
+                slideUp(listView, 0);
+                isUp = !isUp;
+            }
         }
-        slideUp(listView, 0);
-        isUp = !isUp;
     }
 
     @Override

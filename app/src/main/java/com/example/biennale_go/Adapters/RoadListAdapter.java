@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.biennale_go.MapsActivity;
 import com.example.biennale_go.R;
+import com.example.biennale_go.Utility.CurrentUser;
 import com.example.biennale_go.Utility.RoadListItem;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -83,11 +84,15 @@ public class RoadListAdapter extends RecyclerView.Adapter<RoadListAdapter.ViewHo
         holder.mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(holder.name.getContext(), MapsActivity.class);
-                Bundle b = new Bundle();
-                b.putSerializable("polyline", items.get(position).getPolyline());
-                intent.putExtras(b);
-                holder.name.getContext().startActivity(intent);
+                if (CurrentUser.mLocationPermissionGranted) {
+                    Intent intent = new Intent(holder.name.getContext(), MapsActivity.class);
+                    Bundle b = new Bundle();
+                    b.putSerializable("polyline", items.get(position).getPolyline());
+                    intent.putExtras(b);
+                    holder.name.getContext().startActivity(intent);
+                } else {
+
+                }
             }
         });
         RoadListItem item = items.get(position);
@@ -100,7 +105,7 @@ public class RoadListAdapter extends RecyclerView.Adapter<RoadListAdapter.ViewHo
                 RoadListAdapter.this.notifyItemChanged(position);
             }
         });
-        if ((position == 2) && (items.get(items.size() - 1).getImage() != null)) {
+        if ((position == 1) && (items.get(items.size() - 1).getImage() != null)) {
             updateView.closeLoadingScreen();
         }
     }
