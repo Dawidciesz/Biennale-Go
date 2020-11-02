@@ -1,7 +1,10 @@
 package com.example.biennale_go;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -10,6 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -17,6 +24,7 @@ import android.content.pm.Signature;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -27,6 +35,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.biennale_go.Adapters.MenuListAdapter;
 import com.example.biennale_go.Fragments.AdminPanelFragment;
@@ -40,6 +49,8 @@ import com.example.biennale_go.Utility.CurrentUser;
 import com.example.biennale_go.Utility.HideLoadingPanel;
 import com.example.biennale_go.Utility.MenuListItem;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -48,6 +59,10 @@ import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.biennale_go.Utility.Constants.ERROR_DIALOG_REQUEST;
+import static com.example.biennale_go.Utility.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
+import static com.example.biennale_go.Utility.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 
 
 public class MainActivity extends FragmentActivity implements MenuListAdapter.OnMenuItemClick, HideLoadingPanel {
@@ -58,6 +73,7 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
     boolean isProfilUp;
     private RecyclerView recyclerView;
     private RelativeLayout listView;
+    private boolean mLocationPermissionGranted = false;
     private ConstraintLayout profilBar;
     private LinearLayout buttons, topBar;
     private List<MenuListItem> items = new ArrayList<>();
@@ -77,12 +93,11 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         PackageInfo info;
         Resources res = getResources();
         Intent intent = getIntent();
-
         setContentView(R.layout.activity_main);
-        if( intent.getStringExtra("fragment") !=null && intent.getStringExtra("fragment").equals("pois")) {
+        if (intent.getStringExtra("fragment") != null && intent.getStringExtra("fragment").equals("pois")) {
             openPoi();
         }
-        if( intent.getStringExtra("fragment") !=null && intent.getStringExtra("fragment").equals("routes")) {
+        if (intent.getStringExtra("fragment") != null && intent.getStringExtra("fragment").equals("routes")) {
             openRoutesList();
         }
         if( intent.getStringExtra("infoWindowClick") !=null && intent.getStringExtra("infoWindowClick").equals("true")) {
@@ -303,6 +318,108 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         set.start();
         view.setZ(0);
     }
+
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Aplikacja wymaga do działania aktywnej usługi GPS, czy chesz ją aktywować?")
+                .setCancelable(false)
+                .setPositiveButton("Tak", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        Intent enableGpsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivityForResult(enableGpsIntent, PERMISSIONS_REQUEST_ENABLE_GPS);
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public boolean isMapsEnabled() {
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            buildAlertMessageNoGps();
+            return false;
+        }
+        return true;
+    }
+
+    private void getLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mLocationPermissionGranted = true;
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
+    }
+
+    public boolean isServicesOK() {
+        Log.d(TAG, "isServicesOK: checking google services version");
+
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MainActivity.this);
+
+        if (available == ConnectionResult.SUCCESS) {
+            Log.d(TAG, "isServicesOK: Google Play Services is working");
+            return true;
+        } else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
+            Log.d(TAG, "isServicesOK: an error occured but we can fix it");
+            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MainActivity.this, available, ERROR_DIALOG_REQUEST);
+            dialog.show();
+        } else {
+            Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show();
+        }
+        return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        mLocationPermissionGranted = false;
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mLocationPermissionGranted = true;
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult: called.");
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_ENABLE_GPS: {
+                if (!mLocationPermissionGranted) {
+                    getLocationPermission();
+                }
+            }
+        }
+    }
+
+    private boolean checkMapServices() {
+        if (isServicesOK()) {
+            if (isMapsEnabled()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (checkMapServices()) {
+            if (!mLocationPermissionGranted) {
+                getLocationPermission();
+            }
+        }
+    }
+
     @Override
     public void onMenuItemClick(int position) {
         if (items.get(position).getName() != null) {
