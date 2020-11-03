@@ -39,27 +39,30 @@ public class CurrentUser {
     private static int count = 0;
 
     public static void logout() {
-         uId = null;
-         name = null;
-         email = null;
-         score = 0;
-         distance_traveled = 0;
-         distance = 0;
-         visitedPOIList.clear();
-       completedQuizes.clear();
-       visitedPOIMap.clear();
+        uId = null;
+        name = null;
+        email = null;
+        score = 0;
+        distance_traveled = 0;
+        distance = 0;
+        visitedPOIList.clear();
+        completedQuizes.clear();
+        visitedPOIMap.clear();
         favoritePOI = null;
         poiScores.clear();
-         favoritePOICount = 0;
-         isLogged = false;
-         profilPictureColor = null;
-         profilPictureId = null;
+        favoritePOICount = 0;
+        count = 0;
+        isLogged = false;
+        profilPictureColor = null;
+        profilPictureId = null;
     }
+
     public static void setCurrentUser(HideLoadingPanel hideLoadingPanel) {
         hide = hideLoadingPanel;
         FirebaseAuth mAuth;
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        count = 0;
         if (currentUser == null) {
            isLogged = false;
         } else {

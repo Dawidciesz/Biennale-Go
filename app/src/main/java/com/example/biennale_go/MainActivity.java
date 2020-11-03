@@ -93,25 +93,7 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         Resources res = getResources();
         Intent intent = getIntent();
         setContentView(R.layout.activity_main);
-        if (intent.getStringExtra("fragment") != null && intent.getStringExtra("fragment").equals("pois")) {
-            openPoi();
-        }
-        if (intent.getStringExtra("fragment") != null && intent.getStringExtra("fragment").equals("routes")) {
-            openRoutesList();
-        }
-        if( intent.getStringExtra("infoWindowClick") !=null && intent.getStringExtra("infoWindowClick").equals("true")) {
-            Fragment poiFragment = new PoiDetailsFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("name", intent.getStringExtra("poiName"));
-            bundle.putString("infoWindowClicked", "true");
-            bundle.putString("image",intent.getStringExtra("poiImage"));
-            bundle.putString("address",intent.getStringExtra("poiAddress"));
-            bundle.putString("description",intent.getStringExtra("poiDescription"));
-            poiFragment.setArguments(bundle);
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, poiFragment);
-            fragmentTransaction.commit();
-        }
+
         items.add(new MenuListItem("MAPA", res.getDrawable(R.drawable.ic_formy, getTheme()), 3, 3));
         items.add(new MenuListItem("QUIZ", res.getDrawable(R.drawable.ic_formy, getTheme()), 3, 3));
         items.add(new MenuListItem("FORMY", res.getDrawable(R.drawable.ic_formy, getTheme()), 3, 3));
@@ -174,13 +156,42 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         isProfilUp = false;
         if (CurrentUser.profilPictureId == null || CurrentUser.profilPictureId.equals("")) {
             CurrentUser.setCurrentUser(this);
-        } else {
+        } else if (!intent.getStringExtra("fragment").equals("pois")
+                && !intent.getStringExtra("fragment").equals("routes")
+                && !intent.getStringExtra("infoWindowClick").equals("true")) {
             onSlideViewButtonClick();
         }
         if (checkMapServices()) {
             if (!CurrentUser.mLocationPermissionGranted) {
                 getLocationPermission();
+                findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
             }
+        }
+        if (intent.getStringExtra("fragment") != null && intent.getStringExtra("fragment").equals("pois")) {
+            profilBar.setVisibility(View.INVISIBLE);
+            openPoi();
+            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+        }
+        if (intent.getStringExtra("fragment") != null && intent.getStringExtra("fragment").equals("routes")) {
+            profilBar.setVisibility(View.INVISIBLE);
+            openRoutesList();
+            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+        }
+        if (intent.getStringExtra("infoWindowClick") != null && intent.getStringExtra("infoWindowClick").equals("true")) {
+            Fragment poiFragment = new PoiDetailsFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("name", intent.getStringExtra("poiName"));
+            bundle.putString("infoWindowClicked", "true");
+            bundle.putString("image", intent.getStringExtra("poiImage"));
+            bundle.putString("address", intent.getStringExtra("poiAddress"));
+            bundle.putString("description", intent.getStringExtra("poiDescription"));
+            poiFragment.setArguments(bundle);
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, poiFragment);
+            fragmentTransaction.commit();
+            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+            profilBar.setVisibility(View.INVISIBLE);
+
         }
     }
 
@@ -189,7 +200,6 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
         startActivity(intent);
     }
 
@@ -246,6 +256,9 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
     }
 
     public void slideDown(View view, int yHight) {
+        if (profilBar.getVisibility() == View.GONE || profilBar.getVisibility() == View.INVISIBLE) {
+            profilBar.setVisibility(View.VISIBLE);
+        }
         view.setVisibility(View.VISIBLE);
         if (CurrentUser.profilPictureId != null) {
             profilePicture.setImageDrawable(getResources().getDrawable(Integer.parseInt(CurrentUser.profilPictureId)));
