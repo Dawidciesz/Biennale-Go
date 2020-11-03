@@ -302,11 +302,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         checkIfPoi(latitude, longtitude);
         checkIfRoad(latitude, longtitude);
-        if(loadingPanel.getVisibility() != View.GONE) {
-            loadingPanel.setVisibility(View.GONE);
-            mapPanel.setVisibility(View.VISIBLE);
-        }
+//        if(loadingPanel.getVisibility() != View.GONE) {
+//            loadingPanel.setVisibility(View.GONE);
+//            mapPanel.setVisibility(View.VISIBLE);
+//        }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
     public void updateData() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> data = new HashMap<>();
@@ -385,33 +391,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Log.e("MapsActivityRaw", "Can't find style.", e);
         }
 
-        if(polyline != null) drawRoutes();
-mMap.setOnInfoWindowCloseListener(new GoogleMap.OnInfoWindowCloseListener() {
-    @Override
-    public void onInfoWindowClose(Marker marker) {
-        iconImage.setImageDrawable(null);
-    }
-});
+        if (polyline != null) drawRoutes();
+        mMap.setOnInfoWindowCloseListener(new GoogleMap.OnInfoWindowCloseListener() {
+            @Override
+            public void onInfoWindowClose(Marker marker) {
+                iconImage.setImageDrawable(null);
+            }
+        });
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                if ( marker.getTag() !=null) {
+                if (marker.getTag() != null) {
                     mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
                         @Override
                         public View getInfoWindow(Marker marker) {
                             PoiInfoWindow event = (PoiInfoWindow) marker.getTag();
                             if (event == null) {
-                            return null;
-                            } title.setText(event.getName());
+                                return null;
+                            }
+                            title.setText(event.getName());
                             iconImage.setImageBitmap(event.getBitMapImage());
                             return v;
                         }
+
                         @Override
                         public View getInfoContents(Marker marker) {
                             return null;
                         }
-                    });}
-                    return false;
+                    });
+                }
+                return false;
             }
         });
         mMap.setInfoWindowAdapter(this);
@@ -420,14 +429,16 @@ mMap.setOnInfoWindowCloseListener(new GoogleMap.OnInfoWindowCloseListener() {
             public void onInfoWindowClick(Marker marker) {
                 PoiInfoWindow event = (PoiInfoWindow) marker.getTag();
                 Intent intent = new Intent(MapsActivity.this, MainActivity.class);
-                intent.putExtra("infoWindowClick","true");
-                intent.putExtra("poiName",event.getName());
-                intent.putExtra("poiImage",event.getImage());
-                intent.putExtra("poiAddress",event.getAddress());
-                intent.putExtra("poiDescription",event.getDescription());
+                intent.putExtra("infoWindowClick", "true");
+                intent.putExtra("poiName", event.getName());
+                intent.putExtra("fragment", "true");
+                intent.putExtra("poiImage", event.getImage());
+                intent.putExtra("poiAddress", event.getAddress());
+                intent.putExtra("poiDescription", event.getDescription());
                 startActivity(intent);
             }
         });
+
     }
 
     @Override
@@ -516,6 +527,8 @@ mMap.setOnInfoWindowCloseListener(new GoogleMap.OnInfoWindowCloseListener() {
                             poiInfoWindow.setBitMapImage(result);
                         }
                         }
+                    loadingPanel.setVisibility(View.GONE);
+                    mapPanel.setVisibility(View.VISIBLE);
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }

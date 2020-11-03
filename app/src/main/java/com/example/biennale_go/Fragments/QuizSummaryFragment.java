@@ -3,6 +3,8 @@ package com.example.biennale_go.Fragments;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -48,7 +50,7 @@ public class QuizSummaryFragment extends Fragment {
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openMainActivity();
+                openQuizList();
             }
         });
         awardImageView = (ImageView) view.findViewById(R.id.awardImageView);
@@ -86,8 +88,10 @@ public class QuizSummaryFragment extends Fragment {
         }
     }
 
-    public void openMainActivity(){
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        startActivity(intent);
+    public void openQuizList() {
+        Fragment quizListFragment = new QuizListFragment();
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, quizListFragment);
+        fragmentTransaction.commit();
     }
 }
