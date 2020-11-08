@@ -105,6 +105,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private View v;
     private TextView title;
     private ImageView iconImage;
+    LatLng userCurrentLocation;
+    private boolean routeIsdraw = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +149,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (b != null) {
             polyline = (ArrayList) b.getSerializable("polyline");
             searchPoiName = (String) b.getString("searchPoiName");
+        }
+        if ((polyline != null) && (mMap != null)) {
+            drawRoutes();
         }
         poiNames = new ArrayList<String>();
         poiScores = new ArrayList<String>();
@@ -274,7 +279,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     void setMapLocation(double latitude, double longtitude) {
-        LatLng userCurrentLocation = new LatLng(latitude, longtitude);
+        userCurrentLocation = new LatLng(latitude, longtitude);
+        if (!polyline.isEmpty() && !routeIsdraw) {
+            drawRoutes();
+            routeIsdraw = true;
+        }
         float zoomLevel = 17.0f;
         if (userLat < 1) {
             userLat = latitude;
@@ -364,10 +373,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
     public void drawRoutes() {
-        for(Integer i = 1; i<polyline.size();i++) {
-            ArrayList firstEl = (ArrayList) polyline.get(i-1);
+        for (Integer i = 0; i < polyline.size(); i++) {
             ArrayList secondEl = (ArrayList) polyline.get(i);
-            calculateDirections(new LatLng((Double) firstEl.get(0), (Double) firstEl.get(1)),new  LatLng((Double) secondEl.get(0), (Double) secondEl.get(1)));
+            if (i == 0) {
+                LatLng firstEl = userCurrentLocation;
+                calculateDirections(firstEl, new LatLng((Double) secondEl.get(0), (Double) secondEl.get(1)));
+            } else {
+                ArrayList firstEl = (ArrayList) polyline.get(i - 1);
+                calculateDirections(new LatLng((Double) firstEl.get(0), (Double) firstEl.get(1)), new LatLng((Double) secondEl.get(0), (Double) secondEl.get(1)));
+            }
         }
         ArrayList firstEl = (ArrayList) polyline.get(0);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng((Double) firstEl.get(0), (Double) firstEl.get(1)), 16));
@@ -391,7 +405,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Log.e("MapsActivityRaw", "Can't find style.", e);
         }
 
-        if (polyline != null) drawRoutes();
+
         mMap.setOnInfoWindowCloseListener(new GoogleMap.OnInfoWindowCloseListener() {
             @Override
             public void onInfoWindowClose(Marker marker) {
@@ -435,6 +449,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 intent.putExtra("poiImage", event.getImage());
                 intent.putExtra("poiAddress", event.getAddress());
                 intent.putExtra("poiDescription", event.getDescription());
+                intent.putExtra("longitude", event.getLatitude().toString());
+                intent.putExtra("latitude", event.getLongitude().toString());
                 startActivity(intent);
             }
         });
@@ -487,6 +503,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         poiInfoWindow.setDescription(description);
                         poiInfoWindow.setImage(image);
                         poiInfoWindow.setAddress(address);
+                        poiInfoWindow.setLatitude(latitude);
+                        poiInfoWindow.setLongitude(longitude);
                         if(poiScores.contains(name)) {
                             Marker poMark = mMap.addMarker(new MarkerOptions().position(POI).title(name).icon(BitmapDescriptorFactory.fromBitmap(checkedMarker)));
                             poMark.setTag(poiInfoWindow);
