@@ -3,13 +3,13 @@ package com.example.biennale_go.Fragments;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import de.hdodenhof.circleimageview.CircleImageView;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Debug;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,12 +29,14 @@ import com.example.biennale_go.R;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class PoiDetailsFragment extends Fragment {
     private String name, image, address, description;
     private Boolean checked;
     private TextView nameTextView, addressTextView, descriptionTextView, aboutTextView;
     private Bundle b;
+    private CircleImageView routesButton;
     private ImageView PoiImageView, checkedImageView, showOnMapButton;
     private View view;
     private ImageView galleryLogo;
@@ -42,7 +44,10 @@ public class PoiDetailsFragment extends Fragment {
     private LinearLayout poiDetailsPanel;
     private Animation animFadeIn, animFadeOut;
     private ScrollView poiDetailsScrollView;
-
+    private Double latitude;
+    private Double longitude;
+    private ArrayList<ArrayList> poiList = new ArrayList<>();
+    private ArrayList<Double> lats = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -59,6 +64,17 @@ public class PoiDetailsFragment extends Fragment {
         b = getArguments();
 
         loadingPanel = (RelativeLayout) view.findViewById(R.id.loadingPanel);
+        routesButton = (CircleImageView) view.findViewById(R.id.routesButton);
+        routesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), MapsActivity.class);
+                Bundle b = new Bundle();
+                b.putSerializable("polyline", poiList);
+                intent.putExtras(b);
+                getContext().startActivity(intent);
+            }
+        });
         poiDetailsPanel = (LinearLayout) view.findViewById(R.id.poiDetailsPanel);
         poiDetailsScrollView = (ScrollView) view.findViewById(R.id.poiDetailsScrollView);
 
@@ -77,6 +93,12 @@ public class PoiDetailsFragment extends Fragment {
             address = (String) b.getString("address");
             description = (String) b.getString("description");
             checked = (Boolean) b.getBoolean("checked");
+            latitude = (Double) Double.parseDouble(b.getString("latitude"));
+            longitude = (Double) Double.parseDouble(b.getString("longitude"));
+            lats.add(latitude);
+            lats.add(longitude);
+            poiList.add(lats);
+
             nameTextView = (TextView) view.findViewById(R.id.nameTextView);
             nameTextView.setText(name);
             addressTextView = (TextView) view.findViewById(R.id.addressTextView);
@@ -103,6 +125,7 @@ public class PoiDetailsFragment extends Fragment {
                     Intent intent = new Intent(getContext(), MapsActivity.class);
                     Bundle b = new Bundle();
                     b.putString("searchPoiName", name);
+                    b.putSerializable("polyline", poiList);
                     intent.putExtras(b);
                     startActivity(intent);
                 }

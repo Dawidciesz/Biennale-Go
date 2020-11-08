@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.example.biennale_go.Adapters.profilePictureAdapter;
 import com.example.biennale_go.Utility.CurrentUser;
 import com.example.biennale_go.Utility.ProfilPictureItem;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -103,6 +104,9 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                LoginManager.getInstance().logOut();
+                CurrentUser.logout();
                 openBeginningScreen();
             }
         });

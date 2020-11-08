@@ -113,6 +113,19 @@ public class LoginRegisterActivity extends FragmentActivity  implements View.OnC
         startActivity(intent);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (user != null
+        ) {
+            Intent i = new Intent(LoginRegisterActivity.this, MainActivity.class);
+            startActivity(i);
+        } else {
+            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+        }
+
+    }
+
     public void onClick(View v) {
         openMenuActivity();
     }

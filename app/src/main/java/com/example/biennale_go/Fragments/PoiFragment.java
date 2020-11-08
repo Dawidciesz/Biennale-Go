@@ -176,6 +176,8 @@ public class PoiFragment extends Fragment {
             final String image = poiList.get(i).getImage();
             final String address = poiList.get(i).getAddress();
             final String description = poiList.get(i).getDescription();
+            final Double latitude = poiList.get(i).getLatitude();
+            final Double longitude = poiList.get(i).getLongitude();
 
             if(!categorySign.equals(name.substring(0, 1))){
                 categorySign = name.substring(0, 1);
@@ -198,6 +200,8 @@ public class PoiFragment extends Fragment {
                     b.putString("address", address);
                     b.putString("description", description);
                     b.putBoolean("checked", scores.contains(name));
+                    b.putString("latitude", latitude.toString());
+                    b.putString("longitude", longitude.toString());
 
                     Fragment testFragment = new PoiDetailsFragment();
                     testFragment.setArguments(b);

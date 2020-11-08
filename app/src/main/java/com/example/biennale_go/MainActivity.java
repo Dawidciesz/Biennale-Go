@@ -185,6 +185,8 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
             bundle.putString("image", intent.getStringExtra("poiImage"));
             bundle.putString("address", intent.getStringExtra("poiAddress"));
             bundle.putString("description", intent.getStringExtra("poiDescription"));
+            bundle.putString("longitude", intent.getStringExtra("longitude"));
+            bundle.putString("latitude", intent.getStringExtra("latitude"));
             poiFragment.setArguments(bundle);
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, poiFragment);
@@ -197,10 +199,11 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+//        Intent intent = new Intent(Intent.ACTION_MAIN);
+//        intent.addCategory(Intent.CATEGORY_HOME);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        startActivity(intent);
+        onSlideViewButtonClick();
     }
 
     public void openMapActivity() {
