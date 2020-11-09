@@ -89,7 +89,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FrameLayout dialogFrameLayout;
     private View dialog;
     private Double POICollisionRange = (360.0 * 30.0) / 40075000.0; // 100 meters
-    private ArrayList polyline;
+    //    private ArrayList polyline;
+    private ArrayList<ArrayList> polyline = new ArrayList<>();
+
     private Bundle b;
     private double userLat = 0;
     private double userLong = 0;
