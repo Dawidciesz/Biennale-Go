@@ -106,7 +106,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private TextView title;
     private ImageView iconImage;
     LatLng userCurrentLocation;
-    private boolean routeIsdraw = false;
+    private int routeIsdraw = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,6 +185,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .apiKey(getString(R.string.google_maps_key2))
                     .build();
         }
+        routeIsdraw = 0;
     }
 
     private void calculateDirections(LatLng from, LatLng to){
@@ -267,6 +268,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         startActivity(intent);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        routeIsdraw = 0;
+    }
+
     void getLocation() {
         try {
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -280,9 +287,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     void setMapLocation(double latitude, double longtitude) {
         userCurrentLocation = new LatLng(latitude, longtitude);
-        if (!polyline.isEmpty() && !routeIsdraw) {
+        if (!polyline.isEmpty() && routeIsdraw < 2) {
             drawRoutes();
-            routeIsdraw = true;
+            routeIsdraw++;
         }
         float zoomLevel = 17.0f;
         if (userLat < 1) {
@@ -449,8 +456,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 intent.putExtra("poiImage", event.getImage());
                 intent.putExtra("poiAddress", event.getAddress());
                 intent.putExtra("poiDescription", event.getDescription());
-                intent.putExtra("longitude", event.getLatitude().toString());
-                intent.putExtra("latitude", event.getLongitude().toString());
+                intent.putExtra("longitude", event.getLongitude().toString());
+                intent.putExtra("latitude", event.getLatitude().toString());
                 startActivity(intent);
             }
         });
@@ -547,6 +554,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         }
                     loadingPanel.setVisibility(View.GONE);
                     mapPanel.setVisibility(View.VISIBLE);
+
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }
