@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.biennale_go.Classes.PoiInfoWindow;
+import com.example.biennale_go.Classes.RetrieveFeedTask;
 import com.example.biennale_go.Utility.CurrentUser;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -514,15 +515,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         poiInfoWindow.setAddress(address);
                         poiInfoWindow.setLatitude(latitude);
                         poiInfoWindow.setLongitude(longitude);
-                        if(poiScores.contains(name)) {
-                            Marker poMark = mMap.addMarker(new MarkerOptions().position(POI).title(name).icon(BitmapDescriptorFactory.fromBitmap(checkedMarker)));
-                            poMark.setTag(poiInfoWindow);
-                            markers.add(poMark);
-                        } else {
-                            Marker poMark = mMap.addMarker(new MarkerOptions().position(POI).title(name).icon(BitmapDescriptorFactory.fromBitmap(questionMarker)));
-                            poMark.setTag(poiInfoWindow);
-                            markers.add(poMark);
-                        }
+
                         if(searchPoiName != null && searchPoiName.equals(name)) {
                             float zoomLevel = 17.0f;
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(POI, zoomLevel));
@@ -533,26 +526,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         poiDescriptions.add(description);
                         poiLatitude.add(latitude);
                         poiLongitude.add(longitude);
-                        int SDK_INT = android.os.Build.VERSION.SDK_INT;
-                        if (SDK_INT > 8) {
-                            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-                                    .permitAll().build();
-                            StrictMode.setThreadPolicy(policy);
-                            URL url = null;
-                            try {
-                                url = new URL(image);
-                            } catch (MalformedURLException e) {
-                                e.printStackTrace();
+//                        int SDK_INT = android.os.Build.VERSION.SDK_INT;
+//                        if (SDK_INT > 8) {
+//                            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+//                                    .permitAll().build();
+//                            StrictMode.setThreadPolicy(policy);
+//                            URL url = null;
+//                            try {
+//                                url = new URL(image);
+//                            } catch (MalformedURLException e) {
+//                                e.printStackTrace();
+//                            }
+//                            Bitmap result = null;
+//                            try {
+//                                result = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                            poiBitmapImages.add(result);
+//                            poiInfoWindow.setBitMapImage(result);
+//                        }
+                        RetrieveFeedTask asyncTask = new RetrieveFeedTask(new AsyncResponse() {
+                            @Override
+                            public void processFinish(Bitmap output) {
+                                if (poiScores.contains(name)) {
+                                    Marker poMark = mMap.addMarker(new MarkerOptions().position(POI).title(name).icon(BitmapDescriptorFactory.fromBitmap(checkedMarker)));
+                                    poMark.setTag(poiInfoWindow);
+                                    markers.add(poMark);
+                                } else {
+                                    Marker poMark = mMap.addMarker(new MarkerOptions().position(POI).title(name).icon(BitmapDescriptorFactory.fromBitmap(questionMarker)));
+                                    poMark.setTag(poiInfoWindow);
+                                    markers.add(poMark);
+                                }
+                                poiBitmapImages.add(output);
+                                poiInfoWindow.setBitMapImage(output);
                             }
-                            Bitmap result = null;
-                            try {
-                                result = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            poiBitmapImages.add(result);
-                            poiInfoWindow.setBitMapImage(result);
-                        }
+                        });
+                        asyncTask.execute(image);
                         }
                     loadingPanel.setVisibility(View.GONE);
                     mapPanel.setVisibility(View.VISIBLE);
