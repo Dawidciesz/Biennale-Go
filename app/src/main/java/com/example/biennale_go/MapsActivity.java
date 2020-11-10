@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.biennale_go.Classes.PoiInfoWindow;
+import com.example.biennale_go.Classes.RetrieveFeedTask;
 import com.example.biennale_go.Utility.CurrentUser;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -89,7 +90,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FrameLayout dialogFrameLayout;
     private View dialog;
     private Double POICollisionRange = (360.0 * 30.0) / 40075000.0; // 100 meters
-    private ArrayList polyline;
+    //    private ArrayList polyline;
+    private ArrayList<ArrayList> polyline = new ArrayList<>();
+
     private Bundle b;
     private double userLat = 0;
     private double userLong = 0;
@@ -106,7 +109,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private TextView title;
     private ImageView iconImage;
     LatLng userCurrentLocation;
-    private boolean routeIsdraw = false;
+    private int routeIsdraw = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,6 +188,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .apiKey(getString(R.string.google_maps_key2))
                     .build();
         }
+        routeIsdraw = 0;
     }
 
     private void calculateDirections(LatLng from, LatLng to){
@@ -267,6 +271,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         startActivity(intent);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        routeIsdraw = 0;
+    }
+
     void getLocation() {
         try {
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -280,9 +290,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     void setMapLocation(double latitude, double longtitude) {
         userCurrentLocation = new LatLng(latitude, longtitude);
-        if (!polyline.isEmpty() && !routeIsdraw) {
+        if (!polyline.isEmpty() && routeIsdraw < 2) {
             drawRoutes();
-            routeIsdraw = true;
+            routeIsdraw++;
         }
         float zoomLevel = 17.0f;
         if (userLat < 1) {
@@ -449,8 +459,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 intent.putExtra("poiImage", event.getImage());
                 intent.putExtra("poiAddress", event.getAddress());
                 intent.putExtra("poiDescription", event.getDescription());
-                intent.putExtra("longitude", event.getLatitude().toString());
-                intent.putExtra("latitude", event.getLongitude().toString());
+                intent.putExtra("longitude", event.getLongitude().toString());
+                intent.putExtra("latitude", event.getLatitude().toString());
                 startActivity(intent);
             }
         });
@@ -505,15 +515,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         poiInfoWindow.setAddress(address);
                         poiInfoWindow.setLatitude(latitude);
                         poiInfoWindow.setLongitude(longitude);
-                        if(poiScores.contains(name)) {
-                            Marker poMark = mMap.addMarker(new MarkerOptions().position(POI).title(name).icon(BitmapDescriptorFactory.fromBitmap(checkedMarker)));
-                            poMark.setTag(poiInfoWindow);
-                            markers.add(poMark);
-                        } else {
-                            Marker poMark = mMap.addMarker(new MarkerOptions().position(POI).title(name).icon(BitmapDescriptorFactory.fromBitmap(questionMarker)));
-                            poMark.setTag(poiInfoWindow);
-                            markers.add(poMark);
-                        }
+
                         if(searchPoiName != null && searchPoiName.equals(name)) {
                             float zoomLevel = 17.0f;
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(POI, zoomLevel));
@@ -524,29 +526,47 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         poiDescriptions.add(description);
                         poiLatitude.add(latitude);
                         poiLongitude.add(longitude);
-                        int SDK_INT = android.os.Build.VERSION.SDK_INT;
-                        if (SDK_INT > 8) {
-                            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-                                    .permitAll().build();
-                            StrictMode.setThreadPolicy(policy);
-                            URL url = null;
-                            try {
-                                url = new URL(image);
-                            } catch (MalformedURLException e) {
-                                e.printStackTrace();
+//                        int SDK_INT = android.os.Build.VERSION.SDK_INT;
+//                        if (SDK_INT > 8) {
+//                            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+//                                    .permitAll().build();
+//                            StrictMode.setThreadPolicy(policy);
+//                            URL url = null;
+//                            try {
+//                                url = new URL(image);
+//                            } catch (MalformedURLException e) {
+//                                e.printStackTrace();
+//                            }
+//                            Bitmap result = null;
+//                            try {
+//                                result = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                            poiBitmapImages.add(result);
+//                            poiInfoWindow.setBitMapImage(result);
+//                        }
+                        RetrieveFeedTask asyncTask = new RetrieveFeedTask(new AsyncResponse() {
+                            @Override
+                            public void processFinish(Bitmap output) {
+                                if (poiScores.contains(name)) {
+                                    Marker poMark = mMap.addMarker(new MarkerOptions().position(POI).title(name).icon(BitmapDescriptorFactory.fromBitmap(checkedMarker)));
+                                    poMark.setTag(poiInfoWindow);
+                                    markers.add(poMark);
+                                } else {
+                                    Marker poMark = mMap.addMarker(new MarkerOptions().position(POI).title(name).icon(BitmapDescriptorFactory.fromBitmap(questionMarker)));
+                                    poMark.setTag(poiInfoWindow);
+                                    markers.add(poMark);
+                                }
+                                poiBitmapImages.add(output);
+                                poiInfoWindow.setBitMapImage(output);
                             }
-                            Bitmap result = null;
-                            try {
-                                result = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            poiBitmapImages.add(result);
-                            poiInfoWindow.setBitMapImage(result);
-                        }
+                        });
+                        asyncTask.execute(image);
                         }
                     loadingPanel.setVisibility(View.GONE);
                     mapPanel.setVisibility(View.VISIBLE);
+
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }

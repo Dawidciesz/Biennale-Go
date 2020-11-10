@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -61,7 +62,8 @@ public class RoutesListFragment extends Fragment implements RoadListAdapter.OnRo
 
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
-
+        galleryLogo = (ImageView) view.findViewById(R.id.galleryLogo);
+        galleryLogo.startAnimation(AnimationUtils.loadAnimation(this.getContext(), R.anim.loading_scale));
         recyclerView = (RecyclerView) view.findViewById(R.id.road_recycler);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
