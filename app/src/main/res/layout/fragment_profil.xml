@@ -35,11 +35,9 @@
     <FrameLayout
         android:id="@+id/dialog_colors"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
-        android:layout_marginVertical="64dp"
+        android:layout_centerInParent="true"
         android:background="@drawable/poidialogbg"
         android:visibility="invisible"
         tools:layout_editor_absoluteX="89dp"
@@ -47,7 +45,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/save_settings_button"
@@ -87,8 +85,8 @@
                 android:id="@+id/profilPicturesRecycler"
                 android:layout_width="281dp"
                 android:layout_height="171dp"
-                android:layout_marginLeft="16dp"
                 android:layout_alignStart="@+id/dialogLayout"
+                android:layout_marginLeft="16dp"
                 android:layout_marginBottom="15dp"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
                 app:layout_constraintEnd_toEndOf="parent"
