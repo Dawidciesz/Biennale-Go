@@ -73,6 +73,7 @@ public class ProfilFragment extends Fragment implements profilePictureAdapter.On
             @Override
             public void onClick(View v) {
                 chosenPicture.setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+                chosenPicture2.setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
                 profileColor = "0xFFFF0000";
             }
         });
@@ -81,6 +82,7 @@ public class ProfilFragment extends Fragment implements profilePictureAdapter.On
             @Override
             public void onClick(View v) {
                 chosenPicture.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
+                chosenPicture2.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
                 profileColor = "0xFF00FF00";
             }
         });
@@ -89,6 +91,7 @@ public class ProfilFragment extends Fragment implements profilePictureAdapter.On
             @Override
             public void onClick(View v) {
                 chosenPicture.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
+                chosenPicture2.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
                 profileColor = "0xFF0000FF";
             }
         });
@@ -97,6 +100,7 @@ public class ProfilFragment extends Fragment implements profilePictureAdapter.On
             @Override
             public void onClick(View v) {
                 chosenPicture.setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_IN);
+                chosenPicture2.setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_IN);
                 profileColor = "0xFFFFFF00";
             }
         });

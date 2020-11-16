@@ -12,11 +12,12 @@
         android:id="@+id/linearLayout3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginBottom="64dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/relativeLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/imageView4">
 
         <TextView
             android:id="@+id/questionNumberTextView"
@@ -68,18 +69,19 @@
 
     <RelativeLayout
         android:id="@+id/relativeLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="464dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:gravity="center"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
         <RelativeLayout
+            android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:id="@+id/imageView"
 
             >
 
@@ -102,9 +104,9 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginLeft="12dp"
                 android:layout_marginEnd="12dp"
-                android:layout_toRightOf="@id/imageA"
                 android:layout_marginRight="12dp"
                 android:layout_marginBottom="10dp"
+                android:layout_toRightOf="@id/imageA"
                 android:text="Button" />
 
 
@@ -126,20 +128,21 @@
                 android:layout_width="128dp"
                 android:layout_height="192dp"
                 android:layout_below="@id/imageB"
-                android:layout_toRightOf="@id/imageC"
                 android:layout_marginStart="12dp"
                 android:layout_marginLeft="12dp"
                 android:layout_marginEnd="12dp"
                 android:layout_marginRight="12dp"
                 android:layout_marginBottom="8dp"
+                android:layout_toRightOf="@id/imageC"
 
                 android:text="Button" />
         </RelativeLayout>
+
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="464dp"
             android:id="@+id/buttonsView"
->
+            android:layout_width="wrap_content"
+            android:layout_height="464dp">
+
             <Button
                 android:id="@+id/answerA"
                 android:layout_width="match_parent"
@@ -199,11 +202,12 @@
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:src="@drawable/quiznum1"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
