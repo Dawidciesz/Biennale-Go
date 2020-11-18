@@ -130,8 +130,11 @@ public class LoginActivityGoogleFB extends Activity implements View.OnClickListe
             startActivity(intent);
         }
 
-      public void opeAccountSettingsActivity() {
+    public void opeAccountSettingsActivity(String name, String email) {
             Intent intent = new Intent(this, AccountSettingsActivity.class);
+        intent.putExtra("name", name);
+        intent.putExtra("email", email);
+        intent.putExtra("pass", "none");
             startActivity(intent);
     }
 
@@ -192,8 +195,8 @@ public class LoginActivityGoogleFB extends Activity implements View.OnClickListe
                                             openMenuActivity();
                                         }
                                         else {
-                                            createUser(0, user.getDisplayName(), user.getEmail());
-                                            opeAccountSettingsActivity();
+//                                            createUser(0, user.getDisplayName(), user.getEmail());
+                                            opeAccountSettingsActivity(user.getDisplayName(), user.getEmail());
                                         }
                                     }}});
 
@@ -223,8 +226,8 @@ public class LoginActivityGoogleFB extends Activity implements View.OnClickListe
                                         openMenuActivity();
                                     }
                                     else {
-                                        createUser(0, account.getDisplayName(), account.getEmail());
-                                        opeAccountSettingsActivity();
+//                                        createUser(0, account.getDisplayName(), account.getEmail());
+                                        opeAccountSettingsActivity(account.getDisplayName(), account.getEmail());
                                     }
                                 }}});
                     } else {
