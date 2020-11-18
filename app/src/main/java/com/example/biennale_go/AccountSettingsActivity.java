@@ -120,12 +120,12 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
                     errorMessage.setVisibility(View.VISIBLE);
                     errorMessage.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shake));
                 } else {
-                    if (currentUser.isEmailVerified())
+                    if (currentUser.isEmailVerified() || getIntent().getStringExtra("pass").equals("none"))
                         createUserDetails();
                 }
                 if (currentUser.isEmailVerified()) {
                     errorEmail.setText("Adres email zweryfikowany");
-                    errorEmail.setTextColor(Color.parseColor("#123dp"));
+                    errorEmail.setTextColor(Color.parseColor("#34d5eb"));
                 } else {
                     errorEmail.setText("Potwierdź adres email");
                     errorEmail.setTextColor(Color.parseColor("#a8323c"));
@@ -145,8 +145,9 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
         items.add(new ProfilPictureItem(res.getDrawable(2131165358), String.valueOf(R.drawable.ic_heart_circles)));
         items.add(new ProfilPictureItem(res.getDrawable(2131165369), String.valueOf(R.drawable.ic_star)));
         items.add(new ProfilPictureItem(res.getDrawable(2131165370), String.valueOf(R.drawable.ic_tru)));
-
-        createAccount(getIntent().getStringExtra("email"), getIntent().getStringExtra("pass"));
+        if (!getIntent().getStringExtra("pass").equals("none")) {
+            createAccount(getIntent().getStringExtra("email"), getIntent().getStringExtra("pass"));
+        }
     }
 
     public void createAccount(String email, String password) {
@@ -173,7 +174,8 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
         CurrentUser.fetchPOIScores();
         createUser();
         Intent intent = new Intent(AccountSettingsActivity.this, MainActivity.class);
-        intent.putExtra("from", "new_account");
+        intent.putExtra("fragment", "new_account");
+        intent.putExtra("infoWindowClick", "new_account");
         startActivity(intent);
     }
 
