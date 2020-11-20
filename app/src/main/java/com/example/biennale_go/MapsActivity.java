@@ -4,21 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -34,13 +33,18 @@ import android.widget.Toast;
 import com.example.biennale_go.Classes.PoiInfoWindow;
 import com.example.biennale_go.Classes.RetrieveFeedTask;
 import com.example.biennale_go.Utility.CurrentUser;
+import com.example.biennale_go.Utility.GeofenceHelper;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingClient;
+import com.google.android.gms.location.GeofencingRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.Dot;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -50,6 +54,8 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RoundCap;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -65,9 +71,6 @@ import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.TravelMode;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -78,7 +81,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ImageView poiButton, routesButton, followButton;
     LocationManager locationManager;
     private TextView  dialogPoiText;
-    private static final String TAG = "QuizMapActicity";
+    private static final String TAG = "Geofence";
     private ArrayList<String> poiNames, poiAddresses, poiDescriptions, poiImages, poiScores;
     private ArrayList<Double> poiLatitude, poiLongitude;
     private ArrayList<Polyline> polylineList = new ArrayList<>();
@@ -110,7 +113,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ImageView iconImage;
     LatLng userCurrentLocation;
     private int routeIsdraw = 0;
-
+    private GeofencingClient geofencingClient;
+    private ArrayList<Geofence> geofenceList = new ArrayList<>();
+    private PendingIntent geofencePendingIntent;
+    private GeofenceHelper geofenceHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -189,6 +195,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .build();
         }
         routeIsdraw = 0;
+        geofencingClient = LocationServices.getGeofencingClient(this);
+        geofenceHelper = new GeofenceHelper(this);
     }
 
     private void calculateDirections(LatLng from, LatLng to){
@@ -226,6 +234,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
     }
+//    private GeofencingRequest getGeofencingRequest() {
+//        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
+//        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
+//        builder.addGeofences(geofenceList);
+//        return builder.build();
+//    }
+//
+//    private PendingIntent getGeofencePendingIntent() {
+//        // Reuse the PendingIntent if we already have it.
+//        if (geofencePendingIntent != null) {
+//            return geofencePendingIntent;
+//        }
+//        Intent intent = new Intent(this, GeofenceBroadcastReceiver.class);
+//        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
+//        // calling addGeofences() and removeGeofences().
+//        geofencePendingIntent = PendingIntent.getBroadcast(this, 2607, intent, PendingIntent.
+//                FLAG_UPDATE_CURRENT);
+//        return geofencePendingIntent;
+//    }
 
     private void addPolylinesToMap(final DirectionsResult result){
         new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -280,8 +307,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     void getLocation() {
         try {
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 50,
-                    3, this);
+            if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 50, 3, this);
+            } else {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 50, 3, this);
+            }
         }
         catch(SecurityException e) {
             e.printStackTrace();
@@ -347,6 +377,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         playerMarkFlag = !playerMarkFlag;
     }
 
+    public void addCircle(LatLng latLng, float radius) {
+        CircleOptions circleOptions = new CircleOptions();
+        circleOptions.center(latLng);
+        circleOptions.radius(radius);
+        circleOptions.strokeColor(Color.argb(255, 255, 0, 0));
+        circleOptions.fillColor(Color.argb(64, 255, 0, 0));
+        circleOptions.strokeWidth(4);
+        mMap.addCircle(circleOptions);
+    }
     private void checkIfPoi(double player_latitude, double player_longtitude){
         for (Integer i = 0; i < poiNames.size(); i++) {
             final Double POI_latitude = poiLatitude.get(i);
@@ -397,12 +436,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng((Double) firstEl.get(0), (Double) firstEl.get(1)), 16));
     }
 
+    private void addGeofence(LatLng latLng, float radius, String poiName) {
+
+        Geofence geofence = geofenceHelper.getGeofence(poiName, latLng, radius, Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL | Geofence.GEOFENCE_TRANSITION_EXIT);
+        GeofencingRequest geofencingRequest = geofenceHelper.getGeofencingRequest(geofence);
+        PendingIntent pendingIntent = geofenceHelper.getPendingIntent();
+
+        geofencingClient.addGeofences(geofencingRequest, pendingIntent)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "onSuccess: Geofence Added...");
+                        addCircle(latLng, 200);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        String errorMessage = geofenceHelper.getErrorString(e);
+                        Log.d(TAG, "onFailure: " + errorMessage);
+                    }
+                });
+    }
     @Override
     public void onMapReady(GoogleMap googleMap) {
         dialogFrameLayout.setVisibility(View.VISIBLE);
         mMap = googleMap;
         mMap.setLatLngBoundsForCameraTarget(elblagBorder);
         mMap.setMinZoomPreference(13.8f);
+        mMap.setMyLocationEnabled(true);
         fetchPOIScores();
         try {
             boolean success = mMap.setMapStyle(
@@ -563,10 +625,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             }
                         });
                         asyncTask.execute(image);
-                        }
+                        addGeofence(new LatLng(latitude, longitude), 200, name);
+                    }
                     loadingPanel.setVisibility(View.GONE);
                     mapPanel.setVisibility(View.VISIBLE);
-
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }
