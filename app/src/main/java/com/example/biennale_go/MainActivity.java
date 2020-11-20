@@ -1,6 +1,5 @@
 package com.example.biennale_go;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -53,7 +52,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
@@ -199,10 +197,6 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
 
     @Override
     public void onBackPressed() {
-//        Intent intent = new Intent(Intent.ACTION_MAIN);
-//        intent.addCategory(Intent.CATEGORY_HOME);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        startActivity(intent);
         onSlideViewButtonClick();
     }
 
@@ -376,6 +370,8 @@ public class MainActivity extends FragmentActivity implements MenuListAdapter.On
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
+        // android 10    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
     }
 
     public boolean isServicesOK() {

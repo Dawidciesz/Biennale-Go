@@ -8,6 +8,7 @@
          location permissions for the 'MyLocation' functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="com.weaverprojects.gpstest.permission.MAPS_RECEIVE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -22,6 +23,16 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         tools:ignore="GoogleAppIndexingWarning">
+        <receiver
+            android:name="GeofenceBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.aol.android.geofence.ACTION_RECEIVE_GEOFENCE" />
+            </intent-filter>
+        </receiver>
+
+
         <activity android:name=".MenuActivity" />
         <activity android:name=".RegistrationActivity" />
         <activity android:name=".LoginActivity" />
