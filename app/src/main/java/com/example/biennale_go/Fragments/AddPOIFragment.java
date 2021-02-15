@@ -7,12 +7,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.biennale_go.MainActivity;
 import com.example.biennale_go.R;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -29,6 +31,14 @@ public class AddPOIFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_poi, container, false);
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                ((MainActivity) getActivity()).onSlideViewButtonClick();
+            }                // Handle the back button event
+
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
         addPOI = (Button) view.findViewById(R.id.create);
         address = (EditText) view.findViewById(R.id.adres);
         latitude = (EditText) view.findViewById(R.id.latitude);

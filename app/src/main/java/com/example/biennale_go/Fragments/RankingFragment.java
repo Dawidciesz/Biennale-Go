@@ -5,11 +5,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-
-import com.example.biennale_go.Adapters.QuizListAdapter;
 import com.example.biennale_go.Adapters.RankingListAdapter;
+import com.example.biennale_go.MainActivity;
 import com.example.biennale_go.R;
 import com.example.biennale_go.Utility.CurrentUser;
 import com.example.biennale_go.Utility.RankingItem;
@@ -20,7 +18,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,10 +25,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -49,6 +46,14 @@ public class RankingFragment extends Fragment implements RankingListAdapter.OnIt
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ranking, container, false);
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                ((MainActivity) getActivity()).onSlideViewButtonClick();
+            }                // Handle the back button event
+
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
         recyclerView = (RecyclerView) view.findViewById(R.id.ranking_list_recycler);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -66,12 +71,14 @@ public class RankingFragment extends Fragment implements RankingListAdapter.OnIt
 
                             items.add(new RankingItem(document.get("name").toString(),
                                     Integer.parseInt(document.get("score").toString()) + (scores.size() * 3),
-                                    Double.parseDouble(document.get("distance_traveled").toString())));
+                                    Double.parseDouble(document.get("distance_traveled").toString()),
+                                    document.get("profile_img").toString(), document.get("profile_color").toString()));
                             adapter.notifyDataSetChanged();
                         } else {
                             items.add(new RankingItem(document.get("name").toString(),
                                     Integer.parseInt(document.get("score").toString()),
-                                    Double.parseDouble(document.get("distance_traveled").toString())));
+                                    Double.parseDouble(document.get("distance_traveled").toString()),
+                                    document.get("profile_img").toString(), document.get("profile_color").toString()));
                             adapter.notifyDataSetChanged();
                         }
                     }

@@ -1,8 +1,11 @@
 package com.example.biennale_go;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -11,11 +14,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends Activity implements View.OnClickListener {
     FirebaseAuth mAuth;
     private EditText emailField;
     private EditText passwordField;
@@ -24,7 +25,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_login);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.fragment_login_email);
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
         emailField = findViewById(R.id.fieldEmail);
@@ -36,7 +39,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 int idView = v.getId();
                 if (idView == R.id.emailSignInButton) {
                     if (validate()) {
-                        signIn(emailField.getText().toString(), passwordField.getText().toString());
+                        signIn(emailField.getText().toString().toLowerCase(), passwordField.getText().toString());
                     }
                 }
             }
@@ -49,7 +52,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void openMenuActivity() {
-        Intent intent = new Intent(this, MenuActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 

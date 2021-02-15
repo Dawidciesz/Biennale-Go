@@ -1,5 +1,6 @@
 package com.example.biennale_go.Fragments;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.biennale_go.MainActivity;
 import com.example.biennale_go.MapsActivity;
 import com.example.biennale_go.R;
 import java.io.IOException;
@@ -32,6 +35,14 @@ public class RoutesDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         view = inflater.inflate(R.layout.activity_routes_details, container, false);
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                ((MainActivity) getActivity()).onSlideViewButtonClick();
+            }                // Handle the back button event
+
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
         b = getArguments();
         if (b != null) {
             name = (String) b.getString("name");
@@ -39,13 +50,11 @@ public class RoutesDetailsFragment extends Fragment {
             color = (String) b.getString("color");
             description = (String) b.getString("description");
             polyline = (ArrayList) b.getSerializable("polyline");
-            final ArrayList streets = (ArrayList) b.getSerializable("streets");
             nameTextView = (TextView) view.findViewById(R.id.nameTextView);
             nameTextView.setText(name);
             descriptionTextView = (TextView) view.findViewById(R.id.descriptionTextView);
             descriptionTextView.setText(description);
             streetsTextView = (TextView) view.findViewById(R.id.streetsTextView);
-            streetsTextView.setText(streets.toString());
 
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
@@ -71,7 +80,6 @@ public class RoutesDetailsFragment extends Fragment {
                     Intent intent = new Intent(getContext(), MapsActivity.class);
                     Bundle b = new Bundle();
                     b.putSerializable("polyline", polyline);
-                    b.putString("polylineColor", color);
                     intent.putExtras(b);
                     startActivity(intent);
                 }

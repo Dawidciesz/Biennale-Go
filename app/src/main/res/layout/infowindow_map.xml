@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout android:id="@+id/dialogLayout"
+
+    android:background="@drawable/poidialogbg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#CCCCCC">
+
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/window_image"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        app:srcCompat="@drawable/awardbronze" />
+
+
+    <TextView
+        android:id="@+id/window_title"
+        android:layout_width="96dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/window_image"
+        android:gravity="center"
+        android:text="TITLE"
+        android:textColor="#FFFFFF"
+        android:layout_marginTop="5dp"
+        android:textSize="16sp" />
+
+    <!--<TextView-->
+    <!--android:id="@+id/window_description"-->
+    <!--android:layout_width="237dp"-->
+    <!--android:layout_height="58dp"-->
+    <!--android:layout_below="@id/window_title"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:layout_marginTop="10dp"-->
+    <!--android:gravity="center"-->
+    <!--android:text="TextView"-->
+     <!--/>-->
+</RelativeLayout>
+</FrameLayout>

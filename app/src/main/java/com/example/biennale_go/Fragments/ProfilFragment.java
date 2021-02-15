@@ -1,112 +1,163 @@
 package com.example.biennale_go.Fragments;
 
+import android.annotation.SuppressLint;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+
+import com.example.biennale_go.Adapters.profilePictureAdapter;
+import com.example.biennale_go.MainActivity;
 import com.example.biennale_go.R;
 import com.example.biennale_go.Utility.CurrentUser;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.biennale_go.Utility.ProfilPictureItem;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-public class ProfilFragment extends Fragment {
+public class ProfilFragment extends Fragment implements profilePictureAdapter.OnProfilePictureItemClick {
     private  View view;
-    private TextView userName;
-    private TextView placesVisitedText;
-    private TextView quizesCompletedText;
-    private TextView favoritePlaceText;
-    private TextView distanceTraveledText;
-    private ArrayList<String> poiScores;
-    private int poiSize;
-    private ArrayList scoresList;
-    private Map<String, Integer> scores = new HashMap<String, Integer>();
+    private RecyclerView recyclerView;
+    private List<ProfilPictureItem> items = new ArrayList<>();
+    private RecyclerView.Adapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
+    private ImageView chosenPicture, chosenPicture2;
+    private FrameLayout red, green, blue, yellow, dialog;
+    private String profileColor = "", profilName = "";
+    private Button saveSettingsButton, showFrameLayoutButton;
+    private FirebaseFirestore db;
 
+    @SuppressLint("ResourceType")
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         view = inflater.inflate(R.layout.fragment_profil, container, false);
-        CurrentUser.getPOICount(CurrentUser.email);
-        fetchScores();
-        userName = (TextView) view.findViewById(R.id.userName);
-        userName.setText(CurrentUser.name);
-        fetchPOIScores();
-        placesVisitedText = (TextView) view.findViewById(R.id.map_text_botom);
-
-        quizesCompletedText = (TextView) view.findViewById(R.id.test_text_botom);
-
-        favoritePlaceText = (TextView) view.findViewById(R.id.marker_text_botom);
-        favoritePlaceText.setText(CurrentUser.favoritePOI);
-
-        distanceTraveledText = (TextView) view.findViewById(R.id.route_text_botom);
-        distanceTraveledText.setText(getResources().getString(R.string.distance_traveled, CurrentUser.distance_traveled/1000));
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                ((MainActivity) getActivity()).onSlideViewButtonClick();
+            }                // Handle the back button event
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+        profilName = CurrentUser.profilPictureId;
+        profileColor = CurrentUser.profilPictureColor;
+        Resources res = getResources();
+        db = FirebaseFirestore.getInstance();
+        FirebaseApp.initializeApp(getContext());
+        dialog = (FrameLayout) view.findViewById(R.id.dialog_colors);
+        chosenPicture = (ImageView) view.findViewById(R.id.choosen_image);
+        chosenPicture2 = (ImageView) view.findViewById(R.id.choosen_image2);
+        chosenPicture.setImageDrawable(getResources().getDrawable(Integer.parseInt(CurrentUser.profilPictureId)));
+        chosenPicture.setColorFilter(Color.parseColor(CurrentUser.profilPictureColor), PorterDuff.Mode.SRC_IN);
+        chosenPicture2.setImageDrawable(getResources().getDrawable(Integer.parseInt(CurrentUser.profilPictureId)));
+        chosenPicture2.setColorFilter(Color.parseColor(CurrentUser.profilPictureColor), PorterDuff.Mode.SRC_IN);
+        red = (FrameLayout)  view.findViewById(R.id.red);
+        red.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chosenPicture.setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+                chosenPicture2.setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+                profileColor = "0xFFFF0000";
+            }
+        });
+        green = (FrameLayout)  view.findViewById(R.id.green);
+        green.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chosenPicture.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
+                chosenPicture2.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
+                profileColor = "0xFF00FF00";
+            }
+        });
+        blue = (FrameLayout)  view.findViewById(R.id.blue);
+        blue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chosenPicture.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
+                chosenPicture2.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
+                profileColor = "0xFF0000FF";
+            }
+        });
+        yellow = (FrameLayout)  view.findViewById(R.id.yellow);
+        yellow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chosenPicture.setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_IN);
+                chosenPicture2.setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_IN);
+                profileColor = "0xFFFFFF00";
+            }
+        });
+        showFrameLayoutButton = (Button)  view.findViewById(R.id.show_frame_layout);
+        showFrameLayoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.setVisibility(View.VISIBLE);
+                dialog.bringToFront();
+                showFrameLayoutButton.setVisibility(View.INVISIBLE);
+            }
+        });
+        saveSettingsButton = (Button)  view.findViewById(R.id.save_settings_button);
+        saveSettingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (profileColor.contains("x")) {
+                    profileColor = "#" + profileColor.substring(profileColor.lastIndexOf("x") + 1);
+                }
+                DocumentReference docUpdateScores = db.collection("users").document(CurrentUser.email);
+                if (profileColor == null && profilName == null) {
+                } else if (profileColor != null && profilName == null) {
+                    CurrentUser.profilPictureColor = profileColor;
+                    docUpdateScores.update("profile_color", profileColor);
+                } else if (profileColor == null && profilName != null) {
+                    CurrentUser.profilPictureId = profilName;
+                    docUpdateScores.update("profile_img", profilName);
+                } else {
+                    CurrentUser.profilPictureColor = profileColor;
+                    CurrentUser.profilPictureId = profilName;
+                    docUpdateScores.update("profile_color", profileColor);
+                    docUpdateScores.update("profile_img", profilName);
+                }
+                dialog.setVisibility(View.INVISIBLE);
+                showFrameLayoutButton.setVisibility(View.VISIBLE);
+            }
+        });
+        recyclerView = (RecyclerView) view.findViewById(R.id.profilPicturesRecycler);
+//        layoutManager = new LinearLayoutManager(this);
+        items.add(new ProfilPictureItem(res.getDrawable(2131165352), String.valueOf(R.drawable.ic_android)));
+        items.add(new ProfilPictureItem(res.getDrawable(2131165351), String.valueOf(R.drawable.ic_1538505207)));
+        items.add(new ProfilPictureItem(res.getDrawable(2131165354), String.valueOf(R.drawable.ic_circie_cube)));
+        items.add(new ProfilPictureItem(res.getDrawable(2131165358), String.valueOf(R.drawable.ic_heart_circles)));
+        items.add(new ProfilPictureItem(res.getDrawable(2131165369), String.valueOf(R.drawable.ic_star)));
+        items.add(new ProfilPictureItem(res.getDrawable(2131165370), String.valueOf(R.drawable.ic_tru)));
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+//        recyclerView.setLayoutManager(layoutManager);
+        adapter = new profilePictureAdapter(items, this);
+        recyclerView.setAdapter(adapter);
 
         return view;
     }
-    private void fetchPOIScores() {
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("POI_scores").document(CurrentUser.uId);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        poiScores = (ArrayList<String>) document.getData().get("scores");
-                        CurrentUser.poiScores = poiScores;
-                    } else {
-                        poiScores = new ArrayList<String>();
-                    }
-                } else {
-                    Log.d("", "get failed with ", task.getException());
-                }
 
-                placesVisitedText.setText(getResources().getString(R.string.places_visited, poiScores.size()));
-            }
-        });
+    @Override
+    public void onProfilePictureItemClick(int position, String imageName) {
+        profilName = imageName;
+        chosenPicture.setImageDrawable(items.get(position).getImage());
+        chosenPicture2.setImageDrawable(items.get(position).getImage());
     }
-
-    public void fetchScores() {
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("quizzes_scores").document(CurrentUser.uId);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        scoresList = new ArrayList((ArrayList) document.getData().get("scores"));
-                        for(int i=0; i<scoresList.size(); i++) {
-                            Map<String, String> temp = new HashMap<String, String>();
-                            temp.putAll((HashMap<String,String>)scoresList.get(i));
-                            String name = temp.get("name");
-                            Integer score = Integer.parseInt(temp.get("score"));
-                            if (score > 0){
-                                CurrentUser.score += score;
-                            scores.put(name, score);
-                            }
-                        }
-                    } else {
-                    }
-
-                } else {
-                    Log.d("", "get failed with ", task.getException());
-                }
-                quizesCompletedText.setText(getResources().getString(R.string.quizes_finished, scores.size()));
-            }
-
-        });
-    }
-    }
+}

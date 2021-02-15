@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+
+        <RelativeLayout
+            android:id="@+id/info"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@id/topBar"
+            android:layout_marginTop="64dp"
+            android:gravity="center_vertical">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="215dp"
+                    android:layout_height="39dp"
+                    android:layout_alignParentTop="true"
+
+
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="Załóź konto,"
+                    android:textColor="#000000"
+                    android:textSize="30dp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:fontFamily="sans-serif-light"
+                    />
+
+                <TextView
+                    android:id="@+id/underTitle"
+                    android:layout_width="321dp"
+                    android:layout_height="158dp"
+
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="wybierz jedną z tras                                 i odkrywaj wraz z nami elbląskie formy przestrzenne."
+                    android:textColor="#000000"
+                    android:textSize="24sp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/title"
+                    android:fontFamily="sans-serif-light"
+                    />
+
+                <TextView
+                    android:id="@+id/nextToImg"
+                    android:layout_width="277dp"
+                    android:layout_height="262dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="188dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="end"
+                    android:text="Zasada jest prosta,
+za każdym razem
+gdy znajdziesz sie
+przy jednej z rzeźb
+odpowiedź na dwa
+proste pytania
+z nią związane.
+Zbieraj punkty i porównuj
+je ze swoimi znajomymi!"
+                    android:textColor="#000000"
+                    android:textSize="24sp"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/underTitle"
+                    android:fontFamily="sans-serif-light"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </RelativeLayout>
+    </RelativeLayout>

@@ -1,11 +1,15 @@
 package com.example.biennale_go;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.Signature;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -14,33 +18,62 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.example.biennale_go.Utility.CurrentUser;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.auth.FirebaseAuth;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import static com.example.biennale_go.Utility.Constants.ERROR_DIALOG_REQUEST;
 import static com.example.biennale_go.Utility.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.example.biennale_go.Utility.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 
-public class MenuActivity extends AppCompatActivity {
+public class MenuActivity extends Activity {
     private LinearLayout mapCard, quizCard, poiCard, routesCard, profilCard, adminPanel, logOut;
     private boolean mLocationPermissionGranted = false;
     private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
-        CurrentUser.setCurrentUser();
+        PackageInfo info;
+        try {
+
+            info = getPackageManager().getPackageInfo("com.example.biennale_go", PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md;
+                md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                String something = new String(Base64.encode(md.digest(), 0));
+                Log.e("hash key", something);
+            }
+        } catch (PackageManager.NameNotFoundException e1) {
+            Log.e("name not found", e1.toString());
+        } catch (NoSuchAlgorithmException e) {
+            Log.e("no such an algorithm", e.toString());
+        } catch (Exception e) {
+            Log.e("exception", e.toString());
+        }
+//        CurrentUser.setCurrentUser();
         setContentView(R.layout.activity_main_menu);
 
         mapCard = (LinearLayout) findViewById(R.id.mapCard);
         mapCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openMapActivity();
+                if (mLocationPermissionGranted) {
+                    openMapActivity();
+                } else {
+                    getLocationPermission();
+                }
             }
         });
         profilCard = (LinearLayout) findViewById(R.id.profilCard);
@@ -90,10 +123,17 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
+                LoginManager.getInstance().logOut();
                 Intent i = new Intent(MenuActivity.this, LoginRegisterActivity.class);
                 startActivity(i);
             }
         });
+
+        if(savedInstanceState.getString("fragmnet").equals("roads")) {
+            openRoutesListActivity();
+        } else if(savedInstanceState.getString("fragmnet").equals("pois")) {
+            openPoiActivity();
+        }
     }
 
     public void openMapActivity(){
@@ -168,7 +208,6 @@ public class MenuActivity extends AppCompatActivity {
                         startActivityForResult(enableGpsIntent, PERMISSIONS_REQUEST_ENABLE_GPS);
                     }
                 });
-
         final AlertDialog alert = builder.create();
         alert.show();
     }
@@ -200,12 +239,10 @@ public class MenuActivity extends AppCompatActivity {
         int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MenuActivity.this);
 
         if(available == ConnectionResult.SUCCESS){
-            //everything is fine and the user can make map requests
             Log.d(TAG, "isServicesOK: Google Play Services is working");
             return true;
         }
         else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
-            //an error occured but we can resolve it
             Log.d(TAG, "isServicesOK: an error occured but we can fix it");
             Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MenuActivity.this, available, ERROR_DIALOG_REQUEST);
             dialog.show();
@@ -219,11 +256,9 @@ public class MenuActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[],
                                            @NonNull int[] grantResults) {
-
         mLocationPermissionGranted = false;
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mLocationPermissionGranted = true;
