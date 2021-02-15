@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -158,6 +159,7 @@ public class AccountSettingsActivity  extends Activity implements profilePicture
                         if (task.isSuccessful()) {
                             sendVerificationEmail();
                         } else {
+                            Log.e("Registration Error", "createUserWithEmail:failure", task.getException());
                         }
                     }
                 });
