@@ -1,13 +1,16 @@
 package com.example.biennale_go;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import android.Manifest;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -76,18 +79,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener, GoogleMap.InfoWindowAdapter{
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener, GoogleMap.InfoWindowAdapter {
     private GoogleMap mMap;
     private ImageView poiButton, routesButton, followButton;
     LocationManager locationManager;
-    private TextView  dialogPoiText;
+    private TextView dialogPoiText;
     private static final String TAG = "Geofence";
     private ArrayList<String> poiNames, poiAddresses, poiDescriptions, poiImages, poiScores;
     private ArrayList<Double> poiLatitude, poiLongitude;
     private ArrayList<Polyline> polylineList = new ArrayList<>();
     private ArrayList<LatLng> endOfPolyline = new ArrayList<>();
     private ArrayList<Bitmap> poiBitmapImages = new ArrayList<>();
-    private ArrayList<Marker> markers= new ArrayList<>();
+    private ArrayList<Marker> markers = new ArrayList<>();
     private CircleImageView poiDialogImage;
     private RelativeLayout loadingPanel, mapPanel;
     private FrameLayout dialogFrameLayout;
@@ -104,7 +107,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String searchPoiName;
     private Boolean playerMarkFlag = false, followPlayerFlag = true;
     private Marker playerMarker;
-    final LatLngBounds elblagBorder = new LatLngBounds(new LatLng(54.146831,19.386889  ), new LatLng(54.189640, 19.437335));
+    final LatLngBounds elblagBorder = new LatLngBounds(new LatLng(36.815189, -11.549458), new LatLng(70.583101, 31.333199));
     private String id = CurrentUser.uId;
     private ImageView galleryLogo;
     private GeoApiContext mGeoApiContext;
@@ -117,6 +120,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<Geofence> geofenceList = new ArrayList<>();
     private PendingIntent geofencePendingIntent;
     private GeofenceHelper geofenceHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,9 +146,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 followPlayerFlag = !followPlayerFlag;
                 if (followPlayerFlag) {
-                    followButton.setImageDrawable(ContextCompat.getDrawable(getBaseContext(),R.drawable.lockclosed));
+                    followButton.setImageDrawable(ContextCompat.getDrawable(getBaseContext(), R.drawable.lockclosed));
                 } else {
-                    followButton.setImageDrawable(ContextCompat.getDrawable(getBaseContext(),R.drawable.lockopen));
+                    followButton.setImageDrawable(ContextCompat.getDrawable(getBaseContext(), R.drawable.lockopen));
                 }
             }
         });
@@ -152,8 +156,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         closePoiDialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    dialogFrameLayout.setZ(0);
-                }});
+                dialogFrameLayout.setZ(0);
+            }
+        });
         b = getIntent().getExtras();
         if (b != null) {
             polyline = (ArrayList) b.getSerializable("polyline");
@@ -184,12 +189,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
         getLocation();
-        if(polyline != null || searchPoiName != null) {
+        if (polyline != null || searchPoiName != null) {
             followPlayerFlag = false; // dont follow player if routes are available
             if (followPlayerFlag) followButton.setBackgroundColor(Color.parseColor("#018786"));
             else followButton.setBackgroundColor(Color.GRAY);
         }
-        if(mGeoApiContext == null){
+        if (mGeoApiContext == null) {
             mGeoApiContext = new GeoApiContext.Builder()
                     .apiKey(getString(R.string.google_maps_key2))
                     .build();
@@ -199,10 +204,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         geofenceHelper = new GeofenceHelper(this);
     }
 
-    private void calculateDirections(LatLng from, LatLng to){
+    private void calculateDirections(LatLng from, LatLng to) {
         Log.d(TAG, "calculateDirections: calculating directions.");
         endOfPolyline.add(new LatLng(to.latitude,
-                        to.longitude));
+                to.longitude));
         com.google.maps.model.LatLng destination = new com.google.maps.model.LatLng(
                 to.latitude,
                 to.longitude
@@ -229,7 +234,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             @Override
             public void onFailure(Throwable e) {
-                Log.e(TAG, "calculateDirections: Failed to get directions: " + e.getMessage() );
+                Log.e(TAG, "calculateDirections: Failed to get directions: " + e.getMessage());
 
             }
         });
@@ -254,33 +259,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //        return geofencePendingIntent;
 //    }
 
-    private void addPolylinesToMap(final DirectionsResult result){
+    private void addPolylinesToMap(final DirectionsResult result) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 Log.d(TAG, "run: result routes: " + result.routes.length);
 
-                for(DirectionsRoute route: result.routes){
+                for (DirectionsRoute route : result.routes) {
                     Log.d(TAG, "run: leg: " + route.legs[0].toString());
                     List<com.google.maps.model.LatLng> decodedPath = PolylineEncoding.decode(route.overviewPolyline.getEncodedPath());
                     List<LatLng> newDecodedPath = new ArrayList<>();
-                    for(com.google.maps.model.LatLng latLng: decodedPath){
+                    for (com.google.maps.model.LatLng latLng : decodedPath) {
                         newDecodedPath.add(new LatLng(
                                 latLng.lat,
                                 latLng.lng
                         ));
                     }
                     polylineList.add(mMap.addPolyline(new PolylineOptions().addAll(newDecodedPath)));
-                    polylineList.get(polylineList.size()-1).setColor(Color.BLUE);
-                    polylineList.get(polylineList.size()-1).setClickable(true);
-                    polylineList.get(polylineList.size()-1).setWidth(10);
-                    polylineList.get(polylineList.size()-1).setStartCap(new RoundCap());
-                    polylineList.get(polylineList.size()-1).setStartCap(new RoundCap());
+                    polylineList.get(polylineList.size() - 1).setColor(Color.BLUE);
+                    polylineList.get(polylineList.size() - 1).setClickable(true);
+                    polylineList.get(polylineList.size() - 1).setWidth(10);
+                    polylineList.get(polylineList.size() - 1).setStartCap(new RoundCap());
+                    polylineList.get(polylineList.size() - 1).setStartCap(new RoundCap());
                 }
             }
         });
     }
-    public void openPoiActivity(){
+
+    public void openPoiActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         Bundle b = new Bundle();
         b.putSerializable("names", poiNames);
@@ -288,13 +294,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         b.putSerializable("images", poiImages);
         b.putSerializable("addresses", poiAddresses);
         b.putSerializable("descriptions", poiDescriptions);
-        intent.putExtra("fragment","pois");
+        intent.putExtra("fragment", "pois");
         startActivity(intent);
     }
 
-    public void openRoutesListActivity(){
+    public void openRoutesListActivity() {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("fragment","routes");
+        intent.putExtra("fragment", "routes");
         startActivity(intent);
     }
 
@@ -312,8 +318,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             } else {
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 50, 3, this);
             }
-        }
-        catch(SecurityException e) {
+        } catch (SecurityException e) {
             e.printStackTrace();
         }
     }
@@ -328,8 +333,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (userLat < 1) {
             userLat = latitude;
             userLong = longtitude;
-        }
-        else if(userLat != userCurrentLocation.latitude && userLong != userCurrentLocation.longitude) {
+        } else if (userLat != userCurrentLocation.latitude && userLong != userCurrentLocation.longitude) {
             Location locationA = new Location("A");
             locationA.setLatitude(userLat);
             locationA.setLongitude(userLong);
@@ -344,9 +348,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             userLat = latitude;
             userLong = longtitude;
         }
-        if(!playerMarkFlag) addPlayerMarker(userCurrentLocation);
+        if (!playerMarkFlag) addPlayerMarker(userCurrentLocation);
         else playerMarker.setPosition(new LatLng(latitude, longtitude));
-        if(followPlayerFlag) {
+        if (followPlayerFlag) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userCurrentLocation, zoomLevel));
         }
         checkIfPoi(latitude, longtitude);
@@ -366,12 +370,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> data = new HashMap<>();
         data.put("distance_traveled", CurrentUser.distance_traveled);
-        data.put("score", Math.round(CurrentUser.distance_traveled /100));
+        data.put("score", Math.round(CurrentUser.distance_traveled / 100));
         db.collection("users").document(CurrentUser.email).update(data);
     }
-    void addPlayerMarker(LatLng userCurrentLocation){
-        BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.usermarker);
-        Bitmap b=bitmapdraw.getBitmap();
+
+    void addPlayerMarker(LatLng userCurrentLocation) {
+        BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.usermarker);
+        Bitmap b = bitmapdraw.getBitmap();
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
         playerMarker = mMap.addMarker(new MarkerOptions().position(userCurrentLocation).icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
         playerMarkFlag = !playerMarkFlag;
@@ -386,7 +391,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         circleOptions.strokeWidth(4);
         mMap.addCircle(circleOptions);
     }
-    private void checkIfPoi(double player_latitude, double player_longtitude){
+
+    private void checkIfPoi(double player_latitude, double player_longtitude) {
         for (Integer i = 0; i < poiNames.size(); i++) {
             final Double POI_latitude = poiLatitude.get(i);
             final Double POI_longtitude = poiLongitude.get(i);
@@ -394,22 +400,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     player_latitude + POICollisionRange > POI_latitude &&
                     player_longtitude < POI_longtitude + POICollisionRange &&
                     player_longtitude + POICollisionRange > POI_longtitude) {
-            if (!poiScores.contains(poiNames.get(i))) {
-                dialogFrameLayout.setZ(1);
-                dialogPoiText.setText("Gratulacje!  Odkryłeś Formę Biennale: " + poiNames.get(i));
-                BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.checkedmarker);
-                Bitmap b = bitmapdraw.getBitmap();
-                final Bitmap checkedMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
-                markers.get(i).setIcon(BitmapDescriptorFactory.fromBitmap(checkedMarker));
-                poiDialogImage.setImageBitmap(poiBitmapImages.get(i));
-            }
+                if (!poiScores.contains(poiNames.get(i))) {
+                    dialogFrameLayout.setZ(1);
+                    dialogPoiText.setText("Gratulacje!  Odkryłeś Formę Biennale: " + poiNames.get(i));
+                    BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.checkedmarker);
+                    Bitmap b = bitmapdraw.getBitmap();
+                    final Bitmap checkedMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
+                    markers.get(i).setIcon(BitmapDescriptorFactory.fromBitmap(checkedMarker));
+                    poiDialogImage.setImageBitmap(poiBitmapImages.get(i));
+                }
                 updatePoiScores(poiNames.get(i));
             }
         }
     }
-    private void checkIfRoad(double player_latitude, double player_longtitude){
-        for (Integer i = 0; i<polylineList.size(); i++) {
-            final Double POI_latitude =endOfPolyline.get(i).latitude;
+
+    private void checkIfRoad(double player_latitude, double player_longtitude) {
+        for (Integer i = 0; i < polylineList.size(); i++) {
+            final Double POI_latitude = endOfPolyline.get(i).latitude;
             final Double POI_longtitude = endOfPolyline.get(i).longitude;
 
             if (player_latitude < POI_latitude + POICollisionRange &&
@@ -421,6 +428,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
     }
+
     public void drawRoutes() {
         for (Integer i = 0; i < polyline.size(); i++) {
             ArrayList secondEl = (ArrayList) polyline.get(i);
@@ -442,12 +450,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         GeofencingRequest geofencingRequest = geofenceHelper.getGeofencingRequest(geofence);
         PendingIntent pendingIntent = geofenceHelper.getPendingIntent();
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
         geofencingClient.addGeofences(geofencingRequest, pendingIntent)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "onSuccess: Geofence Added...");
-                        addCircle(latLng, 200);
+                        addCircle(latLng, 100);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -458,12 +470,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 });
     }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         dialogFrameLayout.setVisibility(View.VISIBLE);
         mMap = googleMap;
         mMap.setLatLngBoundsForCameraTarget(elblagBorder);
         mMap.setMinZoomPreference(13.8f);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         mMap.setMyLocationEnabled(true);
         fetchPOIScores();
         try {
@@ -625,7 +648,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             }
                         });
                         asyncTask.execute(image);
-                        addGeofence(new LatLng(latitude, longitude), 200, name);
+                        addGeofence(new LatLng(latitude, longitude), 100, name);
                     }
                     loadingPanel.setVisibility(View.GONE);
                     mapPanel.setVisibility(View.VISIBLE);

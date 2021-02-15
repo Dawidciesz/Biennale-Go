@@ -42,8 +42,6 @@ public class RegistrationActivity extends Activity implements View.OnClickListen
                 if (idView == R.id.emailCreateAccountButton) {
                     if (validate()) {
                         openMenuActivity();
-
-
                     }
                 }
             }

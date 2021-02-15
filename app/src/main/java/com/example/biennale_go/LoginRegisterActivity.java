@@ -1,14 +1,21 @@
 package com.example.biennale_go;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
 import com.example.biennale_go.Adapters.ViewPagerFragmentAdapter;
 import com.example.biennale_go.Fragments.AdminPOIListFragment;
 import com.example.biennale_go.Fragments.AdminPanelFragment;
@@ -16,7 +23,11 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
